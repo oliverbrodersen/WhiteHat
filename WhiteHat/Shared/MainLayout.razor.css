@@ -1,0 +1,51 @@
+.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main, article {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    position: fixed;
+    height: 2rem;
+    margin: 8px;
+    padding: 16px;
+    width: calc(100vw - 84px);
+    border: .2rem solid var(--white10);
+    background: var(--white10);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    backdrop-filter: blur(16px);
+    z-index: 10;
+}
+
+header .icon{
+    margin-right: 32px;
+    margin-left: 8px;
+    height: 100%;
+
+}
+
+header .navigation{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+    header .navigation ::deep .nav {
+        margin-right: 12px;
+    }
+
+    header .navigation ::deep .nav.active {
+        color: var(--primary);
+        font-weight: 800;
+    }

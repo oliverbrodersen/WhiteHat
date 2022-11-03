@@ -1,0 +1,48 @@
+﻿@using WhiteHat.Models
+
+<div class="hnlistitem-comment @(_collapse ? "collapse" : string.Empty)">
+    <div class="collapse" @onclick=@(() => _collapse = !_collapse)></div>
+    <content>
+        <div class="comment-info">
+            <p class="p @(Item.By == Op ? "op" : string.Empty)">
+                @Item.By
+            </p>
+            @if(_collapse){
+                <div class="body-collapsed">
+                    @((MarkupString)Item.Text)
+                </div>
+            }
+            <span>
+                @Item.TimeSince()
+            </span>
+        </div>
+        @if (!_collapse)
+        {
+            <p class="body">
+                @((MarkupString)Item.Text)
+            </p>
+            @if (Item.KidsFetched.Any())
+            {
+                <div class="hnlistitem-comment-replies">
+                    @foreach (var kid in Item.KidsFetched)
+                    {
+                        @if (kid is not null)
+                        {
+                            <HnListItemComment Item="kid" Op="@Op" />
+                        }
+                    }
+                </div>
+            }
+        }
+    </content>
+</div>
+
+@code {
+    [Parameter]
+    public HnItem Item { get; set; }
+
+    [Parameter]
+    public string Op { get; set; }
+
+    private bool _collapse;
+}

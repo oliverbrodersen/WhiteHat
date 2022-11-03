@@ -1,0 +1,123 @@
+﻿@using WhiteHat.Models
+@using WhiteHat.Services
+@inject HNFetcher HNFetcher
+
+<div class="hnitem-list-item">
+    <a class="content default" target="_blank" href="@(Item.Url == null ? "" : Item.Url.AbsoluteUri)">
+        <h1 class="index">
+            @Index
+        </h1>
+        <div class="main">
+            <h2>
+                @Item.Title
+            </h2>
+            @if(Item.Url is not null){
+                <span>
+                    @Item.Url.Host
+                    <div class="icon">
+                        <span class="material-icons-round">
+                            open_in_new
+                        </span>
+                    </div>
+                </span>
+            }
+        </div>
+        <div class="details">
+            <div class="score">
+                @Item.Score 
+                <span>
+                    point@(Item.Score > 1 ? "s" : string.Empty)
+                </span>
+            </div>
+            <div class="action">
+                <span class="material-icons-round">
+                    schedule
+                </span>
+                @Item.TimeSince()
+            </div>
+            @if (!string.IsNullOrEmpty(Item.By))
+            {
+                <div class="action">
+                    <span class="material-icons-round">
+                        person
+                    </span>
+                    @Item.By
+                </div>
+            }
+            @if (Item.Kids is not null && Item.Kids.Any())
+            {
+                <div class="action" @onclick=@(() => _showComments = !_showComments) @onclick:preventDefault=true>
+                    <span class="material-icons-round">
+                        mode_comment
+                    </span>
+                    @(Item.KidsCounted ? Item.KidCount : Item.Kids.Count() + "+")
+                </div>
+            }
+        </div>
+    </a>
+    @if(_showComments) {
+        <div class="comments">
+           @foreach (var kid in Item.KidsFetched)
+           {
+                <HnListItemComment Item="kid" Op="@Item.By"/>
+           }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public HnItem Item { get; set; }
+
+    [Parameter]
+    public int Index { get; set; }
+
+    private bool _showComments;
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            if (Item.Kids != null && Item.Kids.Any() && !Item.KidsCounted)
+            {
+                foreach (var kid in Item.Kids)
+                {
+                    var res = await GetKids(kid);
+                    if (res.Type == "comment" && !res.IsDeleted)
+                    {
+                        Item.KidsFetched.Add(res);
+                        Item.KidCount++;
+                    }
+                }
+            }
+            Item.KidsCounted = true;
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task<HnItem> GetKids(long itemId){
+        var item = await HNFetcher.FetchItem(itemId);
+
+        if(item is null){
+            Console.WriteLine("failed to fetch: " + itemId);
+            return null;
+        }
+
+        if (item.Kids is null || !item.Kids.Any()){
+            return item;
+        }
+
+        foreach (var kid in item.Kids)
+        {
+            var res = await GetKids(kid);
+            if(res.Type == "comment" && !res.IsDeleted){
+                item.KidsFetched.Add(res);
+                Item.KidCount++;
+            }
+        }
+
+        return item;
+    }
+}

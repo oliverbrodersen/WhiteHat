@@ -1,0 +1,72 @@
+﻿@page "/"
+@page "/{page}"
+@using WhiteHat.Components
+@using WhiteHat.Models
+@using WhiteHat.Services
+@inject HNFetcher HNFetcher
+
+<PageTitle>WhiteHat | Home</PageTitle>
+
+<div class="story-container">
+    @if(_items is null || _items.Count < 0){
+        <p>
+            loading
+        </p>
+    }
+    else{
+        for (var i = 0; i < _items.Count(); i++)
+        {
+            int index = i + 1;
+            <HnListItem Item="_items[i]" Index="index"></HnListItem>
+        }
+    }
+</div>
+
+@code{
+    [Parameter]
+    public string? Page { get; set; }
+
+    private int _pageSize = 3;
+    List<HnItem> _items;
+    List<long> _itemIds;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        HnStories stories;
+
+        if (string.IsNullOrEmpty(Page))
+        {
+            stories = HnStories.Top;
+        }
+        else
+        {
+            switch (Page.ToLower())
+            {
+                case "best":
+                    stories = HnStories.Best;
+                    break;
+                case "new":
+                    stories = HnStories.New;
+                    break;
+                default:
+                    stories = HnStories.Top;
+                    break;
+            }
+        }
+
+        _items = new();
+        _itemIds = new();
+        await LoadStories(stories);
+    }
+
+    private async Task LoadStories(HnStories stories)
+    {
+        StateHasChanged();
+        _itemIds = await HNFetcher.FetchStories(stories);
+        foreach (var id in _itemIds.Take(_pageSize))
+        {
+            _items.Add(await HNFetcher.FetchItem(id));
+            StateHasChanged();
+        }
+    }
+}

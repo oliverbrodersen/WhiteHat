@@ -1,0 +1,32 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <header>
+        <img src="img/Logo.png" class="icon"/>
+        <div class="navigation">
+            <NavLink class="nav" href="" Match="NavLinkMatch.All">
+                Best
+            </NavLink>
+            <NavLink class="nav" href="/top">
+                Top
+            </NavLink>
+            <NavLink class="nav" href="/new">
+                New
+            </NavLink>
+            <NavLink class="nav" href="/ask">
+                Ask HN
+            </NavLink>
+            <NavLink class="nav" href="/show">
+                Show HN
+            </NavLink>
+            <NavLink class="nav" href="job">
+                Jobs
+            </NavLink>
+        </div>
+    </header>
+    <main>
+        <article class="content">
+            @Body
+        </article>
+    </main>
+</div>
