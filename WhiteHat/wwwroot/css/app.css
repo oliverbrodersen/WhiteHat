@@ -2,10 +2,13 @@
 
 * {
     --primary: #ff6600;
+    --primary20: #ff660060;
     --primary50: #ff660080;
     --primary-light: #ffc096;
     --primary-light50: #ffc09620;
     --bg: #000000;
+    --bg-card: #232323b0;
+    --bg-card1: #101010;
     --text: #ffffff;
     --text50: #ffffff80;
     --white5: #ffffff05;
@@ -88,6 +91,10 @@ h1, h2, h3, h4, h5, h6, label {
     a:not(.default):hover {
         color: var(--primary) !important;
         text-shadow: 0px 0px 6px var(--primary50);
+    }
+
+    code{
+        white-space: break-spaces;
     }
 
 .material-icons {

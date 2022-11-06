@@ -8,5 +8,6 @@
         public static readonly string New = HnApiBase + "newstories.json";
 
         public static readonly string Item = HnApiBase + "/item/{0}.json";
+        public static readonly string ItemAlgolia = "https://hn.algolia.com/api/v1/items/{0}";
     }
 }

@@ -5,5 +5,82 @@
     margin: 16px;
     max-width: calc(100% - 32px);
     width: fit-content;
-    margin-top: 7.5rem;
+    margin: 7.5rem 0;
+}
+
+.loadmore {
+    font-family: var(--title-font);
+    font-weight: 700;
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    background: var(--white50);
+    color: var(--text);
+    margin-top: 4px;
+    padding: 8px 24px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: ease .2s all;
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+    
+    .loadmore:not(.loading):hover {
+        background: var(--primary);
+        color: var(--text);
+        box-shadow: 0px 2px 8px var(--primary50), 0px 0px 32px var(--primary50);
+    }
+
+
+    .loadmore.loading {
+        cursor: default;
+        padding: 2px 24px;
+        padding-left: 2px;
+        color: var(--text50);
+        background: var(--white10);
+    }
+
+.loader {
+    width: calc(1.5rem + 8px);
+    height: calc(1.5rem + 8px);
+    min-width: calc(1.5rem + 8px);
+    min-height: calc(1.5rem + 8px);
+    border-radius: 50%;
+    position: relative;
+    margin-right: 8px;
+    animation: skLinRotate 1.5s ease-in-out infinite alternate;
+}
+
+        .loader:after {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            border-radius: 50%;
+            border: 5px solid transparent;
+            border-top-color: var(--primary);
+        }
+        .loader:before {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            border-radius: 50%;
+            border: 5px solid transparent;
+            border-top-color: var(--primary);
+            animation: blur 1.5s ease-in-out infinite alternate;
+        }
+
+@keyframes skLinRotate {
+    95%,100% {
+        transform: rotate(840deg)
+    }
+}
+@keyframes blur{
+    50% {
+        filter: blur(2px);
+    }
+    0%, 100% {
+        filter: blur(8px);
+    }
 }

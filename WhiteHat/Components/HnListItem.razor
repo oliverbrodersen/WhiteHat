@@ -1,123 +1,160 @@
-﻿@using WhiteHat.Models
+﻿@using System.Text.RegularExpressions
+@using WhiteHat.Models
 @using WhiteHat.Services
 @inject HNFetcher HNFetcher
 
-<div class="hnitem-list-item">
-    <a class="content default" target="_blank" href="@(Item.Url == null ? "" : Item.Url.AbsoluteUri)">
-        <h1 class="index">
-            @Index
-        </h1>
-        <div class="main">
-            <h2>
-                @Item.Title
-            </h2>
-            @if(Item.Url is not null){
-                <span>
-                    @Item.Url.Host
-                    <div class="icon">
-                        <span class="material-icons-round">
-                            open_in_new
+@if(Loader) {
+    <div class="hnitem-list-item ghost">
+        <div class="content">
+            <h1 class="index">
+                @Index
+            </h1>
+            <div class="main">
+                <h2>
+                    loading...
+                </h2>
+            </div>
+            <div class="details">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+}
+else {
+    <div class="hnitem-list-item">
+        <a class="content default @(_showComments ? "show-comments" : string.Empty)" target="@(Item.Url == null ? "" : "_blank")" href="@(Item.Url == null ? "" : Item.Url.AbsoluteUri)" @onclick:stopPropagation=true>
+            <h1 class="index">
+                @(Item.Index <= 0 ? Index : Item.Index)
+            </h1>
+            <div class="main">
+                <h2>
+                    @Item.Title
+                </h2>
+                @if (Item.Url is not null)
+                {
+                    <span>
+                        @Item.Url.Host
+                        <div class="icon">
+                            <span class="material-icons-round">
+                                open_in_new
+                            </span>
+                        </div>
+                    </span>
+                }
+            </div>
+            @if(!string.IsNullOrWhiteSpace(Item.Text)){
+                <div class="text @(_showContent ? "text-expanded" : string.Empty)">
+                    @if(_showContent){
+                        <span @onclick=ToggleExpand @onclick:preventDefault=true>
+                            <span class="material-icons-round">
+                                expand_less
+                            </span>
+                            Collapse
+                        </span>
+                        <div class="text-content">
+                            @((MarkupString)Item.Text)
+                        </div>
+                    }
+                    else{
+                        <span @onclick=ToggleExpand @onclick:preventDefault=true>
+                            <span class="material-icons-round">
+                                expand_more
+                            </span>
+                            Expand
+                        </span>
+                        <div class="text-content">
+                            @((MarkupString)StripHTML(Item.Text))
+                        </div>
+                    }
+                </div>
+            }
+            <div class="details">
+                @if (Item.Points.HasValue)
+                {
+                    <div class="score">
+                        @Item.Points
+                        <span>
+                            point@(Item.Points > 1 ? "s" : string.Empty)
                         </span>
                     </div>
-                </span>
-            }
-        </div>
-        <div class="details">
-            <div class="score">
-                @Item.Score 
-                <span>
-                    point@(Item.Score > 1 ? "s" : string.Empty)
-                </span>
-            </div>
-            <div class="action">
-                <span class="material-icons-round">
-                    schedule
-                </span>
-                @Item.TimeSince()
-            </div>
-            @if (!string.IsNullOrEmpty(Item.By))
-            {
-                <div class="action">
+                }
+                <div>
                     <span class="material-icons-round">
-                        person
+                        schedule
                     </span>
-                    @Item.By
+                    @Item.TimeSince()
                 </div>
-            }
-            @if (Item.Kids is not null && Item.Kids.Any())
-            {
-                <div class="action" @onclick=@(() => _showComments = !_showComments) @onclick:preventDefault=true>
-                    <span class="material-icons-round">
-                        mode_comment
-                    </span>
-                    @(Item.KidsCounted ? Item.KidCount : Item.Kids.Count() + "+")
-                </div>
-            }
-        </div>
-    </a>
-    @if(_showComments) {
-        <div class="comments">
-           @foreach (var kid in Item.KidsFetched)
-           {
-                <HnListItemComment Item="kid" Op="@Item.By"/>
-           }
-        </div>
-    }
-</div>
+                @if (!string.IsNullOrEmpty(Item.Author))
+                {
+                    <div class="action">
+                        <span class="material-icons-round">
+                            person
+                        </span>
+                        @Item.Author
+                    </div>
+                }
+                @if (Item.Children is not null && Item.Children.Any())
+                {
+                    <div class="action" @onclick=@(() => _showComments = !_showComments) @onclick:preventDefault=true>
+                        <span class="material-icons-round">
+                            mode_comment
+                        </span>
+                        @(Item.KidCount >= 0 ? Item.KidCount - 1 : "")
+                    </div>
+                }
+            </div>
+        </a>
+        @if (_showComments)
+        {
+            <div class="comments">
+                @foreach (var kid in Item.Children)
+                {
+                    @if (kid is not null && !string.IsNullOrWhiteSpace(kid.Text) && !string.IsNullOrWhiteSpace(kid.Author))
+                    {
+                        <HnListItemComment Item="kid" Op="@Item.Author" />
+                    }
+                }
+            </div>
+        }
+    </div>
+}
 
 @code {
     [Parameter]
-    public HnItem Item { get; set; }
+    public HnItemAlgolia Item { get; set; }
 
     [Parameter]
     public int Index { get; set; }
 
+    [Parameter]
+    public bool Loader { get; set; }
+
     private bool _showComments;
+
+    private bool _showContent;
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        if(firstRender)
+        if(firstRender && !Loader)
         {
-            if (Item.Kids != null && Item.Kids.Any() && !Item.KidsCounted)
-            {
-                foreach (var kid in Item.Kids)
-                {
-                    var res = await GetKids(kid);
-                    if (res.Type == "comment" && !res.IsDeleted)
-                    {
-                        Item.KidsFetched.Add(res);
-                        Item.KidCount++;
-                    }
-                }
-            }
-            Item.KidsCounted = true;
+            Item.CountKids();
             StateHasChanged();
         }
 
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    private async Task<HnItem> GetKids(long itemId){
-        var item = await HNFetcher.FetchItem(itemId);
-
-        if(item is null){
-            Console.WriteLine("failed to fetch: " + itemId);
-            return null;
+    private void ToggleExpand(){
+        if(!string.IsNullOrWhiteSpace(Item.Text)){
+            _showContent = !_showContent;
         }
+    }
 
-        if (item.Kids is null || !item.Kids.Any()){
-            return item;
-        }
-
-        foreach (var kid in item.Kids)
-        {
-            var res = await GetKids(kid);
-            if(res.Type == "comment" && !res.IsDeleted){
-                item.KidsFetched.Add(res);
-                Item.KidCount++;
-            }
-        }
-
-        return item;
+    private string StripHTML(string HTMLText)
+    {
+        Regex reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase);
+        return reg.Replace(HTMLText, "");
     }
 }

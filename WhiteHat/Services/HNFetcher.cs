@@ -34,11 +34,43 @@ namespace WhiteHat.Services
 
             return result;
         }
+        public async Task<HnItemAlgolia> FetchItemAlgolia(long id)
+        {
+            string uri = string.Format(Constants.ItemAlgolia, id);
+            return await _http.GetFromJsonAsync<HnItemAlgolia>(uri);
+        }
 
         public async Task<HnItem> FetchItem(long id)
         {
             string uri = string.Format(Constants.Item, id);
             return await _http.GetFromJsonAsync<HnItem>(uri);
+        }
+
+        public async Task<HnItem> GetKids(long itemId)
+        {
+            var item = await FetchItem(itemId);
+
+            if (item is null)
+            {
+                Console.WriteLine("failed to fetch: " + itemId);
+                return null;
+            }
+
+            if (item.Kids is null || !item.Kids.Any())
+            {
+                return item;
+            }
+
+            foreach (var kid in item.Kids)
+            {
+                var res = await GetKids(kid);
+                if (!res.IsDeleted)
+                {
+                    item.KidsFetched.Add(res);
+                }
+            }
+
+            return item;
         }
     }
 

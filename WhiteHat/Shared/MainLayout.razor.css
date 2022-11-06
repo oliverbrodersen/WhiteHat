@@ -11,29 +11,33 @@ main, article {
     flex-direction: column;
     align-items: center;
 }
+article{
+    min-height: 110vh;
+}
 
 header {
     position: fixed;
+    top: 0;
+    left: 0;
     height: 2rem;
     margin: 8px;
     padding: 16px;
-    width: calc(100vw - 84px);
-    border: .2rem solid var(--white10);
-    background: var(--white10);
-    border-radius: 16px;
+    width: calc(100vw - 64px - .6rem);
+    border: .3rem solid var(--bg);
+    background: var(--bg-card);
+    border-radius: 22px;
     display: flex;
     flex-direction: row;
     align-items: center;
     backdrop-filter: blur(16px);
-    z-index: 10;
-}
+    z-index: 15;
+}   
 
-header .icon{
-    margin-right: 32px;
-    margin-left: 8px;
-    height: 100%;
-
-}
+    header .icon {
+        margin-right: 32px;
+        margin-left: 8px;
+        height: 100%;
+    }
 
 header .navigation{
     display: flex;
@@ -49,3 +53,13 @@ header .navigation{
         color: var(--primary);
         font-weight: 800;
     }
+
+.h-gradient{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 3rem;
+    background: linear-gradient(var(--bg) 10%, transparent);
+    z-index: 14;
+}

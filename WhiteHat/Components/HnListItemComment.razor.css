@@ -1,17 +1,17 @@
 ﻿.hnlistitem-comment {
-    --indent: 24px;
-    width: calc(100% - var(--indent) - .2rem);
+    --indent: 16px;
+    width: 100%;
     display: flex;
     flex-direction: row;
-    margin: 8px 0;
+    margin-top: 16px;
 }
 
     .hnlistitem-comment .collapse {
-        padding-left: calc((var(--indent) / 3));
-        margin-right: calc((var(--indent) / 3) * 2);
+        padding-left: calc(var(--indent) / 2);
+        margin-right: calc(var(--indent) / 2);
         cursor: pointer;
         border-radius: .1rem calc(var(--indent) / 5) calc(var(--indent) / 5) .1rem;
-        border-left: .2rem solid var(--primary-light);
+        border-left: .1rem solid var(--primary-light);
     }
 
         .hnlistitem-comment .collapse:hover {
@@ -24,7 +24,7 @@
         max-width: 100%;
     }
 
-    .hnlistitem-comment p.body {
+    .hnlistitem-comment p.body, .body ::deep p {
         margin: 0;
     }
 
@@ -43,23 +43,33 @@
         margin: 0;
     }
 
-            .hnlistitem-comment .comment-info .p.op{
-                color: var(--primary);
-                font-weight: 800;
-            }
-
-        .hnlistitem-comment .comment-info > span {
-            background: var(--white10);
-            height: 1.8rem;
-            padding: 0 12px;
-            display: flex;
-            align-items: center;
-            border-radius: 16px;
-            font-size: .85rem;
-            margin-top: 4px;
-            margin-left: 8px;
-            transition: linear .2s all;
+        .hnlistitem-comment .comment-info .p.op {
+            color: var(--primary);
+            font-weight: 800;
         }
+
+        .hnlistitem-comment .comment-info .p.op span{
+            color: var(--primary);
+            font-weight: 400;
+            font-size: 12px;
+            margin-left: 4px;
+            background: var(--white10);
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+    .hnlistitem-comment .comment-info > span:not(.collapse-inline) {
+        background: var(--white10);
+        height: 1.8rem;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        border-radius: 16px;
+        font-size: .85rem;
+        margin-top: 4px;
+        margin-left: 8px;
+        transition: linear .2s all;
+    }
 
             .hnlistitem-comment-replies {
                 width: calc(100%);
@@ -77,6 +87,56 @@
     opacity: .8;
 }
 
-.hnlistitem-comment .comment-info .body-collapsed ::deep *{
-    display: none;
+    .hnlistitem-comment .comment-info .body-collapsed ::deep *:not(:first-child) {
+        display: none;
+    }
+
+    .hnlistitem-comment .comment-info .body-collapsed ::deep *:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0;
+    }
+
+.collapse-inline {
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--white50);
+    cursor: pointer;
+    transition: ease .2s color;
+    margin: 0;
+    background: unset;
+    padding: 0;
+    margin-right: 8px;
 }
+.collapse-inline:hover{
+    color: var(--primary);
+}
+
+.hnlistitem-comment .comment-info > span.expand {
+    margin-left: 0;
+    padding: 0 8px;
+    margin-right: 8px;
+}
+    .hnlistitem-comment .comment-info > span.expand:has(div) {
+        cursor: pointer;
+    }
+
+    .hnlistitem-comment .comment-info > span.expand:has(div):hover span {
+        color: var(--primary);
+    }
+
+    .hnlistitem-comment .comment-info > span.expand:not(:has(div)) {
+        padding: 0;
+        background: unset;
+    }
+
+    .hnlistitem-comment .comment-info > span.expand span {
+        margin: 0;
+    }
+
+    .hnlistitem-comment .comment-info > span.expand div {
+        margin: 0 6px 0 4px;
+        color: var(--text50);
+        font-weight: 700;
+    }

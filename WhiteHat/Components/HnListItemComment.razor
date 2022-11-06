@@ -1,11 +1,34 @@
 ﻿@using WhiteHat.Models
 
-<div class="hnlistitem-comment @(_collapse ? "collapse" : string.Empty)">
+<div class="hnlistitem-comment @(_collapse ? "collapsed" : string.Empty)">
     <div class="collapse" @onclick=@(() => _collapse = !_collapse)></div>
     <content>
         <div class="comment-info">
-            <p class="p @(Item.By == Op ? "op" : string.Empty)">
-                @Item.By
+            @if (_collapse)
+            {
+                <span class="expand" @onclick=@(() => _collapse = !_collapse)>
+                    <span class="material-icons-round collapse-inline">
+                        expand_more
+                    </span>
+                    @if (Item.KidCount > 0)
+                    {
+                        <div>
+                           +@(Item.KidCount - 1)
+                        </div>
+                    }
+                </span>
+            }
+            else{
+                <span class="material-icons-round collapse-inline" @onclick=@(() => _collapse = !_collapse)>
+                    expand_less
+                </span>
+            }
+            <p class="p @(Item.Author == Op ? "op" : string.Empty)">
+                @Item.Author
+                @if (Item.Author == Op)
+                {
+                    <span>OP</span>
+                }
             </p>
             @if(_collapse){
                 <div class="body-collapsed">
@@ -21,12 +44,12 @@
             <p class="body">
                 @((MarkupString)Item.Text)
             </p>
-            @if (Item.KidsFetched.Any())
+            @if (Item.Children.Any())
             {
                 <div class="hnlistitem-comment-replies">
-                    @foreach (var kid in Item.KidsFetched)
+                    @foreach (var kid in Item.Children)
                     {
-                        @if (kid is not null)
+                        @if (kid is not null && !string.IsNullOrWhiteSpace(kid.Text) && !string.IsNullOrWhiteSpace(kid.Author))
                         {
                             <HnListItemComment Item="kid" Op="@Op" />
                         }
@@ -39,7 +62,7 @@
 
 @code {
     [Parameter]
-    public HnItem Item { get; set; }
+    public HnItemAlgolia Item { get; set; }
 
     [Parameter]
     public string Op { get; set; }

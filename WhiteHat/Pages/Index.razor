@@ -19,6 +19,22 @@
             int index = i + 1;
             <HnListItem Item="_items[i]" Index="index"></HnListItem>
         }
+
+        @if(_isLoading){
+            <HnListItem Index="_items.Count() + 1" Loader="true"></HnListItem>
+        }
+        @if (_isLoading)
+        {
+            <button class="loadmore loading" @onclick=LoadStories>
+                <span class="loader"></span>
+                Loading
+            </button>
+        }
+        else{
+            <button class="loadmore" @onclick=LoadStories>
+                Load more
+            </button>
+        }
     }
 </div>
 
@@ -26,14 +42,15 @@
     [Parameter]
     public string? Page { get; set; }
 
-    private int _pageSize = 3;
-    List<HnItem> _items;
+    private readonly int _pageSize = 25;
+    private int _page = 0;
+    private bool _isLoading;
+    List<HnItemAlgolia> _items;
     List<long> _itemIds;
+    HnStories stories;
 
     protected async override Task OnParametersSetAsync()
     {
-        HnStories stories;
-
         if (string.IsNullOrEmpty(Page))
         {
             stories = HnStories.Top;
@@ -56,17 +73,24 @@
 
         _items = new();
         _itemIds = new();
-        await LoadStories(stories);
+        _page = 0;
+        await LoadStories();
     }
 
-    private async Task LoadStories(HnStories stories)
+    private async Task LoadStories()
     {
+        HnStories stloaded = stories;
+        _isLoading = true;
         StateHasChanged();
         _itemIds = await HNFetcher.FetchStories(stories);
-        foreach (var id in _itemIds.Take(_pageSize))
+        foreach (var id in _itemIds.Skip(_pageSize * _page++).Take(_pageSize))
         {
-            _items.Add(await HNFetcher.FetchItem(id));
+            var item = await HNFetcher.FetchItemAlgolia(id);
+
+            _items.Add(item);
             StateHasChanged();
         }
+        _isLoading = false;
+        StateHasChanged();
     }
 }

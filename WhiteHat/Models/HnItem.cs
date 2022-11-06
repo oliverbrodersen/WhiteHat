@@ -56,6 +56,7 @@
         [JsonPropertyName("descendants")]
         public long Descendants { get; set; }
 
+
         public HnItem()
         {
             KidsFetched = new();
