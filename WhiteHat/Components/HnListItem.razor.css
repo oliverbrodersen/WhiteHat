@@ -10,19 +10,23 @@
     flex-direction: column;
 }
 
-.index {
-    position: absolute;
-    top: 50%;
-    right: calc(100% + 32px);
-    text-align: right;
-    font-family: var(--title-font);
-    font-weight: 700;
-    font-size: 1.8rem;
-    color: var(--white50);
-    transform: translateY(-50%);
-    margin: 0;
-    transition: ease .2s all;
-}
+    .hnitem-list-item:has(.show-comments){
+        padding: 0 16px !important;
+    }
+
+    .index {
+        position: absolute;
+        top: 50%;
+        right: calc(100% + 32px);
+        text-align: right;
+        font-family: var(--title-font);
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: var(--white50);
+        transform: translateY(-50%);
+        margin: 0;
+        transition: ease .2s all;
+    }
 
 .hnitem-list-item .content:hover .main span .icon {
     width: 1rem;
@@ -229,6 +233,7 @@
     }
     10%{
         padding: 16px;
+        padding-top: 0;
     }
     99% {
         max-height: 5000px;
