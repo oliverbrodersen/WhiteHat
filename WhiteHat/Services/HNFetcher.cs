@@ -27,6 +27,15 @@ namespace WhiteHat.Services
                 case HnStories.New:
                     uri = Constants.New;
                     break;
+                case HnStories.Ask:
+                    uri = Constants.Ask;
+                    break;
+                case HnStories.Job:
+                    uri = Constants.Job;
+                    break;
+                case HnStories.Show:
+                    uri = Constants.Show;
+                    break;
             }
 
             List<long> result = new List<long>();
@@ -37,7 +46,14 @@ namespace WhiteHat.Services
         public async Task<HnItemAlgolia> FetchItemAlgolia(long id)
         {
             string uri = string.Format(Constants.ItemAlgolia, id);
-            return await _http.GetFromJsonAsync<HnItemAlgolia>(uri);
+            try
+            {
+                return await _http.GetFromJsonAsync<HnItemAlgolia>(uri);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<HnItem> FetchItem(long id)
@@ -72,6 +88,39 @@ namespace WhiteHat.Services
 
             return item;
         }
+
+        public async Task<QueryResult> Query(string q, int page, bool orderByDate = false, DateTimeOffset? since = null, DateTimeOffset? before = null)
+        {
+            string url = orderByDate ? Constants.QRecent : Constants.QBest;
+            url += string.Format(Constants.QPage, page);
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                url += string.Format(Constants.QQuery, q);
+            }
+
+            if (since.HasValue && before.HasValue)
+            {
+                url += string.Format(Constants.QBetween, since.Value.ToUnixTimeSeconds(), before.Value.ToUnixTimeSeconds());
+            }
+            else if (since.HasValue)
+            {
+                url += string.Format(Constants.QSince, since.Value.ToUnixTimeSeconds());
+            }
+            else if (before.HasValue)
+            {
+                url += string.Format(Constants.QBefore, before.Value.ToUnixTimeSeconds());
+            }
+
+            try
+            {
+                return await _http.GetFromJsonAsync<QueryResult>(url);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 
     public enum HnStories
@@ -79,5 +128,8 @@ namespace WhiteHat.Services
         Best,
         Top,
         New,
+        Ask,
+        Show,
+        Job,
     }
 }

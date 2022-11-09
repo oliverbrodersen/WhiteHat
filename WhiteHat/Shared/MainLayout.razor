@@ -1,27 +1,36 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <div class="page">
     <header>
         <img src="img/Logo.png" class="icon"/>
         <div class="navigation">
-            <NavLink class="nav" href="" Match="NavLinkMatch.All">
-                Best
-            </NavLink>
-            <NavLink class="nav" href="/top">
-                Top
-            </NavLink>
-            <NavLink class="nav" href="/new">
-                New
-            </NavLink>
-            <NavLink class="nav" href="/ask">
-                Ask HN
-            </NavLink>
-            <NavLink class="nav" href="/show">
-                Show HN
-            </NavLink>
-            <NavLink class="nav" href="job">
-                Jobs
-            </NavLink>
+            <div>
+                <NavLink class="nav" href="" Match="NavLinkMatch.All">
+                    Best
+                </NavLink>
+                <NavLink class="nav" href="/top">
+                    Top
+                </NavLink>
+                <NavLink class="nav" href="/new">
+                    New
+                </NavLink>
+                <NavLink class="nav" href="/ask">
+                    Ask HN
+                </NavLink>
+                <NavLink class="nav" href="/show">
+                    Show HN
+                </NavLink>
+                <NavLink class="nav" href="/job">
+                    Jobs
+                </NavLink>
+            </div>
+            <form class="search-container @(string.IsNullOrWhiteSpace(_search) ? string.Empty : "hasvalue")" @onsubmit=Search>
+                <input type="text" @bind-value=_search @bind-value:event="oninput" />
+                <span class="material-icons-round" @onclick=Search>
+                    search
+                </span>
+            </form>
         </div>
     </header>
     <div class="h-gradient"></div>
@@ -31,3 +40,13 @@
         </article>
     </main>
 </div>
+@code{
+    private string _search;
+
+    private void Search(){
+        if(!string.IsNullOrWhiteSpace(_search)){
+            NavigationManager.NavigateTo("/search/" + _search);
+            _search = string.Empty;
+        }
+    }
+}

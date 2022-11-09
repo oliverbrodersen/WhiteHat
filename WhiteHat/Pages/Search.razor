@@ -1,5 +1,5 @@
-﻿@page "/"
-@page "/{page}"
+﻿@page "/search"
+@page "/search/{query}"
 @using WhiteHat.Components
 @using WhiteHat.Misc
 @using WhiteHat.Models
@@ -39,79 +39,52 @@
     }
 </div>
 
-@code{
+@code {
     [Parameter]
-    public string? Page { get; set; }
+    public string? Query { get; set; }
 
+    private QueryResult _result;
     private readonly int _pageSize = Constants.PageSize;
+    private int _page = 0;
     private int _loadedStories = 0;
     private bool _isLoading, _stop;
     List<HnItemAlgolia> _items;
-    List<long> _itemIds;
-    HnStories story;
 
     protected async override Task OnParametersSetAsync()
     {
-        if (string.IsNullOrEmpty(Page))
-        {
-            story = HnStories.Best;
-        }
-        else
-        {
-            switch (Page.ToLower())
-            {
-                case "best":
-                    story = HnStories.Best;
-                    break;
-                case "new":
-                    story = HnStories.New;
-                    break;
-                case "top":
-                    story = HnStories.Top;
-                    break;
-                case "ask":
-                    story = HnStories.Ask;
-                    break;
-                case "show":
-                    story = HnStories.Show;
-                    break;
-                case "job":
-                    story = HnStories.Job;
-                    break;
-                default:
-                    story = HnStories.Top;
-                    break;
-            }
-        }
-
         _items = new();
-        _itemIds = new();
-        _loadedStories = 0;
+        _page = 0;
         _stop = _isLoading;
         await LoadStories();
     }
 
     private async Task LoadStories()
     {
-        HnStories stloaded = story;
         _isLoading = true;
         StateHasChanged();
-        _itemIds = await HNFetcher.FetchStories(stloaded);
+        _result = await HNFetcher.Query(Query, _page++);
+        _loadedStories = 0;
 
-        await LoadStory(_pageSize);
+        if(_result is not null)
+        {
+            await LoadStory(_result.Hits.Length - 1);
+            _isLoading = _stop;
+        }
+        else{
+            _isLoading = false;
+        }
 
-        _isLoading = _stop;
         _stop = false;
         StateHasChanged();
     }
 
     private async Task LoadStory(int _leftToLoad)
     {
-        var item = await HNFetcher.FetchItemAlgolia(_itemIds[_loadedStories]);
+        var item = await HNFetcher.FetchItemAlgolia(_result.Hits[_loadedStories].Id);
 
         if (!_stop)
         {
-            if(item is not null)
+            if (item is not null)
             {
                 _items.Add(item);
                 _loadedStories++;
