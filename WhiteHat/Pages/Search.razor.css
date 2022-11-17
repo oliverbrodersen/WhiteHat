@@ -1,9 +1,139 @@
-﻿.story-container {
+﻿.search {
+    margin-top: 6rem;
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin: 16px;
-    max-width: calc(100% - 32px);
-    width: fit-content;
-    margin: 7.5rem 0;
+    width: calc(100% - 0px);
+    max-width: calc(100% - 0px);
 }
+
+.search div{
+    display: flex;
+    flex-direction: row;
+}
+
+.search h1 {
+    margin: 0;
+    flex: 1;
+    font-size: 3rem;
+    color: var(--text50);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 2.5rem;
+    display: flex;
+}
+
+    .search h1 div {
+        cursor: pointer;
+        transition: ease .1s color;
+        margin-right: .2rem;
+    }
+
+    .search h1 > div:hover {
+        color: var(--primary);
+        font-weight: 900;
+        font-style: normal;
+        margin-right: .0rem;
+    }
+
+    .search h1 span {
+        color: var(--text);
+        font-style: normal;
+        font-weight: 800;
+        margin-left: .5rem;
+    }
+
+    .search div > span {
+        color: var(--text50);
+        border-radius: .8rem;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+        .search div > span > span {
+            font-size: 2rem;
+            color: var(--text50);
+            padding: .5rem;
+            border-radius: 50%;
+            transform: rotate(0);
+            cursor: pointer;
+            transition: all .7s ease;
+        }
+
+    .search div:not(.sorting) > span:hover {
+        background: var(--white50);
+    }
+
+            .search div > span:hover span {
+                transform: rotate(180deg);
+            }
+
+    .search .settings {
+        max-height: 0;
+        overflow: hidden;
+        transition: all ease .5s;
+    }
+
+            .search .settings.open {
+                max-height: 200px;
+            }
+
+            .search .settings .settings-content {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+            }
+
+                .search .settings .settings-content .row {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    flex: 1;
+                }
+
+                .search .settings .settings-content .ranges div {
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    padding: 8px;
+                }
+
+                    .search .settings .settings-content .ranges div label{
+                        font-weight: 700;
+                        color: var(--text50);
+                    }
+
+                    .sorting {
+                        display: flex;
+                        align-items: center;
+                        background: var(--white10);
+                        padding: .2rem .4rem;
+                        padding-right: .8rem;
+                        border-radius: .5rem;
+                        font-weight: 700;
+                        border: .15rem solid var(--white10);
+                        cursor: pointer;
+                        transition: ease .2s all;
+                        margin-right: .5rem;
+                    }
+
+.sorting:hover{
+    background: var(--white50); 
+}
+
+.sorting span, .sorting ::deep .checkbox{
+    margin-right: .5rem;
+}
+
+    .sorting:hover span{
+        color: var(--primary);
+    }
+        .story-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 16px;
+            max-width: calc(100% - 32px);
+            width: calc(100% - 32px);
+            margin: 0 0 7.5rem 0;
+        }

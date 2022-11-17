@@ -41,7 +41,7 @@ namespace WhiteHat.Models
         public string Author { get; set; }
 
         [JsonPropertyName("points")]
-        public long Points { get; set; }
+        public long? Points { get; set; }
 
         [JsonPropertyName("created_at_i")]
         public long CreateAtI { get; set; }
@@ -56,7 +56,7 @@ namespace WhiteHat.Models
         public string[] Tags { get; set; }
 
         [JsonPropertyName("num_comments")]
-        public long NumComments { get; set; }
+        public long? NumComments { get; set; }
 
         [JsonPropertyName("objectID")]
         public string ObjectId { get; set; }

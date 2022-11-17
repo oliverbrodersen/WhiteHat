@@ -72,7 +72,15 @@
             margin: 0;
             margin-left: 8px;
             margin-right: 16px;
-            font-weight: 800;
+            font-weight: 700;
+        }
+
+        .content .main h2 ::deep em{
+            font-style: normal;
+            background: var(--primary80);
+            padding: .15rem .4rem;
+            border-radius: .5rem;
+            font-weight: 900;
         }
 
             .content .main > span {

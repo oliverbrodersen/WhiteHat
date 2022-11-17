@@ -8,6 +8,77 @@
 
 <PageTitle>WhiteHat | Home</PageTitle>
 
+<div class="search">
+    <div>
+        <h1>
+            <div @onclick=LoadFromFresh>
+                Search
+            </div>
+            <span>
+                @Query
+            </span>
+        </h1>
+        <span @onclick=ToggleSettings>
+            <span class="material-icons-round">
+                settings
+            </span>
+        </span>
+    </div>
+    <div class="settings @(_settingsOpen ? "open" : string.Empty)">
+        <div class="settings-content">
+            <div class="row">
+                <div>
+                    @if (!_orderByDate)
+                    {
+                        <div class="sorting" @onclick=SwitchSort>
+                            <span class="material-icons-round">
+                                sort
+                            </span>
+                            Popular
+                        </div>   
+                    }
+                    else
+                    {
+                        <div class="sorting" @onclick=SwitchSort>
+                            <span class="material-icons-round">
+                                sort
+                            </span>
+                            Recent
+                        </div>
+                    }
+
+                    <div class="sorting" @onclick=SwitchOnlyMatchTitle>
+                        <Checkbox Checked=_onlyMatchTitle></Checkbox>
+                        Only match title
+                    </div>
+                </div>
+            </div>
+            <div class="row ranges">
+                <div>
+                    <label>
+                        Timeframe
+                    </label>
+                    <RangeInputComponent TItem="DateTimeOffset" @bind-To="_toDate" @bind-From="_fromDate">
+                    </RangeInputComponent>
+                </div>
+                <div>
+                    <label>
+                        Points
+                    </label>
+                    <RangeInputComponent TItem="int?" @bind-To="_toPoints" @bind-From="_fromPoints">
+                    </RangeInputComponent>
+                </div>
+                <div>
+                    <label>
+                        Comments
+                    </label>
+                    <RangeInputComponent TItem="int?" @bind-To="_toComments" @bind-From="_fromComments">
+                    </RangeInputComponent>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="story-container">
     @if(_items is null || _items.Count < 0){
         <p>
@@ -39,62 +110,4 @@
     }
 </div>
 
-@code {
-    [Parameter]
-    public string? Query { get; set; }
 
-    private QueryResult _result;
-    private readonly int _pageSize = Constants.PageSize;
-    private int _page = 0;
-    private int _loadedStories = 0;
-    private bool _isLoading, _stop;
-    List<HnItemAlgolia> _items;
-
-    protected async override Task OnParametersSetAsync()
-    {
-        _items = new();
-        _page = 0;
-        _stop = _isLoading;
-        await LoadStories();
-    }
-
-    private async Task LoadStories()
-    {
-        _isLoading = true;
-        StateHasChanged();
-        _result = await HNFetcher.Query(Query, _page++);
-        _loadedStories = 0;
-
-        if(_result is not null)
-        {
-            await LoadStory(_result.Hits.Length - 1);
-            _isLoading = _stop;
-        }
-        else{
-            _isLoading = false;
-        }
-
-        _stop = false;
-        StateHasChanged();
-    }
-
-    private async Task LoadStory(int _leftToLoad)
-    {
-        var item = await HNFetcher.FetchItemAlgolia(_result.Hits[_loadedStories].Id);
-
-        if (!_stop)
-        {
-            if (item is not null)
-            {
-                _items.Add(item);
-                _loadedStories++;
-                StateHasChanged();
-            }
-        }
-        else
-            return;
-
-        if (_leftToLoad > 1)
-            await LoadStory(--_leftToLoad);
-    }
-}

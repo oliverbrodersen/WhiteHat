@@ -1,0 +1,51 @@
+﻿.range{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.range div{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-width: 9rem;
+}
+
+    .range div input {
+        flex: 1;
+        margin: 0 16px 0 8px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        opacity: .1;
+        pointer-events: none;
+        filter: blur(1px);
+        width: 0;
+        max-width: unset;
+        transition: ease .2s all;
+    }
+
+        .range div label {
+            font-family: var(--title-font);
+            font-weight: 800;
+            color: var(--text);
+            position: absolute;
+            left: calc(28px + 1rem);
+            font-size: .8rem;
+            transition: ease opacity .2s;
+        }
+
+        .range div.enabled input {
+            opacity: 1;
+            pointer-events: auto;
+            filter: blur(0px);
+        }
+
+    .range div.enabled label{
+        opacity: 0;
+        pointer-events: none;
+    }

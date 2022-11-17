@@ -89,27 +89,49 @@ namespace WhiteHat.Services
             return item;
         }
 
-        public async Task<QueryResult> Query(string q, int page, bool orderByDate = false, DateTimeOffset? since = null, DateTimeOffset? before = null)
+        public async Task<QueryResult> Query(string? q, int page, bool orderByDate, bool onlyMatchTitle, DateTimeOffset since, DateTimeOffset before, int? _toPoints = null, int? _fromPoints = null, int? _toComments = null, int? _fromComments = null)
         {
             string url = orderByDate ? Constants.QRecent : Constants.QBest;
             url += string.Format(Constants.QPage, page);
 
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                url += string.Format(Constants.QQuery, q);
-            }
+            if (onlyMatchTitle)
+                url += Constants.QOnlyTitle;
 
-            if (since.HasValue && before.HasValue)
+            if (!string.IsNullOrWhiteSpace(q))
+                url += string.Format(Constants.QQuery, q);
+
+            if (since != DateTimeOffset.MinValue || before != DateTimeOffset.MinValue || _toPoints.HasValue || _fromPoints.HasValue || _toComments.HasValue || _fromComments.HasValue)
             {
-                url += string.Format(Constants.QBetween, since.Value.ToUnixTimeSeconds(), before.Value.ToUnixTimeSeconds());
-            }
-            else if (since.HasValue)
-            {
-                url += string.Format(Constants.QSince, since.Value.ToUnixTimeSeconds());
-            }
-            else if (before.HasValue)
-            {
-                url += string.Format(Constants.QBefore, before.Value.ToUnixTimeSeconds());
+                List<string> NumericFilters = new();
+                if (since != DateTimeOffset.MinValue)
+                {
+                    NumericFilters.Add(string.Format(Constants.QSince, Constants.QCreatedAt, since.ToUnixTimeSeconds()));
+                }
+                if (before != DateTimeOffset.MinValue)
+                {
+                    NumericFilters.Add(string.Format(Constants.QBefore, Constants.QCreatedAt, before.ToUnixTimeSeconds()));
+                }
+                if (_toPoints.HasValue)
+                {
+                    NumericFilters.Add(string.Format(Constants.QBefore, Constants.QPoints, _toPoints.Value));
+                }
+                if (_fromPoints.HasValue)
+                {
+                    NumericFilters.Add(string.Format(Constants.QSince, Constants.QPoints, _fromPoints.Value));
+                }
+                if (_toComments.HasValue)
+                {
+                    NumericFilters.Add(string.Format(Constants.QBefore, Constants.QNumComments, _toComments.Value));
+                }
+                if (_fromComments.HasValue)
+                {
+                    NumericFilters.Add(string.Format(Constants.QSince, Constants.QNumComments, _fromComments.Value));
+                }
+
+                if (NumericFilters.Any())
+                {
+                    url += Constants.QNumericFilters + string.Join(',', NumericFilters);
+                }
             }
 
             try

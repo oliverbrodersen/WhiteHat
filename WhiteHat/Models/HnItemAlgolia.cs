@@ -45,6 +45,8 @@ namespace WhiteHat.Models
         [JsonPropertyName("options")]
         public object[] Options { get; set; }
 
+        public Hit Hit { get; set; }
+
         public int KidCount { get; set; } = -1;
 
         public string TimeSince()

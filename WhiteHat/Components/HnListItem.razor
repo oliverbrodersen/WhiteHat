@@ -29,9 +29,17 @@ else {
                 @(Item.Index <= 0 ? Index : Item.Index)
             </h1>
             <div class="main">
-                <h2>
-                    @Item.Title
-                </h2>
+                @if (!string.IsNullOrEmpty(Item.Hit?.HighlightResult?.Title?.Value))
+                {
+                    <h2>
+                        @((MarkupString)Item.Hit.HighlightResult.Title.Value)
+                    </h2>
+                }
+                else{
+                    <h2>
+                        @Item.Title
+                    </h2>
+                }
                 @if (Item.Url is not null)
                 {
                     <span>

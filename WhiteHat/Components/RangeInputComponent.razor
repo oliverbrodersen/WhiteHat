@@ -1,0 +1,113 @@
+﻿@using System.Text.Json
+@typeparam TItem
+<div class="range">
+    @if(To is string)
+    {
+        <div class="@(_fromEnabled ? "enabled" : string.Empty)">
+            <Checkbox @bind-Checked=_fromEnabled></Checkbox>
+            <input placeholder="@FromText" type="text" @bind-value=From />
+            <label>
+                @FromText
+            </label>
+        </div>
+        <div class="@(_toEnabled ? "enabled" : string.Empty)">
+            <Checkbox @bind-Checked=_toEnabled></Checkbox>
+            <input placeholder="@ToText" type="text" @bind-value=To />
+            <label>
+                @ToText
+            </label>
+        </div>
+    }
+    else if(To is int or long)
+    {
+        <div class="@(_fromEnabled ? "enabled" : string.Empty)">
+            <Checkbox @bind-Checked=_fromEnabled></Checkbox>
+            <input placeholder="@FromText" type="number" value=@From @onchange=@(x => ChangeData(x, RangeType.From)) />
+            <label>
+                @FromText
+            </label>
+        </div>
+        <div class="@(_toEnabled ? "enabled" : string.Empty)">
+            <Checkbox @bind-Checked=_toEnabled></Checkbox>
+            <input placeholder="@ToText" type="number" value=@To @onchange=@(x => ChangeData(x, RangeType.To)) />
+            <label>
+                @ToText
+            </label>
+        </div>
+    }
+    else if (To is DateTime or DateTimeOffset)
+    {
+        <div class="@(_fromEnabled ? "enabled" : string.Empty)">
+            <Checkbox @bind-Checked=_fromEnabled></Checkbox>
+            <input placeholder="@FromText" type="date" value=@From @onchange=@(x => ChangeData(x, RangeType.From)) />
+            <label>
+                @FromText
+            </label>
+        </div>
+        <div class="@(_toEnabled ? "enabled" : string.Empty)">
+            <Checkbox @bind-Checked=_toEnabled></Checkbox>
+            <input placeholder="@ToText" type="date" value=@To @onchange=@(x => ChangeData(x, RangeType.To)) />
+            <label>
+                @ToText
+            </label>
+        </div>
+    }
+    else
+    {
+        <div class="@(_fromEnabled ? "enabled" : string.Empty)">
+            <Checkbox @bind-Checked=_fromEnabled></Checkbox>
+            <input placeholder="@FromText" value=@From @onchange=@(x => ChangeData(x, RangeType.From)) />
+            <label>
+                @FromText
+            </label>
+        </div>
+        <div class="@(_toEnabled ? "enabled" : string.Empty)">
+            <Checkbox @bind-Checked=_toEnabled></Checkbox>
+            <input placeholder="@ToText" value=@To @onchange=@(x => ChangeData(x, RangeType.To)) />
+            <label>
+                @ToText
+            </label>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public TItem To { get; set; }
+    [Parameter]
+    public TItem From { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem> ToChanged { get; set; }
+    [Parameter]
+    public EventCallback<TItem> FromChanged { get; set; }
+
+    [Parameter]
+    public string ToText { get; set; } = "Max";
+    [Parameter]
+    public string FromText { get; set; } = "Min";
+
+    private bool _toEnabled;
+    private bool _fromEnabled;
+
+    private async Task ChangeData(ChangeEventArgs item, RangeType type){
+        if(type == RangeType.To){
+            To = JsonSerializer.Deserialize<TItem>((string)item.Value);
+            if(ToChanged.HasDelegate){
+                await ToChanged.InvokeAsync(To);
+            }
+        }
+        else if (type == RangeType.From)
+        {
+            From = JsonSerializer.Deserialize<TItem>((string)item.Value);
+            if (FromChanged.HasDelegate)
+            {
+                await FromChanged.InvokeAsync(From);
+            }
+        }
+    }
+
+    private enum RangeType{
+        To, From
+    }
+}

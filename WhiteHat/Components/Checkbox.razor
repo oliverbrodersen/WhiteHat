@@ -1,0 +1,30 @@
+﻿<div class="checkbox @(Checked ? "checked" : string.Empty)" tabindex="1" id="@id" @onclick=Click>
+    <span class="material-icons-round">
+        done
+    </span>
+</div>
+
+@code {
+    private string id;
+
+    [Parameter]
+    public bool Checked { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> CheckedChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+        id = Guid.NewGuid().ToString();
+        base.OnInitialized();
+    }
+
+    private async Task Click()
+    {
+        Checked = !Checked;
+        if (CheckedChanged.HasDelegate)
+        {
+            await CheckedChanged.InvokeAsync(Checked);
+        }
+    }
+}
