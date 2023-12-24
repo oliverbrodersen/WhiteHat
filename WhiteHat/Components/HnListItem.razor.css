@@ -1,7 +1,11 @@
-﻿.hnitem-list-item {
+﻿.clickable{
+    cursor: pointer;
+}
+
+.hnitem-list-item {
     position: relative;
-    width: 80vw;
-    max-width: 100%;
+    width: 80%;
+    max-width: 80vw;
     margin: 4px 0;
     padding: 16px;
     border-radius: 24px;
@@ -28,21 +32,27 @@
         transition: ease .2s all;
     }
 
-.hnitem-list-item .content:hover .main span .icon {
+.hnitem-list-item .content:hover .main a .icon {
     width: 1rem;
 }
 
+.hnitem-list-item .content:hover .main a,
 .hnitem-list-item .content:hover .main span {
     background: var(--primary);
 }
 
-.hnitem-list-item .content:hover .main > span {
+.hnitem-list-item .content:hover .main > a {
     box-shadow: 0px 2px 8px var(--primary50), 0px 0px 32px var(--primary50);
     outline: .2rem solid var(--primary);
     outline-offset: -0.2rem;
 }
 
-.hnitem-list-item:hover .index {
+.hnitem-list-item .content .main a:hover {
+    color: var(--text) !important;
+}
+
+.hnitem-list-item:hover .index,
+.index.opened {
     color: var(--primary);
     font-weight: 900;
 }
@@ -83,7 +93,7 @@
             font-weight: 900;
         }
 
-            .content .main > span {
+            .content .main > a {
                 background: var(--white50);
                 padding: 6px 12px;
                 border-radius: 16px;
@@ -97,7 +107,7 @@
                 transition: linear .2s all;
             }
 
-        .content .main span .icon {
+        .content .main a .icon {
             display: flex;
             align-items: center;
             margin-left: 8px;
@@ -106,7 +116,7 @@
             transition: linear .2s all;
         }
 
-        .content .main span span {
+        .content .main a span {
             font-size: .9rem;
             font-weight: 900;
         }
@@ -206,11 +216,12 @@
         color: var(--text50);
         width: 100%;
     }
-    .text:not(.text-expanded) .text-content {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+.text:not(.text-expanded) .text-content {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 
 .text:not(.text-expanded) {
     display: flex;

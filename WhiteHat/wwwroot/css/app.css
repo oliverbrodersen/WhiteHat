@@ -1,6 +1,7 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-* {
+    
+:root {
+    --header-h: calc(2.6rem + 48px);
     --primary: #ff6600;
     --primary20: #ff660060;
     --primary50: #ff660080;
@@ -17,12 +18,13 @@
     --white50: #ffffff20;
     --title-font: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --body-font: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color-scheme: dark;
 }
-
 html, body {
     background: var(--bg);
     font-family: var(--body-font);
     color: var(--text);
+    margin:0;
 }
 
 h1, h2, h3, h4, h5, h6, label {

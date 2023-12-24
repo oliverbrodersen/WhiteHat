@@ -23,9 +23,9 @@
     </div>
 }
 else {
-    <div class="hnitem-list-item">
-        <a class="content default @(_showComments ? "show-comments" : string.Empty)" target="@(Item.Url == null ? "" : "_blank")" href="@(Item.Url == null ? "" : Item.Url.AbsoluteUri)" @onclick:stopPropagation=true>
-            <h1 class="index">
+    <div class="hnitem-list-item" id="@Item?.Id">
+        <div class="content default @(Item.ShowComments ? "show-comments" : string.Empty) @(string.IsNullOrEmpty(Item?.Url?.ToString())?string.Empty:"clickable")" @onclick=ItemClicked @onclick:stopPropagation=true>
+            <h1 class="index @((Selected is not null && Selected.Id == Item.Id) || (SelectedIndex == Item?.Index - 1) ? "opened" : string.Empty)">
                 @(Item.Index <= 0 ? Index : Item.Index)
             </h1>
             <div class="main">
@@ -42,40 +42,29 @@ else {
                 }
                 @if (Item.Url is not null)
                 {
-                    <span>
-                        @Item.Url.Host
+                    string url = Item.Url.Host;
+                    <a target="_blank" href="@(Item.Url == null ? "" : Item.Url.AbsoluteUri)">
+                        @(url.StartsWith("www.") ? url.Substring(4) : url)
                         <div class="icon">
                             <span class="material-icons-round">
                                 open_in_new
                             </span>
                         </div>
-                    </span>
+                    </a>
                 }
             </div>
             @if(!string.IsNullOrWhiteSpace(Item.Text)){
-                <div class="text @(_showContent ? "text-expanded" : string.Empty)">
-                    @if(_showContent){
-                        <span @onclick=ToggleExpand @onclick:preventDefault=true>
-                            <span class="material-icons-round">
-                                expand_less
-                            </span>
-                            Collapse
+                <div class="text @(Item.ShowExpand ? "text-expanded" : string.Empty)">
+                    <span @onclick=ToggleExpand @onclick:preventDefault=true @onclick:stopPropagation=true>
+                        <span class="material-icons-round">
+                            @(Item.ShowExpand ? "expand_less" : "expand_more")
                         </span>
-                        <div class="text-content">
-                            @((MarkupString)Item.Text)
-                        </div>
-                    }
-                    else{
-                        <span @onclick=ToggleExpand @onclick:preventDefault=true>
-                            <span class="material-icons-round">
-                                expand_more
-                            </span>
-                            Expand
-                        </span>
-                        <div class="text-content">
-                            @((MarkupString)StripHTML(Item.Text))
-                        </div>
-                    }
+                        @(Item.ShowExpand ? "Collapse" : "Expand")
+
+                    </span>
+                    <div class="text-content">
+                        @(Item.ShowExpand ? (MarkupString)Item.Text : (MarkupString)StripHTML(Item.Text))
+                    </div>
                 </div>
             }
             <div class="details">
@@ -96,7 +85,7 @@ else {
                 </div>
                 @if (!string.IsNullOrEmpty(Item.Author))
                 {
-                    <div class="action">
+                    <div>
                         <span class="material-icons-round">
                             person
                         </span>
@@ -105,7 +94,7 @@ else {
                 }
                 @if (Item.Children is not null && Item.Children.Any())
                 {
-                    <div class="action" @onclick=@(() => _showComments = !_showComments) @onclick:preventDefault=true>
+                    <div class="action" @onclick=@ToggleComments @onclick:preventDefault=true @onclick:stopPropagation=true>
                         <span class="material-icons-round">
                             mode_comment
                         </span>
@@ -113,8 +102,8 @@ else {
                     </div>
                 }
             </div>
-        </a>
-        @if (_showComments)
+        </div>
+        @if (Item.ShowComments)
         {
             <div class="comments">
                 @foreach (var kid in Item.Children)
@@ -129,40 +118,4 @@ else {
     </div>
 }
 
-@code {
-    [Parameter]
-    public HnItemAlgolia Item { get; set; }
 
-    [Parameter]
-    public int Index { get; set; }
-
-    [Parameter]
-    public bool Loader { get; set; }
-
-    private bool _showComments;
-
-    private bool _showContent;
-
-    protected async override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if(firstRender && !Loader)
-        {
-            Item.CountKids();
-            StateHasChanged();
-        }
-
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
-    private void ToggleExpand(){
-        if(!string.IsNullOrWhiteSpace(Item.Text)){
-            _showContent = !_showContent;
-        }
-    }
-
-    private string StripHTML(string HTMLText)
-    {
-        Regex reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase);
-        return reg.Replace(HTMLText, "");
-    }
-}

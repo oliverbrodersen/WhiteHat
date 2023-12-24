@@ -49,6 +49,10 @@ namespace WhiteHat.Models
 
         public int KidCount { get; set; } = -1;
 
+        public bool ShowComments { get; set; }
+
+        public bool ShowExpand { get; set; }
+
         public string TimeSince()
         {
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
@@ -67,17 +71,17 @@ namespace WhiteHat.Models
                     _ => timeSpan.TotalHours switch
                     {
                         <= 1 => "an hour ago",
-                        < 24 => $"{timeSpan.Hours} hour{(timeSpan.Hours > 1 ? "s" : "")} ago",
+                        < 24 => $"{timeSpan.Hours} h ago",
                         _ => timeSpan.TotalDays switch
                         {
                             <= 1 => "yesterday",
-                            <= 30 => $"{timeSpan.Days} day{(timeSpan.Days > 1 ? "s" : "")} ago",
+                            <= 30 => $"{timeSpan.Days} d ago",
 
                             <= 60 => "a month ago",
                             < 365 => $"{timeSpan.Days / 30} month{(timeSpan.Days / 30 > 1 ? "s" : "")} ago",
 
                             <= 365 * 2 => "a year ago",
-                            _ => $"{timeSpan.Days / 365} years ago"
+                            _ => $"{timeSpan.Days / 365} y ago"
                         }
                     }
                 }

@@ -5,123 +5,100 @@
 @using WhiteHat.Models
 @using WhiteHat.Services
 @inject HNFetcher HNFetcher
+@inject IJSRuntime JSRuntime
+@implements IDisposable
 
 <PageTitle>WhiteHat | Home</PageTitle>
-
-<div class="story-container">
-    @if(_items is null || _items.Count < 0){
-        <p>
-            loading
-        </p>
-    }
-    else{
-        for (var i = 0; i < _items.Count(); i++)
+<div class="container @(_shownItem is not null ? "open" : string.Empty) @(_showSmallPreview?"small":string.Empty)">
+    <div class="items-container">
+        @if (_items is null || _items.Count < 0)
         {
-            int index = i + 1;
-            <HnListItem Item="_items[i]" Index="index"></HnListItem>
-        }
-
-        @if(_isLoading){
-            <HnListItem Index="_items.Count() + 1" Loader="true"></HnListItem>
-        }
-        @if (_isLoading)
-        {
+            <HnListItem Index="1" Loader="true"></HnListItem>
             <button class="loadmore loading" @onclick=LoadStories>
                 <span class="loader"></span>
                 Loading
             </button>
         }
-        else{
-            <button class="loadmore" @onclick=LoadStories>
-                Load more
-            </button>
+        else
+        {
+            for (var i = 0; i < _items.Count(); i++)
+            {
+                int index = i;
+                <HnListItem @bind-Item="_items[index]" OpenLink=@(x => OpenItem(x,i)) Selected=_shownItem SelectedIndex=_selectedIndex></HnListItem>
+            }
+
+            @if (_isLoading)
+            {
+                <HnListItem Index="_items.Count() + 1" Loader="true"></HnListItem>
+                <button class="loadmore loading" @onclick=LoadStories>
+                    <span class="loader"></span>
+                    Loading
+                </button>
+            }
+            else
+            {
+                <button class="loadmore" @onclick=LoadStories>
+                    Load more
+                </button>
+            }
         }
-    }
+    </div>
+    <div class="link-pane-container">
+        <div class="link-pane">
+            <div class="pane-header">
+                <div class="group">
+                    <button @onclick=OpenInNewTab>
+                        <p>
+                            Open
+                        </p>
+                        <span class="material-icons-round">
+                            open_in_new
+                        </span>
+                    </button>
+                    <button @onclick=TogglePrevSize>
+                        <p>
+                            @(_showSmallPreview ? "Wide" : "Slim")
+                        </p>
+                        <span class="material-icons-round rotate">
+                            @(_showSmallPreview ? "unfold_more" : "unfold_less")
+                        </span>
+                    </button>
+                    <button @onclick=@(() => ScrollToItem(_shownItem.Id))>
+                        <p>
+                            Scroll to post
+                        </p>
+                        <span class="material-icons-round">
+                            swipe_vertical
+                        </span>
+                    </button>
+                </div>
+                <button class="close" @onclick=CloseLinkPane>
+                    <span class="material-icons-round">
+                        close
+                    </span>
+                </button>
+            </div>
+            @if (_shownItem is not null)
+            {
+                <h3>
+                    @_shownItem.Title
+                </h3>
+                <div class="iframe-container">
+                    <iframe src=@_shownItem.Url.ToString()
+                            id="itemPreview"
+                            onload="iframeLoaded()"
+                            onerror="loadFailed()"
+                            title=@_shownItem.Title
+                            sandbox="allow-forms allow-same-origin allow-scripts"
+                            referrerpolicy="no-referrer">
+                    </iframe>
+                    <button id="frameLoader" class="loadmore loading" @onclick=LoadStories>
+                        <span class="loader"></span>
+                        Loading
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
 </div>
 
-@code{
-    [Parameter]
-    public string? Page { get; set; }
-
-    private readonly int _pageSize = Constants.PageSize;
-    private int _loadedStories = 0;
-    private bool _isLoading, _stop;
-    List<HnItemAlgolia> _items;
-    List<long> _itemIds;
-    HnStories story;
-
-    protected async override Task OnParametersSetAsync()
-    {
-        if (string.IsNullOrEmpty(Page))
-        {
-            story = HnStories.Best;
-        }
-        else
-        {
-            switch (Page.ToLower())
-            {
-                case "best":
-                    story = HnStories.Best;
-                    break;
-                case "new":
-                    story = HnStories.New;
-                    break;
-                case "top":
-                    story = HnStories.Top;
-                    break;
-                case "ask":
-                    story = HnStories.Ask;
-                    break;
-                case "show":
-                    story = HnStories.Show;
-                    break;
-                case "job":
-                    story = HnStories.Job;
-                    break;
-                default:
-                    story = HnStories.Top;
-                    break;
-            }
-        }
-
-        _items = new();
-        _itemIds = new();
-        _loadedStories = 0;
-        _stop = _isLoading;
-        await LoadStories();
-    }
-
-    private async Task LoadStories()
-    {
-        HnStories stloaded = story;
-        _isLoading = true;
-        StateHasChanged();
-        _itemIds = await HNFetcher.FetchStories(stloaded);
-
-        await LoadStory(_pageSize);
-
-        _isLoading = _stop;
-        _stop = false;
-        StateHasChanged();
-    }
-
-    private async Task LoadStory(int _leftToLoad)
-    {
-        var item = await HNFetcher.FetchItemAlgolia(_itemIds[_loadedStories]);
-
-        if (!_stop)
-        {
-            if(item is not null)
-            {
-                _items.Add(item);
-                _loadedStories++;
-                StateHasChanged();
-            }
-        }
-        else
-            return;
-
-        if (_leftToLoad > 1)
-            await LoadStory(--_leftToLoad);
-    }
-}
