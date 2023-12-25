@@ -21,6 +21,7 @@
         public static readonly string QBest = "https://hn.algolia.com/api/v1/search?" + QPagesize + PageSize + QStoriesOnly;
         public static readonly string QRecent = "https://hn.algolia.com/api/v1/search_by_date?" + QPagesize + PageSize + QStoriesOnly;
         public static readonly string QQuery = "&query={0}";
+        public static string SettingsKeyId = "settings";
         public static readonly string QNumericFilters = "&numericFilters=";
         public static readonly string QCreatedAt = "created_at_i";
         public static readonly string QPoints = "points";

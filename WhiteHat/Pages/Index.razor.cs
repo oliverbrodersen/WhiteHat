@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
+using System.Security.Cryptography;
 using WhiteHat.Misc;
 using WhiteHat.Models;
 using WhiteHat.Services;
@@ -15,7 +16,7 @@ namespace WhiteHat.Pages
         private readonly int _pageSize = Constants.PageSize;
         private int _loadedStories = 0;
         private int _selectedIndex = -1;
-        private bool _isLoading, _stop, _showSmallPreview, _isIframeLoading, _isFrameOpen;
+        private bool _isLoading, _stop, _showSmallPreview, _isIframeLoading, _isFrameOpen, _isComments;
         List<HnItemAlgolia> _items;
         private HnItemAlgolia _shownItem;
         List<long> _itemIds;
@@ -129,6 +130,11 @@ namespace WhiteHat.Pages
         private void TogglePrevSize()
         {
             _showSmallPreview = !_showSmallPreview;
+        }
+
+        private void ToggleContent()
+        {
+            _isComments = !_isComments;
         }
 
         private async Task ScrollToItem(long Id)

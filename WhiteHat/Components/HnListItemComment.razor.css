@@ -77,10 +77,11 @@
                 flex-direction: column;
             }
 
-.hnlistitem-comment .comment-info .body-collapsed{
+.hnlistitem-comment .comment-info .body-collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     flex: 1;
     margin: 0 8px;
     color: var(--text);

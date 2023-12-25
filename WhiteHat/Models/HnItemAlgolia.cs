@@ -67,21 +67,21 @@ namespace WhiteHat.Models
                 _ => timeSpan.TotalMinutes switch
                 {
                     <= 1 => "a minute ago",
-                    < 60 => $"{timeSpan.Minutes} minute{(timeSpan.Seconds > 1 ? "s" : "")} ago",
+                    < 60 => $"{timeSpan.Minutes} min",
                     _ => timeSpan.TotalHours switch
                     {
                         <= 1 => "an hour ago",
-                        < 24 => $"{timeSpan.Hours} h ago",
+                        < 24 => $"{timeSpan.Hours}h",
                         _ => timeSpan.TotalDays switch
                         {
                             <= 1 => "yesterday",
-                            <= 30 => $"{timeSpan.Days} d ago",
+                            <= 30 => $"{timeSpan.Days}d",
 
                             <= 60 => "a month ago",
                             < 365 => $"{timeSpan.Days / 30} month{(timeSpan.Days / 30 > 1 ? "s" : "")} ago",
 
                             <= 365 * 2 => "a year ago",
-                            _ => $"{timeSpan.Days / 365} y ago"
+                            _ => $"{timeSpan.Days / 365}y ago"
                         }
                     }
                 }

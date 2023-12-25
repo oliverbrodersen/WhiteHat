@@ -29,6 +29,23 @@ else {
                 @(Item.Index <= 0 ? Index : Item.Index)
             </h1>
             <div class="main">
+                @if (Item.Url is not null)
+                {
+                    string url = Item.Url.Host;
+                    <div class="link-container">
+                        <a target="_blank" href="@(Item.Url == null ? "" : Item.Url.AbsoluteUri)">
+                            @(url.StartsWith("www.") ? url.Substring(4) : url)
+                            <div class="icon">
+                                <span class="inwindow material-icons-round">
+                                    vertical_split
+                                </span>
+                                <span class="newwindow material-icons-round">
+                                    open_in_new
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                }
                 @if (!string.IsNullOrEmpty(Item.Hit?.HighlightResult?.Title?.Value))
                 {
                     <h2>
@@ -39,21 +56,6 @@ else {
                     <h2>
                         @Item.Title
                     </h2>
-                }
-                @if (Item.Url is not null)
-                {
-                    string url = Item.Url.Host;
-                    <a target="_blank" href="@(Item.Url == null ? "" : Item.Url.AbsoluteUri)">
-                        @(url.StartsWith("www.") ? url.Substring(4) : url)
-                        <div class="icon">
-                            <span class="newwindow material-icons-round">
-                                open_in_new
-                            </span>
-                            <span class="inwindow material-icons-round">
-                                vertical_split
-                            </span>
-                        </div>
-                    </a>
                 }
             </div>
             @if(!string.IsNullOrWhiteSpace(Item.Text)){
@@ -108,7 +110,7 @@ else {
         </div>
         @if (Item.ShowComments)
         {
-            <div class="comments">
+            <div class="comments" @onclick:preventDefault=true @onclick:stopPropagation=true>
                 @foreach (var kid in Item.Children)
                 {
                     @if (kid is not null && !string.IsNullOrWhiteSpace(kid.Text) && !string.IsNullOrWhiteSpace(kid.Author))

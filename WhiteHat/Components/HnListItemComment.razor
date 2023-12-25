@@ -1,7 +1,7 @@
 ﻿@using WhiteHat.Models
 
 <div class="hnlistitem-comment @(_collapse ? "collapsed" : string.Empty)">
-    <div class="collapse" @onclick=@(() => _collapse = !_collapse)></div>
+    <div class="collapse" @onclick=@(() => _collapse = !_collapse) ></div>
     <content>
         <div class="comment-info">
             @if (_collapse)

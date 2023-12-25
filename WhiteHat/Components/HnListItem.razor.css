@@ -4,11 +4,11 @@
 
 .hnitem-list-item {
     position: relative;
-    width: 80%;
-    max-width: 80vw;
+    width: var(--w);
+    max-width: var(--mw);
     margin: 4px 0;
     padding: 16px;
-    border-radius: 24px;
+    border-radius: 16px;
     background: var(--white10);
     display: flex;
     flex-direction: column;
@@ -32,28 +32,6 @@
         transition: ease .2s all;
     }
 
-.hnitem-list-item .content:hover .main a .icon {
-    width: 1rem;
-}
-.hnitem-list-item .content.clickable:hover .main a:not(:hover) .icon .newwindow,
-.hnitem-list-item .content:not(.clickable) .main a:hover .icon .inwindow {
-    display: none !important;
-}
-
-.hnitem-list-item .content:hover .main a,
-.hnitem-list-item .content:hover .main span {
-    background: var(--primary);
-}
-
-.hnitem-list-item .content:hover .main > a {
-    box-shadow: 0px 2px 8px var(--primary50), 0px 0px 32px var(--primary50);
-    outline: .2rem solid var(--primary);
-    outline-offset: -0.2rem;
-}
-
-.hnitem-list-item .content .main a:hover {
-    color: var(--text) !important;
-}
 
 .hnitem-list-item:hover .index,
 .index.opened {
@@ -77,9 +55,6 @@
     }
 
     .content .main {
-        display: flex;
-        flex-direction: row;
-        align-items: start;
     }
 
         .content .main h2 {
@@ -97,33 +72,67 @@
             font-weight: 900;
         }
 
-            .content .main > a {
-                background: var(--white50);
-                padding: 6px 12px;
-                border-radius: 16px;
-                font-size: 1rem;
-                font-weight: 600;
-                font-family: var(--title-font);
-                color: var(--text);
-                display: flex;
-                align-items: center;
-                outline: 0px solid var(--primary);
-                transition: linear .2s all;
-            }
+        .content .main .link-container:before {
+            content: '';
+            display: block;
+            float: right;
+            height: 0px;
+        }
+
+.content .main .link-container a {
+    background: var(--white50);
+    padding: 6px 14px;
+    padding-right: 10px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--title-font);
+    color: var(--text);
+    float: right;
+    display: flex;
+    align-items: center;
+    outline: 0px solid var(--primary);
+    transition: linear .2s all;
+}
+
+.hnitem-list-item .content:hover .main .link-container a {
+    box-shadow: 0px 2px 8px var(--primary50), 0px 0px 32px var(--primary50);
+    outline: .2rem solid var(--primary);
+    outline-offset: -0.2rem;
+}
 
         .content .main a .icon {
             display: flex;
             align-items: center;
-            margin-left: 8px;
+            margin-left: 4px;
             overflow: hidden;
             width: 0rem;
             transition: linear .2s all;
         }
 
         .content .main a span {
-            font-size: .9rem;
+            font-size: 18px;
             font-weight: 900;
         }
+
+
+.hnitem-list-item .content:hover .main a .icon {
+    width: 1rem;
+}
+
+.hnitem-list-item .content.clickable:hover .main a:not(:hover) .icon .newwindow,
+.hnitem-list-item .content.clickable .main a:hover .icon .inwindow {
+    display: none !important;
+}
+
+.hnitem-list-item .content:hover .main a,
+.hnitem-list-item .content:hover .main span {
+    background: var(--primary);
+}
+
+.hnitem-list-item .content .main a:hover {
+    color: var(--text) !important;
+}
 
     .content .details {
         display: flex;

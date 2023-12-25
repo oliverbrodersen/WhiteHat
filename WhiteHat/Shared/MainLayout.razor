@@ -1,6 +1,8 @@
 ﻿@using WhiteHat.Components;
+@using WhiteHat.Services
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+@inject StorageService Storage
 
 <div class="page">
     <UpdateAvailable></UpdateAvailable>
@@ -39,7 +41,12 @@
     <main>
         @Body
     </main>
-    <div class="shortcut-display">
+    <div class="shortcut-display @(_settings is not null && _settings.ShowShortcuts?"show":string.Empty)">
+        <button @onclick=ToggleShortcuts class="close">
+            <span class="material-icons-round">
+                @(_settings is not null && _settings.ShowShortcuts ? "keyboard_double_arrow_down" : "keyboard_double_arrow_up")
+            </span>
+        </button>
         <div class="col">
             <div class="shortcut">
                 <span class="material-icons-round">
@@ -126,14 +133,3 @@
         </div>
      </div>
 </div>
-@code{
-    private string _search;
-    private bool _updated;
-
-    private void Search(){
-        if(!string.IsNullOrWhiteSpace(_search)){
-            NavigationManager.NavigateTo("/search/" + _search);
-            _search = string.Empty;
-        }
-    }
-}
