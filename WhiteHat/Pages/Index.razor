@@ -10,7 +10,7 @@
 
 <PageTitle>WhiteHat @(string.IsNullOrEmpty(Page) || Page.ToLower() == "best" ? string.Empty : " - " + Page[0].ToString().ToUpper() + Page.Substring(1))</PageTitle>
 <div class="container @(_shownItem is not null ? "open" : string.Empty) @(_showSmallPreview?"small":string.Empty)">
-    <div class="items-container">
+    <div class="items-container" id="list">
         @if (_items is null || _items.Count < 0)
         {
             <HnListItem Index="1" Loader="true"></HnListItem>

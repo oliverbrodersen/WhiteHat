@@ -16,10 +16,16 @@ function scrollToItem(id) {
     var itemPosition = item.getBoundingClientRect().top + window.pageYOffset;
 
     // Scroll to the element's position minus the header height
-    window.scrollTo({
-        top: itemPosition - getHeaderHeight(),
-        behavior: 'smooth'
-    });
+    if (window.innerHeight > window.innerWidth) {
+        document.getElementById(id).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+    }
+    else {
+        window.scrollTo({
+            top: itemPosition - getHeaderHeight(),
+            behavior: 'smooth'
+        });
+    }
+
 }
 
 function getHeaderHeight() {
