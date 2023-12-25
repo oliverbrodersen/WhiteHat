@@ -1,0 +1,89 @@
+﻿.update-container {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    animation: fadein 1s cubic-bezier(0.18,0.89,0.32,1.27);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 35;
+}
+
+    .update-container > p {
+        margin: 0;
+        margin-top: 8px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text);
+        opacity: .6;
+        z-index: 2;
+        text-align: center;
+    }
+
+
+.floating-update-button {
+    position: relative;
+    padding: 16px 32px;
+    white-space: nowrap;
+    font-size: 16px;
+    padding-right: 8px;
+    border-radius: 20px;
+    border: none;
+    background: var(--bg-card1);
+    font-family: var(--body-font);
+    color: var(--text);
+    font-weight: 700;
+    cursor: pointer;
+    outline: var(--primary50) 3px solid;
+    box-shadow: var(--primary50) 0 0 24px;
+    animation: ease-out pulsate 2s infinite;
+}
+
+@keyframes pulsate {
+    0%, 10%, 90%, 100% {
+        outline: var(--primary50) 1px solid;
+        box-shadow: var(--primary50) 0 0 8px;
+    }
+    50% {
+        outline: var(--primary50) 3px solid;
+        box-shadow: var(--primary50) 0 0 24px;
+    }
+}
+.floating-update-button .click {
+    background: var(--primary);
+    color: var(--text);
+    padding: 6px 12px;
+    margin-left: 16px;
+    font-size: 14px;
+    border-radius: 16px;
+    font-weight: 500;
+    box-shadow: var(--primary50) 0 0 16px;
+}
+
+@keyframes fadein {
+    from {
+       bottom: calc((84px + 1rem) * -2);
+    }
+
+    to {
+        bottom: 16px;
+    }
+}
+
+
+
+@media (max-width: 500px) {
+    .update-container span.click {
+        display: none;
+    }
+
+    .update-container button {
+        padding: 16px 32px;
+    }
+}
+@media (max-width: 250px) {
+    .update-container button {
+        white-space: unset
+    }
+}

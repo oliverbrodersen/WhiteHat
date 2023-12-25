@@ -70,7 +70,7 @@ namespace WhiteHat.Components
 
         private async Task ItemClicked()
         {
-            if (string.IsNullOrEmpty(Item.Url.ToString()) || !OpenLink.HasDelegate)
+            if (Item is null || Item.Url is null || string.IsNullOrEmpty(Item.Url.ToString()) || !OpenLink.HasDelegate)
             {
                 return;
             }

@@ -1,7 +1,9 @@
-﻿@inherits LayoutComponentBase
+﻿@using WhiteHat.Components;
+@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 
 <div class="page">
+    <UpdateAvailable></UpdateAvailable>
     <header>
         <img src="img/Logo.png" class="icon"/>
         <div class="navigation">
@@ -37,9 +39,96 @@
     <main>
         @Body
     </main>
+    <div class="shortcut-display">
+        <div class="col">
+            <div class="shortcut">
+                <span class="material-icons-round">
+                    arrow_upward
+                </span>
+                <div class="key">
+                </div>
+                <p>
+                    Last post
+                    <span>
+                        w
+                    </span>
+                </p>
+            </div>
+            <div class="shortcut">
+                <span class="material-icons-round">
+                    arrow_downward
+                </span>
+                <div class="key">
+                </div>
+                <p>
+                    Next post
+                    <span>
+                        s
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="shortcut">
+                <span class="material-icons-round">
+                    notes
+                </span>
+                <div class="key">
+                </div>
+                <p>
+                    Comments
+                    <span>
+                        a
+                    </span>
+                </p>
+            </div>
+            <div class="shortcut">
+                <span class="material-icons-round">
+                    article
+                </span>
+                <div class="key">
+                </div>
+                <p>
+                    Expand
+                    <span>
+                        e
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="shortcut">
+                <span class="material-icons-round">
+                    vertical_split
+                </span>
+                <div class="key">
+                </div>
+                <p>
+                    Open here
+                    <span>
+                        d
+                    </span>
+                </p>
+            </div>
+            <div class="shortcut">
+                <span class="material-icons-round">
+                    open_in_new
+                </span>
+                <div class="key">
+                </div>
+                <p>
+                    Open in new tab
+                    <span>
+                        o
+                    </span>
+                </p>
+            </div>
+        </div>
+     </div>
 </div>
 @code{
     private string _search;
+    private bool _updated;
 
     private void Search(){
         if(!string.IsNullOrWhiteSpace(_search)){

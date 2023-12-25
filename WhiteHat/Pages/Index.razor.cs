@@ -15,13 +15,13 @@ namespace WhiteHat.Pages
         private readonly int _pageSize = Constants.PageSize;
         private int _loadedStories = 0;
         private int _selectedIndex = -1;
-        private bool _isLoading, _stop, _showSmallPreview;
+        private bool _isLoading, _stop, _showSmallPreview, _isIframeLoading, _isFrameOpen;
         List<HnItemAlgolia> _items;
         private HnItemAlgolia _shownItem;
         List<long> _itemIds;
         HnStories story;
 
-        protected override void OnParametersSet()
+        protected override async Task OnParametersSetAsync()
         {
             if (string.IsNullOrEmpty(Page))
             {
@@ -54,18 +54,17 @@ namespace WhiteHat.Pages
                         break;
                 }
             }
+            _items = new();
+            _itemIds = new();
+            _loadedStories = 0;
+            _stop = _isLoading;
+            await LoadStories();
         }
 
 
         protected async override Task OnInitializedAsync()
         {
             await JSRuntime.InvokeVoidAsync("setupKeyboardShortcuts", DotNetObjectReference.Create(this));
-
-            _items = new();
-            _itemIds = new();
-            _loadedStories = 0;
-            _stop = _isLoading; 
-            await LoadStories();
         }
 
         private async Task LoadStories()
@@ -107,9 +106,11 @@ namespace WhiteHat.Pages
             if (_shownItem == item)
             {
                 _shownItem = null;
+                _isFrameOpen = false;
             }
             else
             {
+                _isIframeLoading = true;
                 _shownItem = item;
                 _selectedIndex = i;
             }
@@ -166,11 +167,12 @@ namespace WhiteHat.Pages
                 _selectedIndex++;
             }
 
-            if (_selectedIndex == _items.Count - 1 && !_isLoading)
+            await SelectItem(_items[_selectedIndex]);
+
+            if (_selectedIndex >= _items.Count - 1 && !_isLoading)
             {
                 await LoadStories();
             }
-            await SelectItem(_items[_selectedIndex]);
         }
 
         [JSInvokable]
@@ -202,13 +204,18 @@ namespace WhiteHat.Pages
             {
                 var item = _items[_selectedIndex];
 
+                if (item is null || item.Url is null)
+                    return;
+
                 if (_shownItem == item)
                 {
                     _shownItem = null;
+                    _isFrameOpen = false;
                 }
                 else
                 {
                     _shownItem = item;
+                    _isIframeLoading = true;
                 }
                 StateHasChanged();
             }
@@ -221,10 +228,19 @@ namespace WhiteHat.Pages
             {
                 var item = _items[_selectedIndex];
 
+                if (item is null || item.Url is null)
+                    return;
+
                 await JSRuntime.InvokeVoidAsync("open", item.Url, "_blank");
             }
         }
 
+        public void IFrameLoaded()
+        {
+            _isIframeLoading = false;
+            _isFrameOpen = true;
+            StateHasChanged();
+        }
 
 
         public void Dispose()

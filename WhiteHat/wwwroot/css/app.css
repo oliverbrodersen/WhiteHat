@@ -1,5 +1,5 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
-    
+
 :root {
     --header-h: calc(2.6rem + 48px);
     --primary: #ff6600;
@@ -16,9 +16,11 @@
     --white5: #ffffff05;
     --white10: #ffffff10;
     --white50: #ffffff20;
+    --white60: #ffffff80;
     --title-font: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --body-font: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color-scheme: dark;
+    --colorscheme: dark;
+    color-scheme: var(--colorscheme);
 }
 html, body {
     background: var(--bg);
@@ -191,6 +193,10 @@ h1, h2, h3, h4, h5, h6, label {
         background: var(--white10);
     }
 
+    .loadmore.small.loading {
+        padding: 2px;
+    }
+
 .loader {
     width: calc(1.5rem + 8px);
     height: calc(1.5rem + 8px);
@@ -200,6 +206,10 @@ h1, h2, h3, h4, h5, h6, label {
     position: relative;
     margin-right: 8px;
     animation: skLinRotate 1.5s ease-in-out infinite alternate;
+}
+
+.small .loader {
+    margin-right: 0px;
 }
 
     .loader:after {

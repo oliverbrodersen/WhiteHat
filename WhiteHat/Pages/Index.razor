@@ -82,17 +82,23 @@
             {
                 <h3>
                     @_shownItem.Title
+                    @if (_isIframeLoading)
+                    {
+                        <button id="loader" class="loadmore loading small" @onclick=StateHasChanged>
+                            <span class="loader"></span>
+                        </button>
+                    }
                 </h3>
                 <div class="iframe-container">
                     <iframe src=@_shownItem.Url.ToString()
                             id="itemPreview"
-                            onload="iframeLoaded()"
-                            onerror="loadFailed()"
+                            @onload=IFrameLoaded
                             title=@_shownItem.Title
                             sandbox="allow-forms allow-same-origin allow-scripts"
-                            referrerpolicy="no-referrer">
+                            referrerpolicy="no-referrer"
+                            class="@(_isFrameOpen?string.Empty:"hidden")">
                     </iframe>
-                    <button id="frameLoader" class="loadmore loading" @onclick=LoadStories>
+                    <button id="frameLoader" class="loadmore loading @(_isFrameOpen?"hidden":string.Empty)" @onclick=StateHasChanged>
                         <span class="loader"></span>
                         Loading
                     </button>

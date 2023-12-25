@@ -1,0 +1,45 @@
+﻿@inject IJSRuntime _jsRuntime
+
+@if (_newVersionAvailable)
+{
+    <div class="update-container">
+        <button type="button" class="floating-update-button" onclick="window.location.reload()">
+            New version available! 
+            <span class="click">
+                Click here
+            </span>
+        </button>
+        <p>
+            Only takes 2 seconds
+        </p>
+    </div>
+}
+
+@code {
+
+    private bool _newVersionAvailable = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RegisterForUpdateAvailableNotification();
+    }
+
+    private async Task RegisterForUpdateAvailableNotification()
+    {
+        await _jsRuntime.InvokeAsync<object>(
+            identifier: "registerForUpdateAvailableNotification",
+            DotNetObjectReference.Create(this),
+            nameof(OnUpdateAvailable));
+    }
+
+    [JSInvokable(nameof(OnUpdateAvailable))]
+    public Task OnUpdateAvailable()
+    {
+        _newVersionAvailable = true;
+
+        StateHasChanged();
+
+        return Task.CompletedTask;
+    }
+
+}

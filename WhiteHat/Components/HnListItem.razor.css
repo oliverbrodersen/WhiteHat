@@ -35,6 +35,10 @@
 .hnitem-list-item .content:hover .main a .icon {
     width: 1rem;
 }
+.hnitem-list-item .content.clickable:hover .main a:not(:hover) .icon .newwindow,
+.hnitem-list-item .content:not(.clickable) .main a:hover .icon .inwindow {
+    display: none !important;
+}
 
 .hnitem-list-item .content:hover .main a,
 .hnitem-list-item .content:hover .main span {

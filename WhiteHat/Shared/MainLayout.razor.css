@@ -131,3 +131,101 @@ header .navigation{
         background: linear-gradient(var(--bg) 10%, transparent);
         z-index: 14;
     }
+
+.shortcut-display {
+    position: fixed;
+    right: 0;
+    top: calc(100% - 32px);
+    transform: translateY(-100%);
+    background: var(--bg-card);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--white10);
+    padding: 8px;
+    margin: 16px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.shortcut-display .col{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+    .shortcut-display .col .shortcut {
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        align-items: center;
+        border: 1px solid var(--white10);
+        backdrop-filter: blur(8px);
+        background: var(--bg-card);
+        border-radius: 8px;
+        padding: 4px;
+        gap: 12px;
+    }
+
+        .shortcut-display .col .shortcut .key {
+            --size: 2rem;
+            height: var(--size);
+            width: var(--size);
+            min-height: var(--size);
+            min-width: var(--size);
+            max-height: var(--size);
+            max-width: var(--size);
+            border-radius: 4px;
+            border: 1px solid var(--white10);
+            backdrop-filter: blur(6px);
+            background: var(--white10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-family: system-mono, monospace;
+            font-weight: 800;
+            color: var(--white60);
+        }
+        .shortcut-display .col .shortcut > span {
+            position: absolute;
+            font-size: 16px;
+            left: calc(1rem + 4px);
+            transform: translateX(-50%);
+            text-align: center;
+        }
+        .shortcut-display .col .shortcut > p {
+            margin: 0;
+            margin-right: 12px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 5;
+        }
+
+        .shortcut-display .col .shortcut p span {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            z-index: 5;
+            font-size: 12px;
+            font-family: system-mono, monospace;
+            font-weight: 900;
+            color: var(--white);
+            background: var(--white50);
+            border: 1px solid var(--white10);
+            margin: 0;
+            --size: 14px;
+            backdrop-filter: blur(6px);
+            height: var(--size);
+            width: var(--size);
+            max-height: var(--size);
+            max-width: var(--size);
+            min-height: var(--size);
+            min-width: var(--size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }

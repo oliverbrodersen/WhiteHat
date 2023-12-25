@@ -46,8 +46,11 @@ else {
                     <a target="_blank" href="@(Item.Url == null ? "" : Item.Url.AbsoluteUri)">
                         @(url.StartsWith("www.") ? url.Substring(4) : url)
                         <div class="icon">
-                            <span class="material-icons-round">
+                            <span class="newwindow material-icons-round">
                                 open_in_new
+                            </span>
+                            <span class="inwindow material-icons-round">
+                                vertical_split
                             </span>
                         </div>
                     </a>

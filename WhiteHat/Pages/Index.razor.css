@@ -66,6 +66,10 @@
     font-size: 24px;
     margin-bottom: 16px;
     font-family: var(--title-font);
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .link-pane .pane-header button {
@@ -141,6 +145,10 @@
         border-radius: 8px;
         border: none;
         background: var(--white50);
-        opacity: 0;
         transition: opacity 0.5s ease;
+        color-scheme: var(--colorscheme);
+    }
+
+    .hidden{
+        opacity: 0;
     }
