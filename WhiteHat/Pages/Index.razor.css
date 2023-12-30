@@ -34,16 +34,22 @@
             padding: 16px;
             border: var(--white20) 1px solid;
             display: flex;
+            border-top: 1px solid var(--bg-card1);
             flex-direction: row;
-            justify-content: space-between;
+            justify-content: end;
         }
+            .container .items-container .footer p{
+                margin: .2rem 1rem;
+                opacity: .3;
+                font-family: monospace;
+            }
 
-        .container .link-pane-container {
-            --ideal-flex: 4;
-            flex: 0;
-            width: 0;
-            overflow: hidden;
-        }
+            .container .link-pane-container {
+                --ideal-flex: 4;
+                flex: 0;
+                width: 0;
+                overflow: hidden;
+            }
     .container.small .link-pane-container {
         --ideal-flex: 1;
     }
@@ -225,5 +231,8 @@
 
     .link-pane h3 {
         margin: 8px;
+    }
+    .open .link-pane .iframe-container {
+        overflow-y: auto;
     }
 }

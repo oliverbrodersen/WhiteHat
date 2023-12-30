@@ -1,4 +1,5 @@
-﻿namespace WhiteHat.Misc
+﻿using Version = WhiteHat.Models.Version;
+namespace WhiteHat.Misc
 {
     public static class Constants
     {
@@ -28,5 +29,8 @@
         public static readonly string QNumComments = "num_comments";
         public static readonly string QSince = "{0}>{1}";
         public static readonly string QBefore = "{0}<{1}";
+
+        public static string VersionKeyId = "version";
+        public static Version CurrentVersion = new Version(0, 3, 2);
     }
 }

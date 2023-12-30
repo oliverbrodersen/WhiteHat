@@ -8,7 +8,7 @@
 @inject IJSRuntime JSRuntime
 @implements IDisposable
 
-<PageTitle>WhiteHat @(string.IsNullOrEmpty(Page) || Page.ToLower() == "best" ? string.Empty : " - " + Page[0].ToString().ToUpper() + Page.Substring(1))</PageTitle>
+<PageTitle>@(string.IsNullOrEmpty(Page) || Page.ToLower() == "best" ? string.Empty : "[" + Page[0].ToString().ToUpper() + Page.Substring(1) + "] ")WhiteHat @(_shownItem is null ? string.Empty : " - " + _shownItem.Title)</PageTitle>
 <div class="container @(_shownItem is not null ? "open" : string.Empty) @(_showSmallPreview?"small":string.Empty)">
     <div class="items-container" id="list">
         @if (_items is null || _items.Count < 0)
@@ -24,7 +24,7 @@
             for (var i = 0; i < _items.Count(); i++)
             {
                 int index = i;
-                <HnListItem @bind-Item="_items[index]" OpenLink=@(x => OpenItem(x,i)) Selected=_shownItem SelectedIndex=_selectedIndex></HnListItem>
+                <HnListItem @bind-Item="_items[index]" OpenLink=@(x => OpenItem(x,index)) Selected=_shownItem SelectedIndex=_selectedIndex></HnListItem>
             }
 
             @if (_isLoading)
@@ -42,6 +42,11 @@
                 </button>
             }
         }
+        <div class="footer">
+            <p>
+                v@(Constants.CurrentVersion)
+            </p>
+        </div>
     </div>
     <div class="link-pane-container">
         <div class="link-pane">

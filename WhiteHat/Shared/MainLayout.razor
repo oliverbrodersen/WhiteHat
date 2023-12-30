@@ -1,11 +1,22 @@
-﻿@using WhiteHat.Components;
+﻿@using Blazored.LocalStorage
+@using WhiteHat.Components;
 @using WhiteHat.Services
+@using WhiteHat.Misc;
+@using WhiteHat.Models;
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+@inject ILocalStorageService localStorage
 @inject StorageService Storage
 
 <div class="page">
     <UpdateAvailable></UpdateAvailable>
+    @if(_updated){
+        <div class="updated-container">
+            <p class="updated">
+                You have been updated to <span>v@(Constants.CurrentVersion)</span>
+            </p>
+        </div>
+    }
     <header>
         <img src="img/Logo.png" class="icon"/>
         <div class="navigation">
@@ -40,6 +51,7 @@
     <div class="h-gradient"></div>
     <main>
         @Body
+
     </main>
     <div class="shortcut-display @(_settings is not null && _settings.ShowShortcuts?"show":string.Empty)">
         <button @onclick=ToggleShortcuts class="close">

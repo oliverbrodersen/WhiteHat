@@ -158,24 +158,45 @@ h1, h2, h3, h4, h5, h6, label {
     transition: margin .2s ease;
 }
 
-
-.loadmore {
-    font-family: var(--title-font);
-    font-weight: 700;
-    font-size: 1rem;
-    outline: none;
-    border: none;
-    background: var(--white50);
-    color: var(--text);
-    margin-top: 4px;
-    padding: 8px 24px;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: ease .2s all;
+.loadscreen{
+    height: 100vh;
+    width: 100%;
     display: flex;
-    position: relative;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 1rem;
 }
+
+.loadscreen img{
+    height: 4rem;
+}
+    .loadscreen .footer {
+        position: absolute;
+        bottom: 8px;
+        text-align: center;
+    }
+    .loadscreen .footer p{
+        font-family: monospace;
+        opacity: .8;
+    }
+    .loadmore {
+        font-family: var(--title-font);
+        font-weight: 700;
+        font-size: 1rem;
+        outline: none;
+        border: none;
+        background: var(--white50);
+        color: var(--text);
+        margin-top: 4px;
+        padding: 8px 24px;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: ease .2s all;
+        display: flex;
+        position: relative;
+        align-items: center;
+    }
 
 
     .loadmore:not(.loading):hover {
