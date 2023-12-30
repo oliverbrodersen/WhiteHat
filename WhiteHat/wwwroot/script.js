@@ -55,10 +55,10 @@ window.setupKeyboardShortcuts = (dotNetReference) => {
     document.addEventListener("keydown", (event) => {
         switch (event.key) {
             case "w":
-                dotNetReference.invokeMethodAsync("HandleUp");
+                dotNetReference.invokeMethodAsync("HandleUp", false);
                 break;
             case "s":
-                dotNetReference.invokeMethodAsync("HandleDown");
+                dotNetReference.invokeMethodAsync("HandleDown", false);
                 break;
             case "a":
                 dotNetReference.invokeMethodAsync("HandleCommentToggle");

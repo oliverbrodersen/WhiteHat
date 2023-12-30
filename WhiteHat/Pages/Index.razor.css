@@ -112,7 +112,7 @@
         box-shadow: var(--primary20) 0 0 12px 0px;
     }
 
-    .link-pane .pane-header button.close {
+    .link-pane .pane-header button.round {
         width: var(--h);
         min-width: var(--h);
         max-width: var(--h);
@@ -169,19 +169,28 @@
         overflow-y: auto;
     }
 
-    .link-pane .iframe-container iframe {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        margin: 0;
-        border-radius: 8px;
-        border: none;
-        background: var(--white50);
-        transition: opacity 0.5s ease;
-        color-scheme: var(--colorscheme);
-    }
+        .link-pane .iframe-container .comments .no-comments {
+            font-family: var(--title-font);
+            color: var(--text);
+            font-weight: 900;
+            font-style: italic;
+            opacity: .5;
+            margin: 0;
+        }
+
+.link-pane .iframe-container iframe {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    margin: 0;
+    border-radius: 8px;
+    border: none;
+    background: var(--white50);
+    transition: opacity 0.5s ease;
+    color-scheme: var(--colorscheme);
+}
 
     .hidden{
         opacity: 0;

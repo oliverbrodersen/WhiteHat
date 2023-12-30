@@ -150,7 +150,7 @@ namespace WhiteHat.Pages
         }
 
         [JSInvokable]
-        public async Task HandleUp()
+        public async Task HandleUp(bool select = false)
         {
             if (_items is null)
                 return;
@@ -159,11 +159,20 @@ namespace WhiteHat.Pages
             {
                 _selectedIndex--;
             }
+            var item = _items[_selectedIndex];
+            await SelectItem(item);
+
+            if (select && item.Url is not null)
+            {
+                _shownItem = item;
+                StateHasChanged();
+            }
+
             await SelectItem(_items[_selectedIndex]);
         }
 
         [JSInvokable]
-        public async Task HandleDown()
+        public async Task HandleDown(bool select = false)
         {
             if (_items is null)
                 return;
@@ -172,8 +181,14 @@ namespace WhiteHat.Pages
             {
                 _selectedIndex++;
             }
+            var item = _items[_selectedIndex];
+            await SelectItem(item);
 
-            await SelectItem(_items[_selectedIndex]);
+            if (select && item.Url is not null)
+            {
+                _shownItem = item;
+                StateHasChanged();
+            }
 
             if (_selectedIndex >= _items.Count - 1 && !_isLoading)
             {
