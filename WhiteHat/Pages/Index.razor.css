@@ -8,8 +8,7 @@
     width: calc(100% - (var(--m)*2));
     box-sizing: border-box;
     flex: 1;
-    margin: var(--m);
-    margin-top: 0;
+    margin: 0 var(--m);
 }
     .container .items-container,
     .container .link-pane-container {
@@ -32,6 +31,7 @@
             width: var(--w);
             max-width: var(--mw);
             padding: 16px;
+            margin-top: 16px;
             border: var(--white20) 1px solid;
             display: flex;
             border-top: 1px solid var(--bg-card1);
