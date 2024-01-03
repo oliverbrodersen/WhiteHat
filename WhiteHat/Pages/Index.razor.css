@@ -103,6 +103,7 @@
     justify-content: center;
     align-items: center;
     border-radius: var(--h);
+    white-space: nowrap;
     cursor: pointer;
     transition: ease .2s background, ease .2s box-shadow;
 }
@@ -221,7 +222,7 @@
                 max-height: 0;
                 width: 100%;
                 transition: ease .2s min-height;
-                flex-direction: column-reverse;
+                flex-direction: column;
                 margin-top: -32px;
             }
         .container.open .link-pane-container .link-pane {

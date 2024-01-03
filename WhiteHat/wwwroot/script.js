@@ -53,7 +53,7 @@ function getHeaderHeight() {
 
 window.setupKeyboardShortcuts = (dotNetReference) => {
     document.addEventListener("keydown", (event) => {
-        switch (event.key) {
+        switch (event.key.toLowerCase()) {
             case "w":
                 dotNetReference.invokeMethodAsync("HandleUp", false);
                 break;
@@ -69,8 +69,11 @@ window.setupKeyboardShortcuts = (dotNetReference) => {
             case "e":
                 dotNetReference.invokeMethodAsync("HandleExpand");
                 break;
-            case "o":
+            case "o": 
                 dotNetReference.invokeMethodAsync("HandleOpen");
+                break;
+            case "q": 
+                dotNetReference.invokeMethodAsync("HandlePaneCommentModeToggle");
                 break;
         }
     });

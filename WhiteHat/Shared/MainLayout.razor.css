@@ -47,9 +47,24 @@ header .navigation{
     justify-content: space-between;
     flex: 1;
 }
+    header .navigation > div{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+        flex: 1;
+    }
 
     header .navigation ::deep .nav {
-        margin-right: 12px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 2px;
+        white-space: nowrap;
+    }
+
+    header .navigation ::deep .nav span {
+        font-size: 1.3rem;
     }
 
     header .navigation ::deep .nav.active {
@@ -68,6 +83,8 @@ header .navigation{
             height: var(--size);
             width: var(--size);
             border: none;
+            flex: 0;
+            max-width: var(--size);
             margin: 0;
             padding: 0 1rem;
             box-sizing: border-box;
@@ -135,7 +152,7 @@ header .navigation{
 .shortcut-display {
     position: fixed;
     right: 0;
-    top: calc(100% + 80px);
+    top: calc(100% + 120px + 1rem);
     transform: translateY(-100%);
     background: transparent;
     border: 0px solid var(--white10);
@@ -146,6 +163,7 @@ header .navigation{
     display: flex;
     flex-direction: row;
     gap: 8px;
+    z-index: 0;
     transition: ease .3s top, ease .2s background, ease .2s border;
 }
 
@@ -155,32 +173,54 @@ header .navigation{
         border: 1px solid var(--white10);
     }
 
-.shortcut-display .close {
-    --size: 26px;
-    position: absolute;
-    top: calc((var(--size) * -1)/2);
-    right: 16px;
-    height: var(--size);
-    width: var(--size);
-    max-height: var(--size);
-    max-width: var(--size);
-    min-height: var(--size);
-    min-width: var(--size);
-    border: 1px solid var(--white10);
-    border-radius: 50%;
-    background: var(--bg-card);
-    backdrop-filter: blur(16px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-    transition: ease .2s background;
-    cursor: pointer;
-}
+    .shortcut-display .title {
+        position: absolute;
+        right: 0;
+        top: -2.25rem;
+        margin: 0 1rem;
+        font-size: 1.25rem;
+        font-family: var(--title-font);
+        font-weight: 800;
+        font-style: italic;
+        color: var(--text);
+        opacity: 0;
+        filter: drop-shadow(#000000 0 0px 0px) blur(12px);
+        z-index: 0;
+        pointer-events: none;
+        transition: ease .3s filter, ease .2s opacity;
+    }
 
-        .shortcut-display .close:hover,
-        .shortcut-display .close:active,
-        .shortcut-display .close:focus {
+        .shortcut-display.show .title {
+            opacity: .4;
+            filter: drop-shadow(#000000 0 4px 8px) blur(0px);
+        }
+
+    .shortcut-display .close {
+        --size: 26px;
+        position: absolute;
+        top: calc((var(--size) * -2));
+        right: 16px;
+        height: var(--size);
+        width: var(--size);
+        max-height: var(--size);
+        max-width: var(--size);
+        min-height: var(--size);
+        min-width: var(--size);
+        border: 1px solid var(--white10);
+        border-radius: 50%;
+        background: var(--bg-card);
+        backdrop-filter: blur(16px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+        transition: ease .2s background, ease .3s top;
+        cursor: pointer;
+    }
+    .shortcut-display.show .close {
+        top: calc((var(--size) * -1)/2);
+    }
+        .shortcut-display .close:hover, .shortcut-display .close:active, .shortcut-display .close:focus {
             background: var(--bg-card1);
         }
 
@@ -192,92 +232,10 @@ header .navigation{
         .shortcut-display .col {
             display: flex;
             flex-direction: column;
+            justify-content: end;
             gap: 8px;
         }
 
-            .shortcut-display .col .shortcut {
-                display: flex;
-                flex-direction: row;
-                position: relative;
-                align-items: center;
-                border: 1px solid var(--white10);
-                backdrop-filter: blur(8px);
-                background: var(--bg-card);
-                border-radius: 8px;
-                padding: 4px;
-                gap: 12px;
-                opacity: 0;
-                filter: blur(16px);
-                transition: ease .2s filter, ease .2s opacity;
-            }
-
-    .shortcut-display.show .col .shortcut {
-        filter: blur(0px);
-        opacity: 1;
-    }
-
-        .shortcut-display .col .shortcut .key {
-            --size: 2rem;
-            height: var(--size);
-            width: var(--size);
-            min-height: var(--size);
-            min-width: var(--size);
-            max-height: var(--size);
-            max-width: var(--size);
-            border-radius: 4px;
-            border: 1px solid var(--white10);
-            backdrop-filter: blur(6px);
-            background: var(--white10);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-family: system-mono, monospace;
-            font-weight: 800;
-            color: var(--white60);
-        }
-        .shortcut-display .col .shortcut > span {
-            position: absolute;
-            font-size: 16px;
-            left: calc(1rem + 4px);
-            transform: translateX(-50%);
-            text-align: center;
-        }
-        .shortcut-display .col .shortcut > p {
-            margin: 0;
-            margin-right: 12px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 5;
-        }
-
-        .shortcut-display .col .shortcut p span {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            z-index: 5;
-            font-size: 12px;
-            font-family: system-mono, monospace;
-            font-weight: 900;
-            color: var(--white);
-            background: var(--white50);
-            border: 1px solid var(--white10);
-            margin: 0;
-            --size: 14px;
-            backdrop-filter: blur(6px);
-            height: var(--size);
-            width: var(--size);
-            max-height: var(--size);
-            max-width: var(--size);
-            min-height: var(--size);
-            min-width: var(--size);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-        }
 .updated-container {
     position: fixed;
     bottom: 0px;
@@ -343,5 +301,85 @@ header .navigation{
         filter: blur(12px);
         opacity: 0;
         transform: translateY(5rem) scale(0.8);
+    }
+}
+
+
+@media(max-width:640px) and (orientation: portrait) {
+    .page {
+        --header-h: 0px;
+        min-height: 100vh;
+        max-height: 100vh;
+        overflow: hidden auto;
+        box-sizing: border-box;
+    }
+
+    header {
+        position: relative;
+        background: none;
+        flex-direction: column;
+        width: calc(100% - 50px);
+        height: auto;
+        align-items: start;
+    }
+
+        header img {
+            width: 40vw;
+            min-height: 15vw;
+            margin: 0px 32px !important;
+            object-fit: contain;
+            object-position: bottom;
+        }
+
+        header .navigation {
+            margin: 0px 24px !important;
+            width: calc(100% - 24px);
+            gap: 12px;
+        }
+
+            header .navigation .search-container:hover input[type=text],
+            header .navigation .search-container input[type=text]:focus {
+                width: auto;
+                flex: 1;
+                max-width: calc(var(--size) * 5);
+            }
+
+    main {
+        margin: 0;
+        min-height: unset;
+    }
+
+    ::deep .container {
+        --m: 0px;
+        max-height: unset;
+        position: unset;
+    }
+
+    ::deep .content.show-comments {
+        top: 0;
+    }
+    ::deep .container .items-container {
+        align-items: end;
+        --w: 85%;
+        padding-right: 8px;
+    }
+
+    ::deep .container .link-pane-container {
+        --ideal-flex: 1;
+        position: fixed;
+        top: 100vh;
+        width: calc(100% - 16px);
+        bottom: unset;
+        transform: translateY(-100%);
+    }
+
+    ::deep .container.open .link-pane-container .link-pane {
+        min-height: 51vh;
+        max-height: 51vh;
+    }
+
+    ::deep .container.open.small .link-pane-container .link-pane {
+        min-height: 35vh;
+        max-height: 35vh;
     }
 }

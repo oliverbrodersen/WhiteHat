@@ -137,13 +137,16 @@
                     }
                     else
                     {
-                        <iframe src=@_shownItem.Url.ToString()
-                                id="itemPreview"
+                        <iframe id="itemPreview"
+                                src=@_shownItem.UrlEmbed()
                                 @onload=IFrameLoaded
                                 title=@_shownItem.Title
                                 sandbox="allow-forms allow-same-origin allow-scripts"
-                                referrerpolicy="no-referrer"
-                                class="@(_isFrameOpen?string.Empty:"hidden")">
+                                frameborder="0"
+                                data-theme="dark"
+                                class="@(_isFrameOpen?string.Empty:"hidden")"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
                         </iframe>
                         <button id="frameLoader" class="loadmore loading @(_isFrameOpen?"hidden":string.Empty)" @onclick=StateHasChanged>
                             <span class="loader"></span>

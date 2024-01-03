@@ -53,6 +53,14 @@
         background: var(--bg-card1);
         z-index: 10;
     }
+.comments .no-comments {
+    font-family: var(--title-font);
+    color: var(--text);
+    font-weight: 900;
+    font-style: italic;
+    opacity: .5;
+    margin: 0;
+}
 
     .content .main {
     }

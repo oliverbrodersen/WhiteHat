@@ -111,11 +111,20 @@ else {
         @if (Item.ShowComments)
         {
             <div class="comments" @onclick:preventDefault=true @onclick:stopPropagation=true>
-                @foreach (var kid in Item.Children)
+                @if (Item.Children is null || !Item.Children.Any())
                 {
-                    @if (kid is not null && !string.IsNullOrWhiteSpace(kid.Text) && !string.IsNullOrWhiteSpace(kid.Author))
+                    <p class="no-comments">
+                        No comments yet
+                    </p>
+                }
+                else
+                {
+                    @foreach (var kid in Item.Children)
                     {
-                        <HnListItemComment Item="kid" Op="@Item.Author" />
+                        @if (kid is not null && !string.IsNullOrWhiteSpace(kid.Text) && !string.IsNullOrWhiteSpace(kid.Author))
+                        {
+                            <HnListItemComment Item="kid" Op="@Item.Author" />
+                        }
                     }
                 }
             </div>

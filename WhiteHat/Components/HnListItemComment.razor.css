@@ -78,7 +78,7 @@
             }
 
 .hnlistitem-comment .comment-info .body-collapsed {
-    display: -webkit-box;
+    display: none;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;

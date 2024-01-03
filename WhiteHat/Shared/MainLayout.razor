@@ -22,6 +22,9 @@
         <div class="navigation">
             <div>
                 <NavLink class="nav" href="" Match="NavLinkMatch.All">
+                    <span class="material-icons-round">
+                        whatshot
+                    </span>
                     Best
                 </NavLink>
                 <NavLink class="nav" href="/top">
@@ -54,94 +57,26 @@
 
     </main>
     <div class="shortcut-display @(_settings is not null && _settings.ShowShortcuts?"show":string.Empty)">
+        <h3 class="title">
+            Shortcuts
+        </h3>
         <button @onclick=ToggleShortcuts class="close">
             <span class="material-icons-round">
                 @(_settings is not null && _settings.ShowShortcuts ? "keyboard_double_arrow_down" : "keyboard_double_arrow_up")
             </span>
         </button>
         <div class="col">
-            <div class="shortcut">
-                <span class="material-icons-round">
-                    arrow_upward
-                </span>
-                <div class="key">
-                </div>
-                <p>
-                    Last post
-                    <span>
-                        w
-                    </span>
-                </p>
-            </div>
-            <div class="shortcut">
-                <span class="material-icons-round">
-                    arrow_downward
-                </span>
-                <div class="key">
-                </div>
-                <p>
-                    Next post
-                    <span>
-                        s
-                    </span>
-                </p>
-            </div>
+            <ShortcutDisplay Title="Last post" Icon="arrow_upward" Key="w"></ShortcutDisplay>
+            <ShortcutDisplay Title="Next post" Icon="arrow_downward" Key="s"></ShortcutDisplay> 
         </div>
         <div class="col">
-            <div class="shortcut">
-                <span class="material-icons-round">
-                    notes
-                </span>
-                <div class="key">
-                </div>
-                <p>
-                    Comments
-                    <span>
-                        a
-                    </span>
-                </p>
-            </div>
-            <div class="shortcut">
-                <span class="material-icons-round">
-                    article
-                </span>
-                <div class="key">
-                </div>
-                <p>
-                    Expand
-                    <span>
-                        e
-                    </span>
-                </p>
-            </div>
+            <ShortcutDisplay Title="Open in new tab" Icon="open_in_new" Key="o"></ShortcutDisplay>
+            <ShortcutDisplay Title="Expand" Icon="article" Key="e"></ShortcutDisplay> 
         </div>
         <div class="col">
-            <div class="shortcut">
-                <span class="material-icons-round">
-                    vertical_split
-                </span>
-                <div class="key">
-                </div>
-                <p>
-                    Open here
-                    <span>
-                        d
-                    </span>
-                </p>
-            </div>
-            <div class="shortcut">
-                <span class="material-icons-round">
-                    open_in_new
-                </span>
-                <div class="key">
-                </div>
-                <p>
-                    Open in new tab
-                    <span>
-                        o
-                    </span>
-                </p>
-            </div>
+            <ShortcutDisplay Title="Toggle thread" Icon="notes" Key="a"></ShortcutDisplay>
+            <ShortcutDisplay Title="Toggle pane" Icon="vertical_split" Key="d"></ShortcutDisplay>
+            <ShortcutDisplay Title="Toggle pane Mode" Icon="loop" Key="q"></ShortcutDisplay>
         </div>
      </div>
 </div>

@@ -206,6 +206,15 @@ namespace WhiteHat.Pages
                 StateHasChanged();
             }
         }
+        [JSInvokable]
+        public void HandlePaneCommentModeToggle()
+        {
+            ToggleContent();
+            if (_shownItem is not null)
+            {
+                StateHasChanged();
+            }
+        }
 
         [JSInvokable]
         public void HandleExpand()

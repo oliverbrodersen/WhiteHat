@@ -88,6 +88,17 @@ namespace WhiteHat.Models
             };
         }
 
+        public string UrlEmbed()
+        {
+            string result = Url.ToString();
+            if (Url.ToString().Contains("youtube.com/watch?v=", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return result.Replace("youtube.com/watch?v=", "youtube.com/embed/", StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            return result;
+        }
+
         public int CountKids()
         {
             int count = 1;
