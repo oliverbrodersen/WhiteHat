@@ -326,15 +326,15 @@ header .navigation{
         header img {
             width: 40vw;
             min-height: 15vw;
-            margin: 0px 32px !important;
+            margin: 0px !important;
             object-fit: contain;
             object-position: bottom;
         }
 
         header .navigation {
-            margin: 0px 24px !important;
+            margin: 0px 8px !important;
             width: calc(100% - 24px);
-            gap: 12px;
+            gap: 8px;
         }
 
             header .navigation .search-container:hover input[type=text],
@@ -359,9 +359,14 @@ header .navigation{
         top: 0;
     }
     ::deep .container .items-container {
-        align-items: end;
-        --w: 85%;
-        padding-right: 8px;
+        align-items: center;
+        --w: 90%;
+    }
+    ::deep .container.open .items-container {
+        padding-bottom: 50vh;
+    }
+    ::deep .container.open.small .items-container {
+        padding-bottom: 35vh;
     }
 
     ::deep .container .link-pane-container {
@@ -381,5 +386,36 @@ header .navigation{
     ::deep .container.open.small .link-pane-container .link-pane {
         min-height: 35vh;
         max-height: 35vh;
+    }
+
+    ::deep .container.open .link-pane-container .link-pane .group button {
+        --h: 42px;
+        width: var(--h);
+        min-width: var(--h);
+        max-width: var(--h);
+        border-radius: 50%;
+    }
+    ::deep .container.open .link-pane-container .link-pane .group button p{
+        display: none;
+    }
+
+    ::deep h1.index {
+        display: none;
+    }
+
+    ::deep .content:has(h1.opened) .main h2:before {
+        content: " ";
+        --size: 0.5em;
+        margin: 0.4em 8px 0 0;
+        min-height: var(--size);
+        min-width: var(--size);
+        max-height: var(--size);
+        max-width: var(--size);
+        float: left;
+        height: var(--size);
+        width: var(--size);
+        border-radius: 50%;
+        background: var(--primary);
+        box-shadow: var(--primary) 0 0 8px;
     }
 }

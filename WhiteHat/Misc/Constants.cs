@@ -31,6 +31,6 @@ namespace WhiteHat.Misc
         public static readonly string QBefore = "{0}<{1}";
 
         public static string VersionKeyId = "version";
-        public static Version CurrentVersion = new Version(0, 3, 6);
+        public static Version CurrentVersion = new Version(0, 3, 7);
     }
 }

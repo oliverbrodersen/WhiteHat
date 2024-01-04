@@ -27,8 +27,6 @@ namespace WhiteHat.Components
         [Parameter]
         public HnItemAlgolia Selected { get; set; }
 
-        public int MyProperty { get; set; }
-
         protected async override Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender && !Loader)
