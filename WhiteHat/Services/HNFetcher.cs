@@ -48,7 +48,8 @@ namespace WhiteHat.Services
             string uri = string.Format(Constants.ItemAlgolia, id);
             try
             {
-                return await _http.GetFromJsonAsync<HnItemAlgolia>(uri);
+                HnItemAlgolia item = await _http.GetFromJsonAsync<HnItemAlgolia>(uri);
+                return item;
             }
             catch (Exception ex)
             {

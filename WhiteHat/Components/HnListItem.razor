@@ -106,6 +106,14 @@ else {
                         @Item.KidCount
                     </div>
                 }
+                @if (Item.EmbedType is not EmbedType.NoUrl and not EmbedType.Url)
+                {
+                    <div class="round">
+                        <span class="material-icons-round">
+                            auto_awesome
+                        </span>
+                    </div>
+                }
             </div>
         </div>
         @if (Item.ShowComments)

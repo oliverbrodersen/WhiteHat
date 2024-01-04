@@ -168,12 +168,19 @@
                 opacity: .6;
                 transition: linear .2s all;
             }
+        .content .details .round {
+            padding: 0 8px;
+        }
 
                 .content .details > div span.material-icons-round {
                     margin-right: 6px;
                     margin-left: unset;
                     font-size: .8rem;
                 }
+
+        .content .details .round span {
+            margin: 0 !important;
+        }
 
         .content .details .action:hover {
             background: var(--primary);

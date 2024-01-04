@@ -234,7 +234,7 @@ namespace WhiteHat.Pages
             {
                 var item = _items[_selectedIndex];
 
-                if (item is null || item.Url is null)
+                if (item is null || item.EmbedType == EmbedType.NoUrl)
                     return;
 
                 if (_shownItem == item)

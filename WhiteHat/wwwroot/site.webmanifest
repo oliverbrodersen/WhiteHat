@@ -1,0 +1,15 @@
+{
+    "name": "WhiteHat",
+    "short_name": "WhiteHat",
+    "icons": [
+        {
+            "src": "/android-chrome-144x144.png?v=1",
+            "sizes": "144x144",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#000000",
+    "background_color": "#000000",
+    "start_url": "https://whitehat.oliver-brodersen.com",
+    "display": "standalone"
+}
