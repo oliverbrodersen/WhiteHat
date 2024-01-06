@@ -5,14 +5,14 @@
     {
         <div class="@(_fromEnabled ? "enabled" : string.Empty)">
             <Checkbox @bind-Checked=_fromEnabled></Checkbox>
-            <input placeholder="@FromText" type="text" @bind-value=From />
+            <input class="disable-shortcuts" placeholder="@FromText" type="text" @bind-value=From />
             <label>
                 @FromText
             </label>
         </div>
         <div class="@(_toEnabled ? "enabled" : string.Empty)">
             <Checkbox @bind-Checked=_toEnabled></Checkbox>
-            <input placeholder="@ToText" type="text" @bind-value=To />
+            <input class="disable-shortcuts" placeholder="@ToText" type="text" @bind-value=To />
             <label>
                 @ToText
             </label>
@@ -22,14 +22,14 @@
     {
         <div class="@(_fromEnabled ? "enabled" : string.Empty)">
             <Checkbox @bind-Checked=_fromEnabled></Checkbox>
-            <input placeholder="@FromText" type="number" value=@From @onchange=@(x => ChangeData(x, RangeType.From)) />
+            <input class="disable-shortcuts" placeholder="@FromText" type="number" value=@From @onchange=@(x => ChangeData(x, RangeType.From)) />
             <label>
                 @FromText
             </label>
         </div>
         <div class="@(_toEnabled ? "enabled" : string.Empty)">
             <Checkbox @bind-Checked=_toEnabled></Checkbox>
-            <input placeholder="@ToText" type="number" value=@To @onchange=@(x => ChangeData(x, RangeType.To)) />
+            <input class="disable-shortcuts" placeholder="@ToText" type="number" value=@To @onchange=@(x => ChangeData(x, RangeType.To)) />
             <label>
                 @ToText
             </label>
@@ -39,14 +39,14 @@
     {
         <div class="@(_fromEnabled ? "enabled" : string.Empty)">
             <Checkbox @bind-Checked=_fromEnabled></Checkbox>
-            <input placeholder="@FromText" type="date" value=@From @onchange=@(x => ChangeData(x, RangeType.From)) />
+            <input class="disable-shortcuts" placeholder="@FromText" type="date" value=@From @onchange=@(x => ChangeData(x, RangeType.From)) />
             <label>
                 @FromText
             </label>
         </div>
         <div class="@(_toEnabled ? "enabled" : string.Empty)">
             <Checkbox @bind-Checked=_toEnabled></Checkbox>
-            <input placeholder="@ToText" type="date" value=@To @onchange=@(x => ChangeData(x, RangeType.To)) />
+            <input class="disable-shortcuts" placeholder="@ToText" type="date" value=@To @onchange=@(x => ChangeData(x, RangeType.To)) />
             <label>
                 @ToText
             </label>
@@ -56,14 +56,14 @@
     {
         <div class="@(_fromEnabled ? "enabled" : string.Empty)">
             <Checkbox @bind-Checked=_fromEnabled></Checkbox>
-            <input placeholder="@FromText" value=@From @onchange=@(x => ChangeData(x, RangeType.From)) />
+            <input class="disable-shortcuts" placeholder="@FromText" value=@From @onchange=@(x => ChangeData(x, RangeType.From)) />
             <label>
                 @FromText
             </label>
         </div>
         <div class="@(_toEnabled ? "enabled" : string.Empty)">
             <Checkbox @bind-Checked=_toEnabled></Checkbox>
-            <input placeholder="@ToText" value=@To @onchange=@(x => ChangeData(x, RangeType.To)) />
+            <input class="disable-shortcuts" placeholder="@ToText" value=@To @onchange=@(x => ChangeData(x, RangeType.To)) />
             <label>
                 @ToText
             </label>

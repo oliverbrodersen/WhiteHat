@@ -49,10 +49,16 @@ function getHeaderHeight() {
     }
 
     return headerHeight;
-}
+} 
 
 window.setupKeyboardShortcuts = (dotNetReference) => {
     document.addEventListener("keydown", (event) => {
+
+        // Check if the current active element is within a "disable-shortcuts" container
+        if (document.activeElement.closest('.disable-shortcuts')) {
+            return; // If it is, do nothing and let the event propagate normally
+        }
+
         switch (event.key.toLowerCase()) {
             case "w":
                 dotNetReference.invokeMethodAsync("HandleUp", false);

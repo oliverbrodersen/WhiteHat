@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using System.Text.RegularExpressions;
+using WhiteHat.Enums;
 using WhiteHat.Models;
 
 namespace WhiteHat.Components
@@ -31,7 +32,7 @@ namespace WhiteHat.Components
         {
             if (firstRender && !Loader)
             {
-                Item.CountKids();
+                Item.CountKids(true);
                 StateHasChanged();
             }
 

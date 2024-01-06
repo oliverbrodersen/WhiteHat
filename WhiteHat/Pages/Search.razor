@@ -79,35 +79,4 @@
         </div>
     </div>
 </div>
-<div class="story-container">
-    @if(_items is null || _items.Count < 0){
-        <p>
-            loading
-        </p>
-    }
-    else{
-        for (var i = 0; i < _items.Count(); i++)
-        {
-            int index = i + 1;
-            <HnListItem Item="_items[i]" Index="index"></HnListItem>
-        }
-
-        @if(_isLoading){
-            <HnListItem Index="_items.Count() + 1" Loader="true"></HnListItem>
-        }
-        @if (_isLoading)
-        {
-            <button class="loadmore loading" @onclick=LoadStories>
-                <span class="loader"></span>
-                Loading
-            </button>
-        }
-        else{
-            <button class="loadmore" @onclick=LoadStories>
-                Load more
-            </button>
-        }
-    }
-</div>
-
-
+<ListView List=_items IsLoading=_isLoading LoadMore=LoadStories></ListView>

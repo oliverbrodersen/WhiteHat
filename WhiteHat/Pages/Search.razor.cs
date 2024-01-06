@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using WhiteHat.Enums;
 using WhiteHat.Misc;
 using WhiteHat.Models;
 using WhiteHat.Services;
@@ -11,10 +12,9 @@ namespace WhiteHat.Pages
         public string? Query { get; set; }
 
         private QueryResult _result;
-        private readonly int _pageSize = Constants.PageSize;
         private int _page = 0;
         private int _loadedStories = 0;
-        private bool _isLoading, _stop, _settingsOpen, _onlyMatchTitle = true;
+        private bool _isLoading,_settingsOpen, _onlyMatchTitle = true;
         List<HnItemAlgolia> _items;
         private bool _orderByDate;
 
@@ -36,7 +36,7 @@ namespace WhiteHat.Pages
         {
             _items = new();
             _page = 0;
-            _stop = _isLoading;
+            _loadedStories = 0;
             await LoadStories();
         }
 
@@ -44,6 +44,7 @@ namespace WhiteHat.Pages
         {
             _isLoading = true;
             StateHasChanged();
+
             _result = await HNFetcher.Query(Query,
                                             _page++,
                                             _orderByDate,
@@ -54,19 +55,31 @@ namespace WhiteHat.Pages
                                             _fromPoints,
                                             _toComments,
                                             _fromComments);
-            _loadedStories = 0;
-            if (_result is not null)
+
+            await LoadStory(_result.Hits.Length - 1);
+
+            StateHasChanged();
+        }
+
+        private async Task LoadStory(int _leftToLoad)
+        {
+            if (!_items.Select(x => x.Id).Contains(_result.Hits[_result.Hits.Length - 1 - _leftToLoad].Id))
             {
-                await LoadStory(_result.Hits.Length - 1);
-                _isLoading = _stop;
-            }
-            else
-            {
-                _isLoading = false;
+                var item = await HNFetcher.FetchItemAlgolia(_result.Hits[_result.Hits.Length - 1 - _leftToLoad].Id);
+
+                if (item is not null)
+                {
+                    item.Hit = _result.Hits[_result.Hits.Length - 1 - _leftToLoad];
+                    item.Index = ++_loadedStories;
+                    _items.Add(item);
+                    StateHasChanged();
+                }
             }
 
-            _stop = false;
-            StateHasChanged();
+            if (_leftToLoad > 1)
+                await LoadStory(--_leftToLoad);
+            else
+                _isLoading = false;
         }
 
         private void SwitchSort()
@@ -83,31 +96,6 @@ namespace WhiteHat.Pages
         {
             _settingsOpen = !_settingsOpen;
             StateHasChanged();
-        }
-
-        private async Task LoadStory(int _leftToLoad)
-        {
-            var item = await HNFetcher.FetchItemAlgolia(_result.Hits[_loadedStories].Id);
-            if (!_stop)
-            {
-                if (item is not null)
-                {
-                    item.Hit = _result.Hits[_loadedStories];
-                    _items.Add(item);
-                    _loadedStories++;
-                    StateHasChanged();
-                }
-            }
-            else
-                return;
-            if (_leftToLoad > 1)
-                await LoadStory(--_leftToLoad);
-        }
-
-        private enum SortTypes
-        {
-            Popular,
-            Time
         }
     }
 }

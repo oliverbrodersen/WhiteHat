@@ -3,6 +3,7 @@
 :root {
     --header-h: calc(2.6rem + 48px);
     --primary: #ff6600;
+    --primary10: #ff660030;
     --primary20: #ff660060;
     --primary50: #ff660080;
     --primary80: #ff6600cc;
@@ -158,7 +159,53 @@ h1, h2, h3, h4, h5, h6, label {
     transition: margin .2s ease;
 }
 
-.loadscreen{
+#cc-main {
+    color-scheme: dark;
+    --cc-bg: var(--bg-card1);
+    --cc-primary-color: var(--text);
+    --cc-secondary-color: var(--white60);
+    --cc-btn-primary-bg: var(--primary80);
+    --cc-btn-primary-color: #000;
+    --cc-btn-primary-hover-bg: var(--primary);
+    --cc-btn-primary-hover-color: #000;
+    --cc-btn-secondary-bg: var(--white50);
+    --cc-btn-secondary-color: var(--cc-primary-color);
+    --cc-btn-secondary-hover-bg: var(--white10);
+    --cc-btn-secondary-hover-color: var(--text);
+    --cc-btn-secondary-border-color: var(--bg-card);
+    --cc-btn-secondary-hover-border-color: var(--bg-card);
+    --cc-cookie-category-block-bg: #1e2428;
+    --cc-cookie-category-block-border: #1e2428;
+    --cc-cookie-category-block-hover-bg: #242c31;
+    --cc-cookie-category-block-hover-border: #242c31;
+    --cc-cookie-category-expanded-block-hover-bg: #242c31;
+    --cc-cookie-category-expanded-block-bg: #1e2428;
+    --cc-toggle-readonly-bg: #343e45;
+    --cc-overlay-bg: rgba(4, 6, 8, .85) !important;
+    --cc-toggle-on-knob-bg: var(--cc-bg);
+    --cc-toggle-readonly-knob-bg: var(--cc-cookie-category-block-bg);
+    --cc-separator-border-color: #222a30;
+    --cc-footer-border-color: #212529;
+    --cc-footer-bg: var(--bg-card);
+}
+
+    #cc-main .cm__title{
+        font-weight: 800;
+    }
+
+    #cc-main .cm{
+    }
+
+    #cc-main .cm__texts {
+        padding-top: 1.5em;
+    }
+
+
+    #cc-main .cm__btn-group button{
+        font-weight: 700;
+    }
+
+.loadscreen {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -166,6 +213,7 @@ h1, h2, h3, h4, h5, h6, label {
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    overflow: hidden;
 }
 
 .loadscreen img{
@@ -180,23 +228,76 @@ h1, h2, h3, h4, h5, h6, label {
         font-family: monospace;
         opacity: .8;
     }
-    .loadmore {
-        font-family: var(--title-font);
-        font-weight: 700;
-        font-size: 1rem;
-        outline: none;
-        border: none;
-        background: var(--white50);
-        color: var(--text);
-        margin-top: 4px;
-        padding: 8px 24px;
-        border-radius: 16px;
-        cursor: pointer;
-        transition: ease .2s all;
+
+    .loadscreen .info-dialog {
+        position: absolute;
+        bottom: 1rem;
+        width: 80%;
+        max-width: 20rem;
+        left: 50%;
+        transform: translateX(-50%);
         display: flex;
-        position: relative;
-        align-items: center;
+        flex-direction: column;
+        gap: .5rem;
+        align-items: start;
+        background: var(--bg-card1);
+        padding: 1.5rem;
+        border-radius: 1rem;
     }
+        .loadscreen .info-dialog .header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 8px;
+        }
+            .loadscreen .info-dialog .header span {
+                --size: 1.8rem;
+                font-size: 1rem;
+                color: var(--primary);
+                height: var(--size);
+                width: var(--size);
+                max-width: var(--size);
+                background: var(--primary10);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+            }
+            .loadscreen .info-dialog .header h3 {
+                margin: 0;
+            }
+
+        .loadscreen .info-dialog p {
+            display: inline;
+            color: var(--white60);
+            margin: 0;
+        } 
+            .loadscreen .info-dialog p kbd {
+                background: var(--white50);
+                padding: 0px 5px;
+                border: inset var(--white10);
+                border-radius: 4px;
+                color: var(--text);
+            }
+
+
+            .loadmore {
+                font-family: var(--title-font);
+                font-weight: 700;
+                font-size: 1rem;
+                outline: none;
+                border: none;
+                background: var(--white50);
+                color: var(--text);
+                margin-top: 4px;
+                padding: 8px 24px;
+                border-radius: 16px;
+                cursor: pointer;
+                transition: ease .2s all;
+                display: flex;
+                position: relative;
+                align-items: center;
+            }
 
 
     .loadmore:not(.loading):hover {

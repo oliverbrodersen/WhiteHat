@@ -85,6 +85,7 @@ header .navigation{
             border: none;
             flex: 0;
             max-width: var(--size);
+            min-width: 0;
             margin: 0;
             padding: 0 1rem;
             box-sizing: border-box;
@@ -92,14 +93,15 @@ header .navigation{
             background: var(--white10);
             font-family: var(--body-font);
             color: var(--text);
-            transition: ease .2s all;
+            transition: ease .2s outline, background ease .2s, min-width .2s ease;
         }
             header .navigation .search-container input[type=text]:active,
             header .navigation .search-container input[type=text]:focus {
                 outline: 2px solid var(--primary);
             }
 
-            header .navigation .search-container.hasvalue input[type=text] {
+            header .navigation .search-container.hasvalue input[type=text],
+            header .navigation .search-container input[type=text]:focus {
                 min-width: calc(var(--size) * 3);
             }
 
@@ -365,8 +367,11 @@ header .navigation{
     ::deep .container.open .items-container {
         padding-bottom: 50vh;
     }
-    ::deep .container.open.small .items-container {
+    ::deep .container.open.Slim .items-container {
         padding-bottom: 35vh;
+    }
+    ::deep .container.open.Split .items-container {
+        padding-bottom: 50vh;
     }
 
     ::deep .container .link-pane-container {
@@ -383,9 +388,14 @@ header .navigation{
         max-height: 51vh;
     }
 
-    ::deep .container.open.small .link-pane-container .link-pane {
+    ::deep .container.open.Slim .link-pane-container .link-pane {
         min-height: 35vh;
         max-height: 35vh;
+    }
+
+    ::deep .container.open.Split .link-pane-container .link-pane {
+        min-height: 50vh;
+        max-height: 50vh;
     }
 
     ::deep .container.open .link-pane-container .link-pane .group button {

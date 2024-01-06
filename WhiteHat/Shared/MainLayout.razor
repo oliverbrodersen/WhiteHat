@@ -1,8 +1,8 @@
 ﻿@using Blazored.LocalStorage
-@using WhiteHat.Components;
+@using WhiteHat.Components
 @using WhiteHat.Services
-@using WhiteHat.Misc;
-@using WhiteHat.Models;
+@using WhiteHat.Misc
+@using WhiteHat.Models
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService localStorage
@@ -44,7 +44,7 @@
                 </NavLink>
             </div>
             <form class="search-container @(string.IsNullOrWhiteSpace(_search) ? string.Empty : "hasvalue")" @onsubmit=Search>
-                <input type="text" @bind-value=_search @bind-value:event="oninput" />
+                <input type="text" class="disable-shortcuts" @bind-value=_search @bind-value:event="oninput" />
                 <span class="material-icons-round" @onclick=Search>
                     search
                 </span>

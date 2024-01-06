@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using WhiteHat.Enums;
 using WhiteHat.Misc;
 using WhiteHat.Models;
 
@@ -144,15 +145,5 @@ namespace WhiteHat.Services
                 return null;
             }
         }
-    }
-
-    public enum HnStories
-    {
-        Best,
-        Top,
-        New,
-        Ask,
-        Show,
-        Job,
     }
 }
