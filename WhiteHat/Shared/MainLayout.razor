@@ -54,29 +54,31 @@
     <div class="h-gradient"></div>
     <main>
         @Body
-
     </main>
-    <div class="shortcut-display @(_settings is not null && _settings.ShowShortcuts?"show":string.Empty)">
-        <h3 class="title">
-            Shortcuts
-        </h3>
-        <button @onclick=ToggleShortcuts class="close">
-            <span class="material-icons-round">
-                @(_settings is not null && _settings.ShowShortcuts ? "keyboard_double_arrow_down" : "keyboard_double_arrow_up")
-            </span>
-        </button>
-        <div class="col">
-            <ShortcutDisplay Title="Last post" Icon="arrow_upward" Key="w"></ShortcutDisplay>
-            <ShortcutDisplay Title="Next post" Icon="arrow_downward" Key="s"></ShortcutDisplay> 
+    @if (_settings is not null)
+    {
+        <div class="shortcut-display @(_settings.ShowShortcuts?"show":string.Empty)">
+            <h3 class="title">
+                Shortcuts
+            </h3>
+            <button @onclick=ToggleShortcuts class="close">
+                <span class="material-icons-round">
+                    @(_settings is not null && _settings.ShowShortcuts ? "keyboard_double_arrow_down" : "keyboard_double_arrow_up")
+                </span>
+            </button>
+            <div class="col">
+                <ShortcutDisplay Title="Last post" Icon="arrow_upward" Key="w"></ShortcutDisplay>
+                <ShortcutDisplay Title="Next post" Icon="arrow_downward" Key="s"></ShortcutDisplay>
+            </div>
+            <div class="col">
+                <ShortcutDisplay Title="Open in new tab" Icon="open_in_new" Key="o"></ShortcutDisplay>
+                <ShortcutDisplay Title="Expand" Icon="article" Key="e"></ShortcutDisplay>
+            </div>
+            <div class="col">
+                <ShortcutDisplay Title="Toggle thread" Icon="notes" Key="a"></ShortcutDisplay>
+                <ShortcutDisplay Title="Toggle pane" Icon="vertical_split" Key="d"></ShortcutDisplay>
+                <ShortcutDisplay Title="Toggle pane Mode" Icon="loop" Key="q"></ShortcutDisplay>
+            </div>
         </div>
-        <div class="col">
-            <ShortcutDisplay Title="Open in new tab" Icon="open_in_new" Key="o"></ShortcutDisplay>
-            <ShortcutDisplay Title="Expand" Icon="article" Key="e"></ShortcutDisplay> 
-        </div>
-        <div class="col">
-            <ShortcutDisplay Title="Toggle thread" Icon="notes" Key="a"></ShortcutDisplay>
-            <ShortcutDisplay Title="Toggle pane" Icon="vertical_split" Key="d"></ShortcutDisplay>
-            <ShortcutDisplay Title="Toggle pane Mode" Icon="loop" Key="q"></ShortcutDisplay>
-        </div>
-     </div>
+    }
 </div>

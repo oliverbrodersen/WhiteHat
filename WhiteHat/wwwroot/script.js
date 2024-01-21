@@ -1,4 +1,25 @@
 var headerHeight = -1;
+function updateVersionText() {
+    var versionElement = document.getElementById('version');
+    if (!versionElement) return; // Element not found
+
+    var versionValue = localStorage.getItem('version');
+    if (versionValue) {
+        // Remove any potential double quotes from the string
+        versionValue = versionValue.replace(/"/g, '');
+        versionElement.textContent = 'v' + versionValue;
+    } else {
+        versionElement.textContent = 'Welcome to White Hat';
+    }
+
+    // Create a new span element
+    var spanElement = document.createElement('span');
+    spanElement.innerHTML = '&#8226;';
+
+    // Insert the new span as a sibling of the version element
+    versionElement.parentNode.insertBefore(spanElement, versionElement.nextSibling);
+}
+document.addEventListener('DOMContentLoaded', updateVersionText);
 
 function iframeLoaded() {
     console.log(this);

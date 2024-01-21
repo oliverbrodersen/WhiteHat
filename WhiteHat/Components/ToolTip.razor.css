@@ -1,0 +1,62 @@
+﻿.tooltip-container
+{
+    position: relative;
+}
+.tooltip-wrapper {
+    position: absolute;
+    bottom: calc(100% + .5rem);
+    left: 50%;
+    z-index: 5;
+}
+.tooltip {
+    --animate-in-distance: .5rem;
+    text-align: center;
+    background: var(--bg-card);
+    backdrop-filter: blur(13px);
+    color: var(--text-dark);
+    font-family: var(--body-font);
+    font-size: 14px;
+    border: var(--bg-card1) .1rem solid;
+    border-radius: 16px;
+    width: max-content;
+    max-width: 10rem;
+    padding: .5rem .7rem;
+    animation: tooltip-in-top .2s ease-in forwards 1;
+    animation-delay: var(--delay);
+    transform: translate(-50%, .5rem);
+    opacity: 0;
+    box-shadow: none;
+}
+
+.tooltip-wrapper.Bottom {
+    position: absolute;
+    bottom: unset;
+    top: calc(100% + .5rem);
+    left: 50%;
+}
+    .Bottom .tooltip {
+        animation: tooltip-in-bottom .2s ease-in forwards 1;
+    }
+
+    @keyframes tooltip-in-top {
+        from {
+        transform: translate(-50%, var(--animate-in-distance));
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+@keyframes tooltip-in-bottom {
+    from {
+        transform: translate(-50%, calc(var(--animate-in-distance) * -1));
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}

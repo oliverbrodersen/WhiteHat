@@ -131,5 +131,43 @@ namespace WhiteHat.Models
             KidCount = count;
             return count;
         }
+
+        public string DisplayUrl()
+        {
+            string url;
+            try
+            {
+                if (Url is null)
+                {
+                    return string.Empty;
+                }
+                else if (Url.Host is null)
+                {
+                    url = Url.ToString();
+                }
+                else
+                {
+                    url = Url.Host;
+                }
+
+                if (url.StartsWith("www."))
+                {
+                    url = url.Substring(4);
+                }
+            }
+            catch (Exception ex)  
+            {
+                if (Url is null)
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    url = Url.ToString();
+                }
+            }
+
+            return url;
+        }
     }
 }

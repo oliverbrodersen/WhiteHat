@@ -6,6 +6,6 @@
 @using WhiteHat.Services
 @inject HNFetcher HNFetcher
 
-<PageTitle>@(string.IsNullOrEmpty(Page) || Page.ToLower() == "best" ? string.Empty : "[" + Page[0].ToString().ToUpper() + Page.Substring(1) + "] ")WhiteHat @(_shownItem is null ? string.Empty : " - " + _shownItem.Title)</PageTitle>
+<PageTitle>@(string.IsNullOrEmpty(Page) || Page.ToLower() == "best" ? string.Empty : "[" + Page[0].ToString().ToUpper() + Page.Substring(1) + "] ")White Hat @(_shownItem is null ? string.Empty : " - " + _shownItem.Title)</PageTitle>
 
-<ListView List=_items SelectedItem=_shownItem IsLoading=_isLoading LoadMore=LoadStories></ListView>
+<ListView List=_items @bind-SelectedItem=_shownItem IsLoading=_isLoading LoadMore=LoadStories></ListView>

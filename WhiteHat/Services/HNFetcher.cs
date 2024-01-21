@@ -145,5 +145,35 @@ namespace WhiteHat.Services
                 return null;
             }
         }
+
+        public async Task<QueryResult> GetUserPosts(string user, int page, bool orderByDate)
+        {
+            string url = orderByDate ? Constants.QRecent : Constants.QBest;
+            url += string.Format(Constants.QProfile, user);
+            url += string.Format(Constants.QPage, page);
+
+            try
+            {
+                return await _http.GetFromJsonAsync<QueryResult>(url);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<HnUser> GetUser(string user)
+        {
+            string url = string.Format(Constants.UserAlgolia, user);
+
+            try
+            {
+                return await _http.GetFromJsonAsync<HnUser>(url);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

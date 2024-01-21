@@ -1,0 +1,29 @@
+﻿@if (!Hide)
+{
+    <div class="list-item @Class" id="@Id">
+        <button class="close" @onclick=@Close>
+            <span class="material-icons-round">
+                close
+            </span>
+        </button>
+        <div class="content">
+            @ChildContent
+        </div>
+    </div>
+}
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public bool Hide { get; set; }
+
+    [Parameter]
+    public EventCallback Close { get; set; }
+}

@@ -1,0 +1,58 @@
+﻿@page "/u/{UserName}"
+@using WhiteHat.Components
+@using WhiteHat.Models
+@using WhiteHat.Enums
+@using WhiteHat.Services
+@inject HNFetcher HNFetcher
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>@UserName - White Hat</PageTitle>
+
+<div class="container">
+    <div class="user-info">
+        <h1>
+            @UserName
+        </h1>
+        @if (user is not null)
+        {
+            <div class="actions">
+                <div class="pill karma">
+                    @user.Karma
+                    <span>
+                        karma
+                    </span>
+                </div>
+                @if (_result is not null)
+                {
+                    <div class="pill karma">
+                        @_result.NbHits
+                        <span>
+                            posts
+                        </span>
+                    </div>
+                }
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(user.About))
+            {
+                <div class="description">
+                    <p>
+                        @((MarkupString)user.About)
+                    </p>
+                </div>
+            }
+        }
+    </div>
+    <div class="actions">
+        <div class="sorting" @onclick=SwitchSort>
+            <span class="material-icons-round">
+                sort
+            </span>
+            @(_orderByDate ? "Recent" : "Popular")
+        </div>
+    </div>
+</div>
+<ListView List=_items IsLoading=_isLoading LoadMore=LoadStories Origin=WhiteHatPages.User NoMoreToLoad=_noMoreToLoad></ListView>
+
+

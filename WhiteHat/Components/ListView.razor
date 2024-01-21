@@ -1,51 +1,107 @@
 ﻿@using WhiteHat.Misc
 @using WhiteHat.Enums
+@using WhiteHat.Services
+@inject StorageService Storage
 @inject IJSRuntime JSRuntime
 @implements IDisposable
 
 
 <div class="container @(SelectedItem is not null ? "open" : string.Empty) @(_paneSize)">
-    <div class="items-container" id="list">
-        @if (List is null || List.Count < 0)
+<div class="items-container" id="list">
+    @if(Origin == WhiteHatPages.Index && _settings != null){
+        <InfoListItem Hide=_settings.DismissWelcome Close=@DismissWelcome>
+            <div class="row">
+                <div class="col">
+                    <h2>
+                        Hi, welcome to White Hat!
+                    </h2>
+                    <p>
+                        A hacker news client for the modern web
+                    </p>
+                </div>
+                <div class="row features">
+                    <div class="feature">
+                        <h4>
+                            Single tab
+                        </h4>
+                        <span class="material-icons-round">
+                            tab
+                        </span>
+                    </div>
+                    <div class="feature">
+                        <h4>
+                            Keyboard navigation
+                        </h4>
+                        <span class="material-icons-round">
+                            keyboard
+                        </span>
+                    </div>
+                    <div class="feature">
+                        <h4>
+                            Improved search
+                        </h4>
+                        <span class="material-icons-round">
+                            travel_explore
+                        </span>
+                    </div>
+                </div>
+                @* <div class="img">
+                <img src="/img/hand.png" alt="Hand waving hello"/>
+                </div> *@
+            </div>
+        </InfoListItem>
+    }
+    @if (List is null || List.Count < 0)
+    {
+        <HnListItem Index="1" Loader="true"></HnListItem>
+        <button class="loadmore loading" @onclick=LoadStories>
+            <span class="loader"></span>
+            Loading
+        </button>
+    }
+    else
+    {
+        for (var i = 0; i < List.Count(); i++)
         {
-            <HnListItem Index="1" Loader="true"></HnListItem>
+            int index = i;
+            <HnListItem @bind-Item="List[index]" OpenLink=@(x => OpenItem(x,index)) Selected=SelectedItem SelectedIndex=_selectedIndex Origin=Origin></HnListItem>
+        }
+
+        @if (IsLoading)
+        {
+            <HnListItem Index="List.Count() + 1" Loader="true" Origin=Origin></HnListItem>
             <button class="loadmore loading" @onclick=LoadStories>
                 <span class="loader"></span>
                 Loading
             </button>
         }
-        else
+        else if (!NoMoreToLoad)
         {
-            for (var i = 0; i < List.Count(); i++)
-            {
-                int index = i;
-                <HnListItem @bind-Item="List[index]" OpenLink=@(x => OpenItem(x,index)) Selected=SelectedItem SelectedIndex=_selectedIndex></HnListItem>
-            }
-
-            @if (IsLoading)
-            {
-                <HnListItem Index="List.Count() + 1" Loader="true"></HnListItem>
-                <button class="loadmore loading" @onclick=LoadStories>
-                    <span class="loader"></span>
-                    Loading
-                </button>
-            }
-            else
-            {
-                <button class="loadmore" @onclick=LoadStories>
-                    Load more
-                </button>
-            }
+            <button class="loadmore" @onclick=LoadStories>
+                Load more
+            </button>
         }
-        <div class="footer">
+    }
+    <div class="footer">
+        <div class="actions">
             <button onclick="CookieConsent.show(true);">
                 Cookies
             </button>
+            <span>
+                •
+            </span>
             <p>
-                v@(Constants.CurrentVersion)
+                By
+                <a href="https://oliver-brodersen.com?utm_source=white-hat.io&utm_medium=referral&utm_campaign=footer">
+                    me
+                </a>
             </p>
         </div>
+        <p>
+            v@(Constants.CurrentVersion)
+        </p>
     </div>
+</div>
     <div class="link-pane-container">
         <div class="link-pane">
             <div class="pane-header">

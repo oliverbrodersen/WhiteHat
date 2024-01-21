@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Runtime;
 using WhiteHat.Enums;
 using WhiteHat.Misc;
 using WhiteHat.Models;
@@ -8,24 +9,54 @@ namespace WhiteHat.Components
 {
     public partial class ListView
     {
+        private HnItemAlgolia _selectedItem;
         private int _selectedIndex = -1;
         private bool _isIframeLoading, _isFrameOpen, _isComments;
         private PaneSize _paneSize;
+        private PersonalSettings _settings;
 
         [Parameter]
         public List<HnItemAlgolia> List { get; set; }
         
         [Parameter]
-        public HnItemAlgolia SelectedItem { get; set; }
+        public HnItemAlgolia SelectedItem 
+        {
+            get
+            {
+                return _selectedItem;
+            }
+            set
+            {
+                if (value == _selectedItem)
+                {
+                    return;
+                }
+                _selectedItem = value;
+                if (SelectedItemChanged.HasDelegate)
+                {
+                    SelectedItemChanged.InvokeAsync(value);
+                }
+            }
+        }
+
+        [Parameter]
+        public EventCallback<HnItemAlgolia> SelectedItemChanged { get; set; }
 
         [Parameter]
         public bool IsLoading { get; set; }
 
         [Parameter]
+        public bool NoMoreToLoad { get; set; }
+
+        [Parameter]
         public EventCallback LoadMore { get; set; }
+
+        [Parameter]
+        public WhiteHatPages Origin { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
+            _settings = await Storage.GetSettings();
             await JSRuntime.InvokeVoidAsync("setupKeyboardShortcuts", DotNetObjectReference.Create(this));
         }
         private async Task OpenItem(HnItemAlgolia item, int i)
@@ -244,6 +275,14 @@ namespace WhiteHat.Components
             _isIframeLoading = false;
             _isFrameOpen = true;
             StateHasChanged();
+        }
+
+        private async Task DismissWelcome()
+        {
+            var settings = await Storage.GetSettings();
+            settings.DismissWelcome = true;
+            _settings = settings;
+            await Storage.UpdateSettings(settings);
         }
 
 

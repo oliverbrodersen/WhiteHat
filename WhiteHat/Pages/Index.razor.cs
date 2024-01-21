@@ -83,6 +83,12 @@ namespace WhiteHat.Pages
 
         private async Task LoadStory(int _leftToLoad)
         {
+            if (_leftToLoad <= 0  || _loadedStories > _itemIds.Count() - 1)
+            {
+                _isLoading = false;
+                return;
+            }
+
             if (!_items.Select(x => x.Id).Contains(_itemIds[_loadedStories]))
             {
                 var item = await HNFetcher.FetchItemAlgolia(_itemIds[_loadedStories]);

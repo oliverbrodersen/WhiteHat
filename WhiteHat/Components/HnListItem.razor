@@ -2,7 +2,9 @@
 @using WhiteHat.Enums
 @using WhiteHat.Models
 @using WhiteHat.Services
+@using WhiteHat.Components
 @inject HNFetcher HNFetcher
+@inject NavigationManager NavigationManager
 
 @if(Loader) {
     <div class="hnitem-list-item ghost">
@@ -32,10 +34,9 @@ else {
             <div class="main">
                 @if (Item.Url is not null)
                 {
-                    string url = Item.Url.Host;
                     <div class="link-container">
-                        <a target="_blank" href="@(Item.Url == null ? "" : Item.Url.AbsoluteUri)">
-                            @(url.StartsWith("www.") ? url.Substring(4) : url)
+                        <a target="_blank" href="@(Item.Url == null ? "" : Item.Url.ToString())">
+                            @Item.DisplayUrl()
                             <div class="icon">
                                 <span class="inwindow material-icons-round">
                                     vertical_split
@@ -76,22 +77,22 @@ else {
             <div class="details">
                 @if (Item.Points.HasValue)
                 {
-                    <div class="score">
+                    <div class="score pill">
                         @Item.Points
                         <span>
                             point@(Item.Points > 1 ? "s" : string.Empty)
                         </span>
                     </div>
                 }
-                <div>
+                <div class=" pill">
                     <span class="material-icons-round">
                         schedule
                     </span>
                     @Item.TimeSince()
                 </div>
-                @if (!string.IsNullOrEmpty(Item.Author))
+                @if (!string.IsNullOrEmpty(Item.Author) && Origin != WhiteHatPages.User)
                 {
-                    <div>
+                    <div class="action pill" @onclick=@OpenAuthor @onclick:preventDefault=true @onclick:stopPropagation=true>
                         <span class="material-icons-round">
                             person
                         </span>
@@ -100,7 +101,7 @@ else {
                 }
                 @if (Item.Children is not null && Item.Children.Any())
                 {
-                    <div class="action" @onclick=@ToggleComments @onclick:preventDefault=true @onclick:stopPropagation=true>
+                    <div class="action pill" @onclick=@ToggleComments @onclick:preventDefault=true @onclick:stopPropagation=true>
                         <span class="material-icons-round">
                             mode_comment
                         </span>
@@ -109,11 +110,13 @@ else {
                 }
                 @if (Item.EmbedType is not EmbedType.NoUrl and not EmbedType.Url)
                 {
-                    <div class="round">
-                        <span class="material-icons-round">
-                            auto_awesome
-                        </span>
-                    </div>
+                    <ToolTip Title=@(Item.EmbedType.ToString() + " uses a custom embed") Position=ToolTipPosition.Top>
+                        <div class="round pill">
+                            <span class="material-icons-round">
+                                auto_awesome
+                            </span>
+                        </div>
+                    </ToolTip>
                 }
             </div>
         </div>

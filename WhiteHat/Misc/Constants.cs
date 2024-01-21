@@ -14,6 +14,7 @@ namespace WhiteHat.Misc
 
         public static readonly string Item = HnApiBase + "/item/{0}.json";
         public static readonly string ItemAlgolia = "https://hn.algolia.com/api/v1/items/{0}";
+        public static readonly string UserAlgolia = "https://hn.algolia.com/api/v1/users/{0}";
 
         public static readonly string QPagesize = "hitsPerPage=";
         public static readonly string QPage = "&page={0}";
@@ -22,15 +23,16 @@ namespace WhiteHat.Misc
         public static readonly string QBest = "https://hn.algolia.com/api/v1/search?" + QPagesize + PageSize + QStoriesOnly;
         public static readonly string QRecent = "https://hn.algolia.com/api/v1/search_by_date?" + QPagesize + PageSize + QStoriesOnly;
         public static readonly string QQuery = "&query={0}";
-        public static string SettingsKeyId = "settings";
         public static readonly string QNumericFilters = "&numericFilters=";
         public static readonly string QCreatedAt = "created_at_i";
         public static readonly string QPoints = "points";
         public static readonly string QNumComments = "num_comments";
         public static readonly string QSince = "{0}>{1}";
         public static readonly string QBefore = "{0}<{1}";
+        public static readonly string QProfile = ",author_{0}";
 
+        public static string SettingsKeyId = "settings";
         public static string VersionKeyId = "version";
-        public static Version CurrentVersion = new Version(0, 3, 9);
+        public static Version CurrentVersion = new Version(0, 3, 11);
     }
 }

@@ -7,76 +7,83 @@
 @inject HNFetcher HNFetcher
 
 <PageTitle>Search: @Query</PageTitle>
+    <div class="container">
+        <div class="search">
+            <div>
+                <h1>
+                    <div @onclick=LoadFromFresh>
+                        Search
+                    </div>
+                    <span>
+                        @Query
+                </span>
+            </h1>
+            <span @onclick=ToggleSettings>
+                <span class="material-icons-round">
+                    settings
+                </span>
+            </span>
+        </div>
+        <div class="settings @(_settingsOpen ? "open" : string.Empty)">
+            <div class="settings-content">
+                <div class="row">
+                    <div>
+                        @if (!_orderByDate)
+                        {
+                            <div class="sorting" @onclick=SwitchSort>
+                                <span class="material-icons-round">
+                                    sort
+                                </span>
+                                Popular
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="sorting" @onclick=SwitchSort>
+                                <span class="material-icons-round">
+                                    sort
+                                </span>
+                                Recent
+                            </div>
+                        }
 
-<div class="search">
-    <div>
-        <h1>
-            <div @onclick=LoadFromFresh>
-                Search
-            </div>
-            <span>
-                @Query
-            </span>
-        </h1>
-        <span @onclick=ToggleSettings>
-            <span class="material-icons-round">
-                settings
-            </span>
-        </span>
-    </div>
-    <div class="settings @(_settingsOpen ? "open" : string.Empty)">
-        <div class="settings-content">
-            <div class="row">
-                <div>
-                    @if (!_orderByDate)
-                    {
-                        <div class="sorting" @onclick=SwitchSort>
-                            <span class="material-icons-round">
-                                sort
-                            </span>
-                            Popular
-                        </div>   
-                    }
-                    else
-                    {
-                        <div class="sorting" @onclick=SwitchSort>
-                            <span class="material-icons-round">
-                                sort
-                            </span>
-                            Recent
+                        <div class="sorting" @onclick=SwitchOnlyMatchTitle>
+                            <Checkbox Checked=_onlyMatchTitle></Checkbox>
+                            Only match title
                         </div>
-                    }
-
-                    <div class="sorting" @onclick=SwitchOnlyMatchTitle>
-                        <Checkbox Checked=_onlyMatchTitle></Checkbox>
-                        Only match title
                     </div>
                 </div>
-            </div>
-            <div class="row ranges">
-                <div>
-                    <label>
-                        Timeframe
-                    </label>
-                    <RangeInputComponent TItem="DateTimeOffset" @bind-To="_toDate" @bind-From="_fromDate">
-                    </RangeInputComponent>
-                </div>
-                <div>
-                    <label>
-                        Points
-                    </label>
-                    <RangeInputComponent TItem="int?" @bind-To="_toPoints" @bind-From="_fromPoints">
-                    </RangeInputComponent>
-                </div>
-                <div>
-                    <label>
-                        Comments
-                    </label>
-                    <RangeInputComponent TItem="int?" @bind-To="_toComments" @bind-From="_fromComments">
-                    </RangeInputComponent>
+                <div class="row ranges">
+                    <div>
+                        <label>
+                            Timeframe
+                        </label>
+                        <RangeInputComponent TItem="DateTimeOffset" @bind-To="_toDate" @bind-From="_fromDate">
+                        </RangeInputComponent>
+                    </div>
+                    <div>
+                        <label>
+                            Points
+                        </label>
+                        <RangeInputComponent TItem="int?" @bind-To="_toPoints" @bind-From="_fromPoints">
+                        </RangeInputComponent>
+                    </div>
+                    <div>
+                        <label>
+                            Comments
+                        </label>
+                        <RangeInputComponent TItem="int?" @bind-To="_toComments" @bind-From="_fromComments">
+                        </RangeInputComponent>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    @if (_result is not null)
+    {
+        <p class="results">
+            <span>@_result.NbHits</span> results
+        </p>
+    }
 </div>
-<ListView List=_items IsLoading=_isLoading LoadMore=LoadStories></ListView>
+<ListView List=_items IsLoading=_isLoading LoadMore=LoadStories NoMoreToLoad="_noMoreToLoad"></ListView>

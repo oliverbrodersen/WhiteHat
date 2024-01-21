@@ -41,7 +41,17 @@
         font-family: var(--title-font);
         color: var(--text50);
         margin: 0;
+        cursor: pointer;
+        transition: ease .1s color;
     }
+
+        .hnlistitem-comment .comment-info .p:hover {
+            color: var(--primary);
+        }
+
+        .hnlistitem-comment .comment-info .p.op:hover {
+            color: var(--primary50);
+        }
 
         .hnlistitem-comment .comment-info .p.op {
             color: var(--primary);

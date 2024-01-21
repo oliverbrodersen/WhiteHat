@@ -1,4 +1,5 @@
 ﻿@using WhiteHat.Models
+@inject NavigationManager NavigationManager
 
 <div class="hnlistitem-comment @(_collapse ? "collapsed" : string.Empty)">
     <div class="collapse" @onclick=@(() => _collapse = !_collapse) ></div>
@@ -23,7 +24,7 @@
                     expand_less
                 </span>
             }
-            <p class="p @(Item.Author == Op ? "op" : string.Empty)">
+            <p class="p @(Item.Author == Op ? "op" : string.Empty)" @onclick=@OpenAuthor>
                 @Item.Author
                 @if (Item.Author == Op)
                 {
@@ -68,4 +69,9 @@
     public string Op { get; set; }
 
     private bool _collapse;
+
+    private void OpenAuthor()
+    {
+        NavigationManager.NavigateTo("/u/" + Item.Author);
+    }
 }

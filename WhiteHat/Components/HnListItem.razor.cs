@@ -28,6 +28,9 @@ namespace WhiteHat.Components
         [Parameter]
         public HnItemAlgolia Selected { get; set; }
 
+        [Parameter]
+        public WhiteHatPages Origin { get; set; }
+
         protected async override Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender && !Loader)
@@ -65,6 +68,11 @@ namespace WhiteHat.Components
         {
             Regex reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase);
             return reg.Replace(HTMLText, "");
+        }
+
+        private void OpenAuthor()
+        {
+            NavigationManager.NavigateTo("/u/" + Item.Author);
         }
 
         private async Task ItemClicked()

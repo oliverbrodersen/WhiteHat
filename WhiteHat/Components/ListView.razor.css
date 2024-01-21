@@ -23,6 +23,7 @@
 
     .container .items-container {
         align-items: center;
+        container-type: inline-size;
         --w: 80%;
         --mw: 80vw:
     }
@@ -40,32 +41,17 @@
             justify-content: space-between;
         }
 
-            .container .items-container .footer p {
-                margin: .2rem 1rem;
-                opacity: .3;
-                font-family: monospace;
+            .container .items-container .footer .actions {
+                display: flex;
+                align-items: center;
             }
 
-            .container .items-container .footer button {
-                margin: .2rem 1rem;
-                opacity: .3;
-                font-family: monospace;
-                background: transparent;
-                border: none;
-                cursor: pointer;
-                transition: ease .2s opacity;
+            .container .link-pane-container {
+                --ideal-flex: 4;
+                flex: 0;
+                width: 0;
+                overflow: hidden;
             }
-
-                .container .items-container .footer button:hover {
-                    opacity: .8;
-                }
-
-    .container .link-pane-container {
-        --ideal-flex: 4;
-        flex: 0;
-        width: 0;
-        overflow: hidden;
-    }
 
     .container.Slim .link-pane-container {
         --ideal-flex: 1;
@@ -224,6 +210,7 @@
     .container {
         flex-direction: column;
         overflow: hidden;
+        justify-content: space-between;
         max-height: calc(100vh - 16px - var(--header-h));
         margin: 0;
         padding: 0;
@@ -238,6 +225,7 @@
         .container .link-pane-container {
             width: calc(100%);
             align-items: center;
+            justify-content: end;
         }
 
             .container .link-pane-container .link-pane {

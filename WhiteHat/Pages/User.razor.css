@@ -1,0 +1,104 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+    .container .actions {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        gap: 8px;
+        margin: .5rem 0;
+    }
+
+        .container .actions .pill {
+            padding: 8px 14px;
+            border-radius: 24px;
+            font-size: .8rem;
+            background: var(--bg-card);
+            color: var(--text);
+            font-family: var(--body-font);
+        }
+
+
+        .container .actions .pill span {
+            color: var(--primary);
+            margin-left: 4px;
+        }
+
+
+
+    .container .user-info {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 2rem 0;
+    }
+        .container .user-info h1 {
+            position: relative;
+            font-weight: 900;
+            margin: 0;
+        }
+
+            .container .user-info h1:before {
+                content: "User";
+                position: absolute;
+                top: -1rem;
+                left: 0;
+                color: var(--primary);
+                font-family: var(--title-font);
+                font-size: 16px;
+                font-weight: 900;
+                font-style: italic;
+            }
+
+    .container .description {
+        padding: 14px;
+        border-radius: 16px;
+        font-size: .8rem;
+        background: var(--bg-card1);
+        color: var(--text);
+    }
+
+        .container .description ::deep *:last-child{
+            margin-bottom: 0 !important;
+        }
+
+        .container .description p {
+            margin: 0;
+        }
+
+            .container .description p:before {
+                content: "About \a";
+                white-space: pre;
+                color: var(--primary);
+                font-family: var(--body-font);
+                font-size: .8rem;
+            }
+
+        .sorting {
+            display: flex;
+            align-items: center;
+            background: var(--white10);
+            padding: .2rem .4rem;
+            padding-right: .8rem;
+            border-radius: .5rem;
+            font-weight: 700;
+            border: .15rem solid var(--white10);
+            cursor: pointer;
+            transition: ease .2s all;
+            margin-right: .5rem;
+        }
+
+    .sorting:hover {
+        background: var(--white50);
+    }
+
+    .sorting span, .sorting ::deep .checkbox {
+        margin-right: .5rem;
+    }
+
+    .sorting:hover span {
+        color: var(--primary);
+    }

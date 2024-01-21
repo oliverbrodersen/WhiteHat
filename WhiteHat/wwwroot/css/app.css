@@ -9,25 +9,31 @@
     --primary80: #ff6600cc;
     --primary-light: #f09a60;
     --primary-light50: #f09a6020;
+    --primary-light80: #f09a60aa;
+    --primary-dark: #a54506;
+    --primary-dark50: #a5450688;
     --bg: #000000;
     --bg-card: #232323b0;
+    --bg-card50: #6666666b;
     --bg-card1: #101010;
     --text: #ffffff;
     --text50: #ffffff80;
     --white5: #ffffff05;
     --white10: #ffffff10;
-    --white50: #ffffff20;
+    --white40: #ffffff20;
+    --white50: #ffffff40;
     --white60: #ffffff80;
     --title-font: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --body-font: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --colorscheme: dark;
     color-scheme: var(--colorscheme);
 }
+
 html, body {
     background: var(--bg);
     font-family: var(--body-font);
     color: var(--text);
-    margin:0;
+    margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6, label {
@@ -79,29 +85,29 @@ h1, h2, h3, h4, h5, h6, label {
         content: "An error has occurred."
     }
 
-    a{
+a {
+    text-decoration: none;
+    color: unset;
+}
+
+    a:not(.default) {
+        font-family: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-weight: 700;
+        color: var(--primary-light);
+        transition: ease .1s color, ease .1s padding-right;
+        position: relative;
         text-decoration: none;
-        color: unset;
+        transition: ease all .2s;
     }
 
-        a:not(.default) {
-            font-family: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-weight: 700;
-            color: var(--primary-light);
-            transition: ease .1s color, ease .1s padding-right;
-            position: relative;
-            text-decoration: none;
-            transition: ease all .2s;
+        a:not(.default):hover {
+            color: var(--primary) !important;
+            text-shadow: 0px 0px 6px var(--primary50);
         }
 
-    a:not(.default):hover {
-        color: var(--primary) !important;
-        text-shadow: 0px 0px 6px var(--primary50);
-    }
-
-    code{
-        white-space: break-spaces;
-    }
+code {
+    white-space: break-spaces;
+}
 
 .material-icons {
     font-family: 'Material Icons' !important;
@@ -189,11 +195,11 @@ h1, h2, h3, h4, h5, h6, label {
     --cc-footer-bg: var(--bg-card);
 }
 
-    #cc-main .cm__title{
+    #cc-main .cm__title {
         font-weight: 800;
     }
 
-    #cc-main .cm{
+    #cc-main .cm {
     }
 
     #cc-main .cm__texts {
@@ -201,7 +207,7 @@ h1, h2, h3, h4, h5, h6, label {
     }
 
 
-    #cc-main .cm__btn-group button{
+    #cc-main .cm__btn-group button {
         font-weight: 700;
     }
 
@@ -216,19 +222,10 @@ h1, h2, h3, h4, h5, h6, label {
     overflow: hidden;
 }
 
-.loadscreen img{
-    height: 4rem;
-}
-    .loadscreen .footer {
-        position: absolute;
-        bottom: 8px;
-        text-align: center;
+    .loadscreen img {
+        height: 4rem;
     }
-    .loadscreen .footer p{
-        font-family: monospace;
-        opacity: .8;
-    }
-
+     
     .loadscreen .info-dialog {
         position: absolute;
         bottom: 1rem;
@@ -244,12 +241,14 @@ h1, h2, h3, h4, h5, h6, label {
         padding: 1.5rem;
         border-radius: 1rem;
     }
+
         .loadscreen .info-dialog .header {
             display: flex;
             align-items: center;
             width: 100%;
             gap: 8px;
         }
+
             .loadscreen .info-dialog .header span {
                 --size: 1.8rem;
                 font-size: 1rem;
@@ -263,6 +262,7 @@ h1, h2, h3, h4, h5, h6, label {
                 justify-content: center;
                 border-radius: 50%;
             }
+
             .loadscreen .info-dialog .header h3 {
                 margin: 0;
             }
@@ -271,7 +271,8 @@ h1, h2, h3, h4, h5, h6, label {
             display: inline;
             color: var(--white60);
             margin: 0;
-        } 
+        }
+
             .loadscreen .info-dialog p kbd {
                 background: var(--white50);
                 padding: 0px 5px;
@@ -279,25 +280,76 @@ h1, h2, h3, h4, h5, h6, label {
                 border-radius: 4px;
                 color: var(--text);
             }
+ .footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: fit-content ;
+    padding: 16px;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
 
+    .footer p {
+        margin: .2rem 1rem;
+        opacity: .3;
+        font-family: monospace;
+    }
 
-            .loadmore {
-                font-family: var(--title-font);
-                font-weight: 700;
-                font-size: 1rem;
-                outline: none;
-                border: none;
-                background: var(--white50);
-                color: var(--text);
-                margin-top: 4px;
-                padding: 8px 24px;
-                border-radius: 16px;
-                cursor: pointer;
-                transition: ease .2s all;
-                display: flex;
-                position: relative;
-                align-items: center;
+    .footer button {
+        margin: .2rem 1rem;
+        opacity: .3;
+        font-family: monospace;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: ease .2s opacity;
+    }
+
+        .footer button:hover {
+            opacity: .8;
+        }
+
+        .footer span {
+            opacity: .3;
+        }
+
+        .footer a {
+            color: var(--text);
+            font-weight: unset;
+            font-family: monospace;
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            cursor: pointer;
+        }
+
+            .footer a:hover {
+                opacity: 1;
+                font-weight: unset;
+                color: var(--primary);
             }
+
+
+.loadmore {
+    font-family: var(--title-font);
+    font-weight: 700;
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    background: var(--white40);
+    color: var(--text);
+    margin-top: 4px;
+    padding: 8px 24px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: ease .2s all;
+    display: flex;
+    position: relative;
+    align-items: center;
+}
 
 
     .loadmore:not(.loading):hover {
@@ -334,24 +386,24 @@ h1, h2, h3, h4, h5, h6, label {
     margin-right: 0px;
 }
 
-    .loader:after {
-        content: "";
-        position: absolute;
-        inset: 2px;
-        border-radius: 50%;
-        border: 5px solid transparent;
-        border-top-color: var(--primary);
-    }
+.loader:after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    border: 5px solid transparent;
+    border-top-color: var(--primary);
+}
 
-    .loader:before {
-        content: "";
-        position: absolute;
-        inset: 2px;
-        border-radius: 50%;
-        border: 5px solid transparent;
-        border-top-color: var(--primary);
-        animation: blur 1.5s ease-in-out infinite alternate;
-    }
+.loader:before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    border: 5px solid transparent;
+    border-top-color: var(--primary);
+    animation: blur 1.5s ease-in-out infinite alternate;
+}
 
 @keyframes skLinRotate {
     95%,100% {
