@@ -26,7 +26,34 @@
     --title-font: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --body-font: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --colorscheme: dark;
+    --homefilter: invert(0%) sepia(11%) saturate(0%) hue-rotate(337deg) brightness(405%) contrast(89%);
     color-scheme: var(--colorscheme);
+}
+
+[data-theme="light"] {
+    --primary: #ff6600;
+    --primary10: #ff660030;
+    --primary20: #ff660060;
+    --primary50: #ff660080;
+    --primary80: #ff6600cc;
+    --primary-light: inherit;
+    --primary-light50: #f09a6020;
+    --primary-light80: #f09a60aa;
+    --primary-dark: #a54506;
+    --primary-dark50: #a5450688;
+    --bg: #fff7f1;
+    --bg-card: #f7ede4;
+    --bg-card50: #f7ede46b;
+    --bg-card1: #f7ede4;
+    --text: #7a5238;
+    --text50: #7a523888;
+    --white5: #86491e05;
+    --white10: #86491e10;
+    --white40: #86491e20;
+    --white50: #86491e40;
+    --white60: #86491e80;
+    --colorscheme: light;
+    --homefilter: invert(70%) sepia(20%) saturate(1110%) hue-rotate(340deg) brightness(97%) contrast(85%);
 }
 
 html, body {
@@ -133,7 +160,7 @@ code {
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
-    color: var(--text-dark);
+    color: var(--text);
     transition: margin .2s ease;
 }
 
@@ -224,6 +251,7 @@ code {
 
     .loadscreen img {
         height: 4rem;
+        filter: var(--homefilter);
     }
      
     .loadscreen .info-dialog {

@@ -20,7 +20,9 @@ function updateVersionText() {
     versionElement.parentNode.insertBefore(spanElement, versionElement.nextSibling);
 }
 document.addEventListener('DOMContentLoaded', updateVersionText);
-
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 function iframeLoaded() {
     console.log(this);
     var iframe = document.getElementById("itemPreview");
@@ -104,4 +106,11 @@ window.setupKeyboardShortcuts = (dotNetReference) => {
                 break;
         }
     });
+};
+
+
+window.blazorHelpers = {
+    DarkMode: (mode) => {
+        document.documentElement.setAttribute('data-theme', mode);
+    }
 };

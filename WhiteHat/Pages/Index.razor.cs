@@ -58,6 +58,20 @@ namespace WhiteHat.Pages
             _items = new();
             _itemIds = new();
             _loadedStories = 0;
+
+            //HnItemAlgolia item = new();
+            //item.Author = "WhiteHat";
+            //item.Created = DateTime.Now.AddHours(-2);
+            //DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            //item.CreatedUnix = (long)(item.Created - unixEpoch).TotalSeconds;
+            //item.KidCount = 1124;
+            //item.Points = 789;
+            //item.Children = [];
+            //item.Index = ++_loadedStories;
+            //item.Title = "White Hat - A modern, single page, hacker news UI";
+            //item.Url = new Uri("https://whitehat.oliver-brodersen.com");
+            //_items.Add(item);
+
             await LoadStories();
         }
 

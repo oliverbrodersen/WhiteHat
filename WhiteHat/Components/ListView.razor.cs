@@ -57,6 +57,7 @@ namespace WhiteHat.Components
         protected async override Task OnInitializedAsync()
         {
             _settings = await Storage.GetSettings();
+            _paneSize = _settings.PaneSize;
             await JSRuntime.InvokeVoidAsync("setupKeyboardShortcuts", DotNetObjectReference.Create(this));
         }
         private async Task OpenItem(HnItemAlgolia item, int i)
@@ -84,9 +85,11 @@ namespace WhiteHat.Components
             await JSRuntime.InvokeVoidAsync("open", SelectedItem.Url, "_blank");
         }
 
-        private void TogglePrevSize()
+        private async Task TogglePrevSize()
         {
             _paneSize = _paneSize.Next();
+            _settings.PaneSize = _paneSize;
+            await Storage.UpdateSettings(_settings);
         }
 
         private void ToggleContent()

@@ -172,6 +172,7 @@
         left: unset;
         right: 8px;
         top: 8px;
+        z-index: 1;
         box-shadow: var(--primary50) 0 2px 16px -8px, var(--primary50) 0 4px 32px, inset var(--primary-light) 0 0 24px -4px;
     }
 

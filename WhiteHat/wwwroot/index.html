@@ -1,19 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
+    <base href="/" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>White Hat: A Modern Interface for Hacker News</title>
+    <meta name="description" content="Explore Hacker News with White Hat's alternative UI. Dive into articles, comments, and discussions with an optimized one-page experience. Navigate effortlessly with keyboard shortcuts, enjoy compatibility with both horizontal and vertical screens, and find content faster with enhanced search capabilities.">
+    <meta name="keywords" content="White Hat, Hacker News, YCombinator, Tech Community, Programming, Articles, Discussions, PWA, Modern UI, Keyboard Navigation, Enhanced Search, Tech News, Programming Articles">
+    <meta name="author" content="Oliver Brodersen">
+    <meta name="robots" content="index, follow">
     <meta name="color-scheme" content="dark" />
-    <title>WhiteHat</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="White Hat: A Modern Interface for Hacker News">
+    <meta property="og:description" content="Explore Hacker News with White Hat's alternative UI. Dive into articles, comments, and discussions with an optimized one-page experience. Navigate effortlessly with keyboard shortcuts, enjoy compatibility with both horizontal and vertical screens, and find content faster with enhanced search capabilities.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://whitehat.oliver-brodersen.com">
+    <meta property="og:image" content="https://oliver-brodersen.com/img/whitehat-thumb.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="White Hat: A Modern Interface for Hacker News">
+    <meta name="twitter:description" content="Discover a superior way to explore Hacker News. White Hat brings a modern UI, embedded articles, seamless browsing, and intuitive keyboard navigation to your favorite tech community.">
+    <meta name="twitter:image" content="https://oliver-brodersen.com/img/whitehat-thumb.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Material+Icons&family=Material+Icons+Round&display=swap" rel="stylesheet">
-    <base href="/" />
 
     <link href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.17/dist/cookieconsent.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
     <link href="WhiteHat.styles.css" rel="stylesheet" />
-    
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
@@ -25,6 +38,16 @@
     <meta name="application-name" content="WhiteHat">
     <meta name="msapplication-TileColor" content="#ff6600">
     <meta name="theme-color" content="#000000">
+    <script src="scripts/prereq.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155151058-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-155151058-1');
+    </script>
 </head>
 
 <body>
@@ -87,9 +110,9 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
-    <script src="sw-registrator.js"></script>
-    <script src="script.js"></script>
-    <script defer type="module" src="cookieconsent-config.js"></script>
+    <script src="scripts/sw-registrator.js"></script>
+    <script src="scripts/script.js"></script>
+    <script defer type="module" src="scripts/cookieconsent-config.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>
 

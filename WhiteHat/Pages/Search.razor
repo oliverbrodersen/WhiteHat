@@ -1,6 +1,7 @@
 ﻿@page "/search"
 @page "/search/{query}"
 @using WhiteHat.Components
+@using WhiteHat.Enums
 @using WhiteHat.Misc
 @using WhiteHat.Models
 @using WhiteHat.Services
@@ -86,4 +87,4 @@
         </p>
     }
 </div>
-<ListView List=_items IsLoading=_isLoading LoadMore=LoadStories NoMoreToLoad="_noMoreToLoad"></ListView>
+<ListView List=_items IsLoading=_isLoading LoadMore=LoadStories NoMoreToLoad="_noMoreToLoad" Origin="WhiteHatPages.Search"></ListView>

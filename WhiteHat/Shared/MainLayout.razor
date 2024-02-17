@@ -7,6 +7,7 @@
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService localStorage
 @inject StorageService Storage
+@inject IJSRuntime JSRuntime
 
 <div class="page">
     <UpdateAvailable></UpdateAvailable>
@@ -18,7 +19,9 @@
         </div>
     }
     <header>
-        <img src="img/Logo.png" class="icon"/>
+        <a href="/" @onclick="ScrollToTop">
+            <img src="img/Logo.png" class="icon"/>
+        </a>
         <div class="navigation">
             <div>
                 <NavLink class="nav" href="" Match="NavLinkMatch.All">

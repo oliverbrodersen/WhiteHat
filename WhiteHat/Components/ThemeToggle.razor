@@ -1,0 +1,67 @@
+﻿@using Blazored.LocalStorage;
+@using WhiteHat.Enums
+@inject ILocalStorageService localStorage
+@inject IJSRuntime JS
+
+<div class="theme-toggle">
+    <span tabindex="1" class="theme-button material-icons @(_showThemes ? "focus" : string.Empty)" onclick=@ToggleThemes>
+        palette
+    </span>
+    <div class="themes">
+        <ToolTip Delay="1" Title="Device preference">
+            <span class="material-icons @(mode == ThemeMode.Device ? "selected" : string.Empty)" @onclick=@(() => SelectTheme(ThemeMode.Device)) tabindex="1">
+                devices
+            </span>
+        </ToolTip>
+        <ToolTip Delay="1" Title="Light mode">
+            <span class="material-icons @(mode == ThemeMode.light ? "selected" : string.Empty)" @onclick=@(() => SelectTheme(ThemeMode.light)) tabindex="1">
+                light_mode
+            </span>
+        </ToolTip>
+        <ToolTip Delay="1" Title="Dark mode">
+            <span class="material-icons @(mode == ThemeMode.dark ? "selected" : string.Empty)" @onclick=@(() => SelectTheme(ThemeMode.dark)) tabindex="1">
+                dark_mode
+            </span>
+        </ToolTip>
+    </div>
+</div>
+@code {
+    private ThemeMode mode;
+    private bool _showThemes;
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (await localStorage.ContainKeyAsync("theme"))
+            {
+                Enum.TryParse(await localStorage.GetItemAsync<string>("theme"), out mode);
+            }
+            else
+                mode = ThemeMode.Device;
+        }
+    }
+
+    private void ToggleThemes()
+    {
+        _showThemes = !_showThemes;
+    }
+
+    private async Task SelectTheme(ThemeMode theme)
+    {
+        mode = theme;
+        if (mode == ThemeMode.Device)
+        {
+            await localStorage.RemoveItemAsync("theme");
+            await JS.InvokeVoidAsync("detectColorScheme");
+        }
+        else
+        {
+            string savedTheme = mode.ToString();
+            await localStorage.SetItemAsync("theme", savedTheme);
+            await JS.InvokeVoidAsync("window.blazorHelpers.DarkMode", savedTheme);
+        }
+        ToggleThemes();
+        StateHasChanged();
+    }
+}

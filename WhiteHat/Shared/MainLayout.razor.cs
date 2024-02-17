@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using System.Runtime;
 using System.Xml.Serialization;
 using WhiteHat.Misc;
@@ -34,6 +36,14 @@ namespace WhiteHat.Shared
                     _updated = true;
                     StateHasChanged();
                 }
+            }
+        }
+
+        private async Task ScrollToTop(MouseEventArgs e)
+        {
+            if (NavigationManager.Uri == NavigationManager.BaseUri)
+            {
+                await JSRuntime.InvokeVoidAsync("scrollToTop");
             }
         }
 

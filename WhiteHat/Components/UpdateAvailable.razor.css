@@ -40,8 +40,13 @@
     animation: ease-out pulsate 2s infinite;
 }
 
-@keyframes pulsate {
-    0%, 10%, 90%, 100% {
+[data-theme="light"] .floating-update-button {
+    background: var(--white50);
+    backdrop-filter: blur(15px);
+}
+
+    @keyframes pulsate {
+        0%, 10%, 90%, 100% {
         outline: var(--primary50) 1px solid;
         box-shadow: var(--primary50) 0 0 8px;
     }

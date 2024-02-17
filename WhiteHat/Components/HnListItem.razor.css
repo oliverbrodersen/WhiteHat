@@ -103,10 +103,17 @@
     transition: linear .2s all;
 }
 
+[data-theme="light"] .content .main .link-container a span {
+    color: var(--bg);
+}
+
 .hnitem-list-item .content:hover .main .link-container a {
     box-shadow: 0px 2px 8px var(--primary50), 0px 0px 32px var(--primary50);
     outline: .2rem solid var(--primary);
     outline-offset: -0.2rem;
+}
+[data-theme="light"] .hnitem-list-item .content:hover .main .link-container a {
+    color: var(--bg) !important;
 }
 
         .content .main a .icon {

@@ -32,21 +32,31 @@ header {
     align-items: center;
     backdrop-filter: blur(16px);
     z-index: 15;
-}   
+}
 
-    header .icon {
+    header a {
+        position: relative;
         margin-right: 32px;
         margin-left: 8px;
         height: 100%;
     }
 
-header .navigation{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    flex: 1;
-}
+        header a .icon {
+            height: 100%;
+            cursor: pointer;
+            filter: var(--homefilter);
+        }
+        header a .icon:hover {
+            filter: invert(81%) sepia(11%) saturate(4592%) hue-rotate(337deg) brightness(405%) contrast(89%);
+        }
+
+        header .navigation {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1;
+        }
     header .navigation > div{
         display: flex;
         flex-direction: row;

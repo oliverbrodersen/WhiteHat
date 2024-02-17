@@ -33,6 +33,6 @@ namespace WhiteHat.Misc
 
         public static string SettingsKeyId = "settings";
         public static string VersionKeyId = "version";
-        public static Version CurrentVersion = new Version(0, 3, 11);
+        public static Version CurrentVersion = new Version(0, 3, 12);
     }
 }
