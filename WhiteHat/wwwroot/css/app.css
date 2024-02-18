@@ -13,6 +13,7 @@
     --primary-dark: #a54506;
     --primary-dark50: #a5450688;
     --bg: #000000;
+    --bg: #00000088;
     --bg-card: #232323b0;
     --bg-card50: #6666666b;
     --bg-card1: #101010;
@@ -39,9 +40,10 @@
     --primary-light: inherit;
     --primary-light50: #f09a6020;
     --primary-light80: #f09a60aa;
-    --primary-dark: #a54506;
+    --primary-dark: #A54506;
     --primary-dark50: #a5450688;
     --bg: #fff7f1;
+    --bg50: #fff7f188;
     --bg-card: #f7ede4;
     --bg-card50: #f7ede46b;
     --bg-card1: #f7ede4;
@@ -380,11 +382,17 @@ code {
 }
 
 
+    .loadmore:not(.loading):active,
     .loadmore:not(.loading):hover {
         background: var(--primary);
         color: var(--text);
         box-shadow: 0px 2px 8px var(--primary50), 0px 0px 32px var(--primary50);
     }
+
+[data-theme="light"] .loadmore:not(.loading):active,
+[data-theme="light"] .loadmore:not(.loading):hover {
+    color: var(--bg);
+}
 
 
     .loadmore.loading {
@@ -394,6 +402,9 @@ code {
         color: var(--text50);
         background: var(--white10);
     }
+[data-theme="light"] .loadmore.loading{
+    color: var(--bg50);
+}
 
     .loadmore.small.loading {
         padding: 2px;

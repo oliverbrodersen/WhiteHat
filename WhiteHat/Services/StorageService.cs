@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using WhiteHat.Enums;
 using WhiteHat.Misc;
 using WhiteHat.Models;
 
@@ -46,5 +47,15 @@ namespace WhiteHat.Services
 
             return Settings;
         } 
+
+        public async Task<ThemeMode> GetTheme()
+        {
+            ThemeMode mode = ThemeMode.Device;
+            if (await _localStorage.ContainKeyAsync("theme"))
+            {
+                Enum.TryParse(await _localStorage.GetItemAsync<string>("theme"), out mode);
+            }
+            return mode;
+        }
     }
 }

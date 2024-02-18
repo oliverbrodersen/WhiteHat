@@ -41,7 +41,7 @@
 }
 
 [data-theme="light"] .floating-update-button {
-    background: var(--white50);
+    background: #edd5bfb0;
     backdrop-filter: blur(15px);
 }
 
@@ -64,6 +64,10 @@
     border-radius: 16px;
     font-weight: 500;
     box-shadow: var(--primary50) 0 0 16px;
+}
+
+[data-theme="light"] .floating-update-button .click {
+    color: var(--bg);
 }
 
 @keyframes fadein {

@@ -8,8 +8,10 @@
 
 <div class="container @(SelectedItem is not null ? "open" : string.Empty) @(_paneSize)">
 <div class="items-container" id="list">
-    @if(Origin == WhiteHatPages.Index && _settings != null){
-        <InfoListItem Hide=_settings.DismissWelcome Close=@DismissWelcome>
+    @if(Origin == WhiteHatPages.Index && _settings != null)
+    {
+        @* <InfoListItem Hide=_settings.DismissWelcome Close=@DismissWelcome> *@
+        <InfoListItem Hide=false Close=@DismissWelcome>
             <div class="row">
                 <div class="col">
                     <h2>
@@ -202,7 +204,7 @@
                                 title=@SelectedItem.Title
                                 sandbox="allow-forms allow-same-origin allow-scripts"
                                 frameborder="0"
-                                data-theme="dark"
+                                data-theme=@_theme;
                                 class="@(_isFrameOpen?string.Empty:"hidden")"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowfullscreen>

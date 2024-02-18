@@ -8,5 +8,6 @@
         Twitter = 3,
         Reddit = 4,
         Arxiv = 5,
+        Proxy = 6,
     }
 }

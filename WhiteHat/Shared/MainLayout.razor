@@ -45,6 +45,7 @@
                 <NavLink class="nav" href="/job">
                     Jobs
                 </NavLink>
+                <ThemeToggle></ThemeToggle>
             </div>
             <form class="search-container @(string.IsNullOrWhiteSpace(_search) ? string.Empty : "hasvalue")" @onsubmit=Search>
                 <input type="text" class="disable-shortcuts" @bind-value=_search @bind-value:event="oninput" />
@@ -61,15 +62,17 @@
     @if (_settings is not null)
     {
         <div class="shortcut-display @(_settings.ShowShortcuts?"show":string.Empty)">
-            <h3 class="title">
-                Shortcuts
-            </h3>
-            <button @onclick=ToggleShortcuts class="close">
-                <span class="material-icons-round">
-                    @(_settings is not null && _settings.ShowShortcuts ? "keyboard_double_arrow_down" : "keyboard_double_arrow_up")
-                </span>
-            </button>
+            <ToolTip Title="Keyboard shortcuts" Delay="1">
+                <button @onclick=ToggleShortcuts class="close">
+                    <span class="material-icons-round">
+                        @(_settings is not null && _settings.ShowShortcuts ? "keyboard_double_arrow_down" : "keyboard_double_arrow_up")
+                    </span>
+                </button>
+            </ToolTip>
             <div class="col">
+                <h3 class="title">
+                    Shortcuts
+                </h3>
                 <ShortcutDisplay Title="Last post" Icon="arrow_upward" Key="w"></ShortcutDisplay>
                 <ShortcutDisplay Title="Next post" Icon="arrow_downward" Key="s"></ShortcutDisplay>
             </div>

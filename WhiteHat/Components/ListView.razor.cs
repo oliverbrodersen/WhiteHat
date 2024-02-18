@@ -14,6 +14,7 @@ namespace WhiteHat.Components
         private bool _isIframeLoading, _isFrameOpen, _isComments;
         private PaneSize _paneSize;
         private PersonalSettings _settings;
+        private string _theme;
 
         [Parameter]
         public List<HnItemAlgolia> List { get; set; }
@@ -58,6 +59,8 @@ namespace WhiteHat.Components
         {
             _settings = await Storage.GetSettings();
             _paneSize = _settings.PaneSize;
+            var theme = await Storage.GetTheme();
+            _theme = theme == ThemeMode.light ? "light" : "dark";
             await JSRuntime.InvokeVoidAsync("setupKeyboardShortcuts", DotNetObjectReference.Create(this));
         }
         private async Task OpenItem(HnItemAlgolia item, int i)

@@ -1,4 +1,6 @@
-﻿using WhiteHat.Enums;
+﻿using System.Net;
+using WhiteHat.Enums;
+using WhiteHat.Models;
 
 namespace WhiteHat.Misc
 {
@@ -35,6 +37,12 @@ namespace WhiteHat.Misc
                 return EmbedType.Arxiv;
             }
 
+            // Proxy whitelist
+            if (Constants.ProxyList.Any(domain => url.Contains(domain, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return EmbedType.Proxy;
+            }
+
             //Just embed the post
             return EmbedType.Url;
         }
@@ -67,6 +75,9 @@ namespace WhiteHat.Misc
                     case EmbedType.Arxiv:
                         splitUrl = url.Split("//")[^1].Split('/');
                         return string.Format("https://arxiv.org/pdf/{0}.pdf", splitUrl[2]);
+                    case EmbedType.Proxy:
+                        result = "http://localhost:7064/api/proxy/" + WebUtility.UrlEncode(url);
+                        return result;
                     case EmbedType.Url:
                     default:
                         return url;
@@ -76,6 +87,24 @@ namespace WhiteHat.Misc
             {
                 return url;
             }
+        }
+
+        public static string EmbedText(HnItemAlgolia item)
+        {
+            if (item.EmbedType == EmbedType.Proxy)
+            {
+                return "This site is served through a proxy";
+            }
+            return item.EmbedType.ToString() + " uses a custom embed";
+        }
+
+        public static string EmbedIcon(HnItemAlgolia item)
+        {
+            if (item.EmbedType == EmbedType.Proxy)
+            {
+                return "alt_route";
+            }
+            return "auto_awesome";
         }
     }
 }

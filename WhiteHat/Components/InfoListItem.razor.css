@@ -18,28 +18,32 @@
     box-shadow: var(--primary50) 0 2px 16px -8px, var(--primary50) 0 4px 32px, inset var(--primary-dark) 0 0 48px 0;
 }
 
-.close {
-    position: absolute;
-    left: calc(100% + 8px);
-    top: 0;
-    --s: calc((var(--br) - var(--b)) * 2);
-    height: var(--s);
-    width: var(--s);
-    min-height: var(--s);
-    min-width: var(--s);
-    max-height: var(--s);
-    max-width: var(--s);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: var(--br);
-    background: var(--primary);
-    border: 0 solid var(--primary);
-    box-shadow: var(--primary50) 0 2px 16px -8px, var(--primary50) 0 4px 32px, inset var(--bg-card) 0 0 24px -4px;
-    opacity: .8;
-    transition: ease .2s opacity;
-    cursor: pointer;
+[data-theme="light"] .list-item {
+    box-shadow: var(--primary50) 0 2px 16px -8px, var(--primary50) 0 4px 32px, inset var(--bg) 0 0 48px -16px;
 }
+
+    .close {
+        position: absolute;
+        left: calc(100% + 8px);
+        top: 0;
+        --s: calc((var(--br) - var(--b)) * 2);
+        height: var(--s);
+        width: var(--s);
+        min-height: var(--s);
+        min-width: var(--s);
+        max-height: var(--s);
+        max-width: var(--s);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: var(--br);
+        background: var(--primary);
+        border: 0 solid var(--primary);
+        box-shadow: var(--primary50) 0 2px 16px -8px, var(--primary50) 0 4px 32px, inset var(--bg-card) 0 0 24px -4px;
+        opacity: .8;
+        transition: ease .2s opacity;
+        cursor: pointer;
+    }
 .close:hover{
     opacity: 1;
 }
@@ -65,6 +69,12 @@
     .content ::deep:is(h1, h2, h3, h4, h5) {
         font-weight: 800;
     }
+
+
+[data-theme="light"] .content ::deep h2,
+[data-theme="light"] .content ::deep p {
+    color: var(--bg);
+}
 
     .content ::deep .row {
         --s: 4rem;
@@ -108,19 +118,26 @@
         gap: 4px;
     }
 
-    .content ::deep .feature {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        box-shadow: inset var(--primary-dark) 0 0 32px 0px;
-        background: linear-gradient(-55deg, var(--bg-card) 40%, var(--bg-card50) 50%, var(--bg-card) 60%);
-        background-size: 300%;
-        background-position-x: 100%;
-        animation: shimmer 3s infinite linear;
-        min-width: 6rem;
-        padding: 8px 10px 8px 14px;
-        border-radius: 10px;
-    }
+.content ::deep .feature {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: inset var(--primary-dark) 0 0 32px 0px;
+    background: linear-gradient(-55deg, var(--bg-card) 40%, var(--bg-card50) 50%, var(--bg-card) 60%);
+    background-size: 300%;
+    background-position-x: 100%;
+    animation: shimmer 3s infinite linear;
+    min-width: 6rem;
+    padding: 8px 10px 8px 14px;
+    border-radius: 10px;
+}
+
+[data-theme="light"] .content ::deep .feature {
+    background: linear-gradient(-55deg, transparent 40%, var(--bg-card50) 50%, transparent 60%);
+    background-size: 300%;
+    background-position-x: 100%;
+    box-shadow: inset var(--bg) 0 0 32px -11px;
+}
 
         .content ::deep .feature:nth-child(1) {
             animation-delay: 0;
@@ -134,11 +151,15 @@
             animation-delay: 1.4s;
         }
 
-        .content ::deep .feature h4 {
-            padding: 0 8px;
-            font-weight: 600;
-            font-size: .9rem;
-        }
+.content ::deep .feature h4 {
+    padding: 0 8px;
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+[data-theme="light"] .content ::deep .feature h4 {
+    color: var(--bg-card);
+}
 
         .content ::deep .feature span {
             --size: calc(var(--s) - 1.8rem);
@@ -156,6 +177,12 @@
             border-radius: 6px;
             font-size: 18px;
         }
+
+[data-theme="light"] .content ::deep .feature span {
+    color: var(--bg);
+    background: var(--bg-card50);
+    backdrop-filter: blur(6px);
+}
 
 @keyframes shimmer {
     0% {
@@ -176,13 +203,11 @@
         box-shadow: var(--primary50) 0 2px 16px -8px, var(--primary50) 0 4px 32px, inset var(--primary-light) 0 0 24px -4px;
     }
 
-
-
     .content ::deep .row {
         flex-wrap: wrap;
     }
 
-        .content ::deep .row .row {
-            flex-wrap: wrap-reverse;
-        }
+    .content ::deep .row .row {
+        flex-wrap: wrap-reverse;
+    }
 }

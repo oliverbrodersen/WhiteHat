@@ -164,7 +164,7 @@ header {
 .shortcut-display {
     position: fixed;
     right: 0;
-    top: calc(100% + 120px + 1rem);
+    top: calc(100% + 120px + 2rem);
     transform: translateY(-100%);
     background: transparent;
     border: 0px solid var(--white10);
@@ -179,33 +179,25 @@ header {
     transition: ease .3s top, ease .2s background, ease .2s border;
 }
 
+[data-theme="light"] .shortcut-display {
+    --bg-card: #edd5bfb0;
+}
+
     .shortcut-display.show {
         top: calc(100% - 32px);
         background: var(--bg-card);
         border: 1px solid var(--white10);
     }
 
-    .shortcut-display .title {
-        position: absolute;
-        right: 0;
-        top: -2.25rem;
-        margin: 0 1rem;
-        font-size: 1.25rem;
-        font-family: var(--title-font);
-        font-weight: 800;
-        font-style: italic;
-        color: var(--text);
-        opacity: 0;
-        filter: drop-shadow(#000000 0 0px 0px) blur(12px);
-        z-index: 0;
-        pointer-events: none;
-        transition: ease .3s filter, ease .2s opacity;
-    }
-
-        .shortcut-display.show .title {
-            opacity: .4;
-            filter: drop-shadow(#000000 0 4px 8px) blur(0px);
-        }
+.shortcut-display .title {
+    font-size: 1.25rem;
+    font-family: var(--title-font);
+    font-weight: 800;
+    color: var(--text);
+    z-index: 0;
+    pointer-events: none;
+    margin: auto 0rem auto 0.5rem;
+}
 
     .shortcut-display .close {
         --size: 26px;

@@ -33,6 +33,20 @@ namespace WhiteHat.Misc
 
         public static string SettingsKeyId = "settings";
         public static string VersionKeyId = "version";
-        public static Version CurrentVersion = new Version(0, 3, 12);
+        public static Version CurrentVersion = new Version(0, 3, 13);
+
+        public static string[] ProxyList = [
+            "github.com", 
+            "reuters.com", 
+            "stackexchange.com", 
+            "microsoft.com",
+            "apple.com",
+            "openai.com", 
+            "theguardian.com",
+            "nytimes.com", 
+            "ycombinator.com",
+            "joshwcomeau.com",
+            "techcrunch.com"
+            ];
     }
 }

@@ -1,5 +1,6 @@
 ﻿@using System.Text.RegularExpressions
 @using WhiteHat.Enums
+@using WhiteHat.Misc
 @using WhiteHat.Models
 @using WhiteHat.Services
 @using WhiteHat.Components
@@ -110,10 +111,10 @@ else {
                 }
                 @if (Item.EmbedType is not EmbedType.NoUrl and not EmbedType.Url)
                 {
-                    <ToolTip Title=@(Item.EmbedType.ToString() + " uses a custom embed") Position=ToolTipPosition.Top>
+                    <ToolTip Title=@EmbedHelper.EmbedText(Item) Position=ToolTipPosition.Top>
                         <div class="round pill">
                             <span class="material-icons-round">
-                                auto_awesome
+                                @EmbedHelper.EmbedIcon(Item)
                             </span>
                         </div>
                     </ToolTip>
