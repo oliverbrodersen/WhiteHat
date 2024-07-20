@@ -3,6 +3,7 @@
 @using WhiteHat.Services
 @inject StorageService Storage
 @inject IJSRuntime JSRuntime
+@inject IframeCheckerService IframeCheckerService
 @implements IDisposable
 
 
@@ -11,14 +12,14 @@
     @if(Origin == WhiteHatPages.Index && _settings != null)
     {
         @* <InfoListItem Hide=_settings.DismissWelcome Close=@DismissWelcome> *@
-        <InfoListItem Hide=false Close=@DismissWelcome>
+            <InfoListItem Hide=_settings.DismissWelcome Close=@DismissWelcome>
             <div class="row">
                 <div class="col">
                     <h2>
-                        Hi, welcome to White Hat!
+                        Hi, Welcome to White Hat!
                     </h2>
                     <p>
-                        A hacker news client for the modern web
+                        An improved Hacker News client
                     </p>
                 </div>
                 <div class="row features">
@@ -112,36 +113,61 @@
         <div class="link-pane">
             <div class="pane-header">
                 <div class="group">
-                    <button @onclick=OpenInNewTab>
-                        <p>
-                            Open
-                        </p>
-                        <span class="material-icons-round">
-                            open_in_new
-                        </span>
-                    </button>
-                    <button @onclick=TogglePrevSize>
+                    <div class="toggle-buttons" @onclick=ToggleContent>
+                        <button class="@(!_isComments ? "active" : "")">
+                            <p>
+                                Site
+                            </p>
+                            <span class="material-icons-round">
+                                language
+                            </span>
+                        </button>
+                        <button class="@(_isComments ? "active" : "")">
+                            <p>
+                                Comments
+                            </p>
+                        </button>
+                    </div>
+                    <div class="toggle-buttons">
+                        <button class="@(_paneSize == PaneSize.Slim ? "active" : "")" @onclick=@(() => SetPrevSize(PaneSize.Slim))>
+                            <p>
+                                Slim
+                            </p>
+                            <span class="material-icons-round rotate">
+                                unfold_less
+                            </span>
+                        </button> 
+                        <button class="@(_paneSize == PaneSize.Split ? "active" : "")" @onclick=@(() => SetPrevSize(PaneSize.Split))>
+                            <p>
+                                Split
+                            </p>
+                            <span class="material-icons-round">
+                                vertical_split
+                            </span>
+                        </button>
+                        <button class="rotate @(_paneSize == PaneSize.Wide ? "active" : "")" @onclick=@(() => SetPrevSize(PaneSize.Wide))>
+                            <p>
+                                Wide
+                            </p>
+                            <span class="material-icons-round rotate">
+                                unfold_more
+                            </span>
+                        </button>
+                    </div>
+                    @* <button @onclick=TogglePrevSize>
                         <p>
                             @GetPaneButtonSizeText()
                         </p>
                         <span class="material-icons-round rotate @(_paneSize.Next())">
                             @GetPaneButtonSizeIcon()
                         </span>
-                    </button>
+                    </button> *@
                     <button @onclick=@(() => ScrollToItem(SelectedItem.Id))>
                         <p>
                             Scroll to post
                         </p>
                         <span class="material-icons-round">
                             swipe_vertical
-                        </span>
-                    </button>
-                    <button @onclick=ToggleContent>
-                        <p>
-                            @(!_isComments ? "Comments" : "Site")
-                        </p>
-                        <span class="material-icons-round">
-                            @(!_isComments ? "mode_comment" : "language")
                         </span>
                     </button>
                 </div>
@@ -154,6 +180,16 @@
                     <button class="round" @onclick=@(() => HandleDown(true))>
                         <span class="material-icons-round">
                             arrow_downward
+                        </span>
+                    </button>
+                    <button @onclick=Reload class="round refresh">
+                        <span class="material-icons-round">
+                            refresh
+                        </span>
+                    </button>
+                    <button class="round" @onclick=OpenInNewTab>
+                        <span class="material-icons-round">
+                            open_in_new
                         </span>
                     </button>
                     <button class="round close" @onclick=CloseLinkPane>
@@ -199,15 +235,15 @@
                     else
                     {
                         <iframe id="itemPreview"
-                                src=@SelectedItem.EmbedUrl
-                                @onload=IFrameLoaded
-                                title=@SelectedItem.Title
-                                sandbox="allow-forms allow-same-origin allow-scripts"
-                                frameborder="0"
-                                data-theme=@_theme;
-                                class="@(_isFrameOpen?string.Empty:"hidden")"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen>
+                                 src=@SelectedItem.EmbedUrl
+                                 @onload=IFrameLoaded
+                                 title=@SelectedItem.Title
+                                 sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation"
+                                 frameborder="0"
+                                 data-theme=@_theme;
+                                 class="@(_isFrameOpen?string.Empty:"hidden")"
+                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                 allowfullscreen>
                         </iframe>
                         <button id="frameLoader" class="loadmore loading @(_isFrameOpen?"hidden":string.Empty)" @onclick=StateHasChanged>
                             <span class="loader"></span>

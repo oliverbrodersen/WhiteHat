@@ -35,7 +35,7 @@ namespace WhiteHat.Components
         {
             if (firstRender && !Loader)
             {
-                Item.CountKids(true);
+                await Item.CountKids(true);
                 StateHasChanged();
             }
 

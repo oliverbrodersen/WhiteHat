@@ -62,13 +62,11 @@
     @if (_settings is not null)
     {
         <div class="shortcut-display @(_settings.ShowShortcuts?"show":string.Empty)">
-            <ToolTip Title="Keyboard shortcuts" Delay="1">
-                <button @onclick=ToggleShortcuts class="close">
-                    <span class="material-icons-round">
-                        @(_settings is not null && _settings.ShowShortcuts ? "keyboard_double_arrow_down" : "keyboard_double_arrow_up")
-                    </span>
-                </button>
-            </ToolTip>
+            <button @onclick=ToggleShortcuts class="close">
+                <span class="material-icons-round">
+                    @(_settings is not null && _settings.ShowShortcuts ? "keyboard_double_arrow_down" : "keyboard_double_arrow_up")
+                </span>
+            </button>
             <div class="col">
                 <h3 class="title">
                     Shortcuts

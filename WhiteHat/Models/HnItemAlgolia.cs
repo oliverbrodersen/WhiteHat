@@ -111,9 +111,11 @@ namespace WhiteHat.Models
             };
         }
 
-        public int CountKids(bool isFirst = false)
+        public async Task<int> CountKids(bool isFirst = false)
         {
             int count = isFirst ? 0 : 1;
+            var tasks = new List<Task<int>>();
+
             foreach (var kid in Children)
             {
                 if (!kid.Children.Any())
@@ -125,9 +127,13 @@ namespace WhiteHat.Models
                 }
                 else
                 {
-                    count += kid.CountKids();
+                    tasks.Add(kid.CountKids());
                 }
             }
+
+            var results = await Task.WhenAll(tasks);
+            count += results.Sum();
+
             KidCount = count;
             return count;
         }

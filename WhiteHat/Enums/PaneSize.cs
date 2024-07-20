@@ -2,8 +2,8 @@
 {
     public enum PaneSize
     {
-        Wide,
         Split,
+        Wide,
         Slim
     }
 }

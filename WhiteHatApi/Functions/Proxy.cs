@@ -21,23 +21,24 @@ namespace WhiteHatApi.Functions
         }
 
         [Function("Proxy")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "proxy/{*restOfPath}")] HttpRequest req,
+        public async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req,
             string restOfPath)
         {
             HttpResponseMessage response;
             string targetUrl = WebUtility.UrlDecode(restOfPath);
             string htmlContent = "<h1>That didn't work...<h1/>";
 
-            if (!Constants.ProxyList.Any(domain => targetUrl.Contains(domain, StringComparison.InvariantCultureIgnoreCase)))
-            {
-                return new ContentResult()
-                {
-                    Content = htmlContent + $"<p><a href='{targetUrl}'>{targetUrl}</a> is not whitelisted</p>",
-                    ContentType = "text/html",
-                    StatusCode = 403
-                };
-            }
+            // WhiteList requests
+            //if (!Constants.ProxyList.Any(domain => targetUrl.Contains(domain, StringComparison.InvariantCultureIgnoreCase)))
+            //{
+            //    return new ContentResult()
+            //    {
+            //        Content = htmlContent + $"<p><a href='{targetUrl}'>{targetUrl}</a> is not whitelisted</p>",
+            //        ContentType = "text/html",
+            //        StatusCode = 403
+            //    };
+            //}
 
             try
             {
@@ -48,7 +49,6 @@ namespace WhiteHatApi.Functions
 
                     // Add CORS header
                     response.Headers.Add("Access-Control-Allow-Origin", "*");
-
                     htmlContent = await response.Content.ReadAsStringAsync();
 
                     // HTML Modifications
@@ -59,12 +59,24 @@ namespace WhiteHatApi.Functions
             catch (HttpRequestException ex)
             {
                 // Error during the web request to the proxied site
-                return CreateErrorResponse(HttpStatusCode.BadGateway, "Error fetching from target website.");
+                _logger.LogError(ex.Message, ex);
+                return new ContentResult()
+                {
+                    Content = htmlContent,
+                    ContentType = "text/html",
+                    StatusCode = (int)HttpStatusCode.BadGateway
+                };
             }
             catch (Exception ex)
             {
                 // Unexpected error (e.g., HTML parsing issues)
-                return CreateErrorResponse(HttpStatusCode.InternalServerError, "An internal error occurred.");
+                _logger.LogError(ex.Message, ex);
+                return new ContentResult()
+                {
+                    Content = htmlContent,
+                    ContentType = "text/html",
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
             }
 
             return new ContentResult()
@@ -76,7 +88,7 @@ namespace WhiteHatApi.Functions
         }
 
         // Helper function to create consistent error responses 
-        private static IActionResult CreateErrorResponse(HttpStatusCode statusCode, string message)
+        private IActionResult CreateErrorResponse(HttpStatusCode statusCode, string message)
         {
             return new ContentResult()
             {
@@ -86,7 +98,7 @@ namespace WhiteHatApi.Functions
             };
         }
 
-        private static string FixRelativePaths(string htmlContent, string targetUrl)
+        private string FixRelativePaths(string htmlContent, string targetUrl)
         {
             var doc = new HtmlDocument();
             doc.LoadHtml(htmlContent);
@@ -98,68 +110,84 @@ namespace WhiteHatApi.Functions
             }
             else
             {
-                Console.WriteLine(targetUrl);
+                _logger.LogError(targetUrl);
             }
 
-            if (doc.DocumentNode is not null && doc.DocumentNode.Depth > 0)
+            // Handle 'href' attributes
+            var hrefNodes = doc.DocumentNode.SelectNodes("//*[@href]");
+            if (hrefNodes != null)
             {
-                // Handle 'href' attributes 
-                foreach (var link in doc.DocumentNode.SelectNodes("//*[@href]"))
+                foreach (var link in hrefNodes)
                 {
                     FixAttribute(link, "href", baseUrl);
                 }
             }
 
-            if (doc.DocumentNode is not null && doc.DocumentNode.Depth > 0)
+            // Handle 'src' attributes
+            var srcNodes = doc.DocumentNode.SelectNodes("//*[@src]");
+            if (srcNodes != null)
             {
-                // Handle 'src' attributes
-                foreach (var elem in doc.DocumentNode.SelectNodes("//*[@src]"))
+                foreach (var elem in srcNodes)
                 {
                     FixAttribute(elem, "src", baseUrl);
                 }
             }
 
-            // You can add handling for more attributes as needed
+            // Handle 'src' attributes
+            var srcsetNodes = doc.DocumentNode.SelectNodes("//*[@srcset]");
+            if (srcsetNodes != null)
+            {
+                foreach (var elem in srcsetNodes)
+                {
+                    FixAttribute(elem, "srcset", baseUrl);
+                }
+            }
 
             return doc.DocumentNode.OuterHtml;
         }
 
-        private static void FixAttribute(HtmlNode node, string attributeName, string baseUrl)
+        private void FixAttribute(HtmlNode node, string attributeName, string baseUrl)
         {
             var currentAttributeValue = node.GetAttributeValue(attributeName, "");
             node.SetAttributeValue(attributeName, ConvertToAbsoluteUrl(currentAttributeValue, baseUrl));
         }
 
-        private static string AdjustLinksForNewTab(string htmlContent)
+        private string AdjustLinksForNewTab(string htmlContent)
         {
             var doc = new HtmlDocument();
             doc.LoadHtml(htmlContent);
 
-            foreach (var link in doc.DocumentNode.SelectNodes("//a"))
+            if (doc != null && doc.DocumentNode != null && doc.DocumentNode.ChildNodes != null && doc.DocumentNode.ChildNodes.Any())
             {
-                link.SetAttributeValue("target", "_blank");
+                var links = doc.DocumentNode.SelectNodes("//a");
+                if (links != null)
+                {
+                    foreach (var link in links)
+                    {
+                        link.SetAttributeValue("target", "_blank");
+                    }
+                }
             }
 
             return doc.DocumentNode.OuterHtml;
         }
 
-        private static string ConvertToAbsoluteUrl(string relativeUrl, string baseUrl)
+        private string ConvertToAbsoluteUrl(string relativeUrl, string baseUrl)
         {
             string result = relativeUrl;
             try
             {
-                if (!string.IsNullOrEmpty(relativeUrl) && !relativeUrl.StartsWith("http") && !relativeUrl.StartsWith("#"))
+                if (!string.IsNullOrEmpty(relativeUrl) && !relativeUrl.StartsWith("http") && !relativeUrl.StartsWith("localhost") && !relativeUrl.StartsWith("data") && !relativeUrl.StartsWith("#"))
                 {
-                    result = baseUrl + (relativeUrl.StartsWith("/") ? string.Empty : "/") + relativeUrl;
+                    result = "https://" + baseUrl + (relativeUrl.StartsWith("/") ? string.Empty : "/") + relativeUrl;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"RelativeUrl: {relativeUrl}, BaseUri: {baseUrl} failed with:");
-                Console.Error.WriteLine(ex);
+                _logger.LogError(ex.Message, ex);
             }
-
-            Console.WriteLine(result);
+             
             return result;
         }
     }

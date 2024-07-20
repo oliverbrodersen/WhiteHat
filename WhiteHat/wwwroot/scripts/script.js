@@ -114,3 +114,9 @@ window.blazorHelpers = {
         document.documentElement.setAttribute('data-theme', mode);
     }
 };
+window.reloadIframe = function () {
+    var iframe = document.getElementById('itemPreview');
+    if (iframe) {
+        iframe.src = iframe.src;
+    }
+}

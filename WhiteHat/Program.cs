@@ -11,6 +11,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<HNFetcher>();
-builder.Services.AddScoped<StorageService>(); 
+builder.Services.AddScoped<StorageService>();
+builder.Services.AddScoped<IframeCheckerService>();
 
 await builder.Build().RunAsync();

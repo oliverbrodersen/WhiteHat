@@ -337,7 +337,7 @@ code {
         border: none;
         cursor: pointer;
         transition: ease .2s opacity;
-    }
+    } 
 
         .footer button:hover {
             opacity: .8;
@@ -402,9 +402,6 @@ code {
         color: var(--text50);
         background: var(--white10);
     }
-[data-theme="light"] .loadmore.loading{
-    color: var(--bg50);
-}
 
     .loadmore.small.loading {
         padding: 2px;

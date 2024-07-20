@@ -76,7 +76,12 @@ namespace WhiteHat.Misc
                         splitUrl = url.Split("//")[^1].Split('/');
                         return string.Format("https://arxiv.org/pdf/{0}.pdf", splitUrl[2]);
                     case EmbedType.Proxy:
-                        result = "http://localhost:7064/api/proxy/" + WebUtility.UrlEncode(url);
+#if(DEBUG)
+                        result = "http://localhost:7064/api/proxy/?restOfPath=";
+#else
+                        result = "https://whitehatapi.azurewebsites.net/api/proxy/?restOfPath=";
+#endif
+                        result += WebUtility.UrlEncode(url);
                         return result;
                     case EmbedType.Url:
                     default:

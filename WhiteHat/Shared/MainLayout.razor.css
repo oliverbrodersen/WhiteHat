@@ -203,7 +203,7 @@ header {
         --size: 26px;
         position: absolute;
         top: calc((var(--size) * -2));
-        right: 16px;
+        right: 0;
         height: var(--size);
         width: var(--size);
         max-height: var(--size);
@@ -222,7 +222,7 @@ header {
         cursor: pointer;
     }
     .shortcut-display.show .close {
-        top: calc((var(--size) * -1)/2);
+        top: calc((var(--size) * -1) - 8px);
     }
         .shortcut-display .close:hover, .shortcut-display .close:active, .shortcut-display .close:focus {
             background: var(--bg-card1);

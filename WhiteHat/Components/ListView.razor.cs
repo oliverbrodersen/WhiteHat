@@ -73,9 +73,30 @@ namespace WhiteHat.Components
             else
             {
                 _isIframeLoading = true;
+                StateHasChanged();
+                await IframeAutoProxy(item);
+
                 SelectedItem = item;
                 _selectedIndex = i;
             }
+        }
+
+        private async Task IframeAutoProxy(HnItemAlgolia item)
+        { 
+            if (item.EmbedType == EmbedType.Url)
+            {
+                var CORS = await IframeCheckerService.CanDisplayInIframe(item.Url.ToString());
+                if (!CORS)
+                {
+                    item.EmbedType = EmbedType.Proxy;
+                    item.EmbedUrl = EmbedHelper.UrlEmbedFromEmbedType(EmbedType.Proxy, item.Url.ToString());
+                }
+            }
+        }
+
+        private async Task Reload()
+        {
+            await JSRuntime.InvokeVoidAsync("reloadIframe");
         }
 
         private void CloseLinkPane()
@@ -90,7 +111,11 @@ namespace WhiteHat.Components
 
         private async Task TogglePrevSize()
         {
-            _paneSize = _paneSize.Next();
+            await SetPrevSize(_paneSize.Next());
+        }
+        private async Task SetPrevSize(PaneSize size)
+        {
+            _paneSize = size;
             _settings.PaneSize = _paneSize;
             await Storage.UpdateSettings(_settings);
         }
@@ -239,7 +264,7 @@ namespace WhiteHat.Components
         }
 
         [JSInvokable]
-        public void HandlePreviewToggle()
+        public async Task HandlePreviewToggle()
         {
             if (_selectedIndex > -1)
             {
@@ -255,6 +280,7 @@ namespace WhiteHat.Components
                 }
                 else
                 {
+                    await IframeAutoProxy(item);
                     SelectedItem = item;
                     _isIframeLoading = true;
                 }
