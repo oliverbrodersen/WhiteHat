@@ -63,7 +63,7 @@ namespace WhiteHat.Components
             _theme = theme == ThemeMode.light ? "light" : "dark";
             await JSRuntime.InvokeVoidAsync("setupKeyboardShortcuts", DotNetObjectReference.Create(this));
         }
-        private async Task OpenItem(HnItemAlgolia item, int i)
+        private async Task OpenItem(HnItemAlgolia item)
         {
             if (SelectedItem == item)
             {
@@ -77,7 +77,11 @@ namespace WhiteHat.Components
                 await IframeAutoProxy(item);
 
                 SelectedItem = item;
-                _selectedIndex = i;
+                var index = List.IndexOf(item);
+                _selectedIndex = index;
+
+                await Task.Delay(50);
+                StateHasChanged();
             }
         }
 
@@ -283,6 +287,8 @@ namespace WhiteHat.Components
                     await IframeAutoProxy(item);
                     SelectedItem = item;
                     _isIframeLoading = true;
+                    await Task.Delay(50);
+                    StateHasChanged();
                 }
                 StateHasChanged();
             }
@@ -302,10 +308,13 @@ namespace WhiteHat.Components
             }
         }
 
-        public void IFrameLoaded()
+        public async Task IFrameLoaded()
         {
             _isIframeLoading = false;
             _isFrameOpen = true;
+            StateHasChanged();
+
+            await Task.Delay(50);
             StateHasChanged();
         }
 

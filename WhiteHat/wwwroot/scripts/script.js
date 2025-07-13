@@ -48,7 +48,23 @@ function scrollToItem(id) {
             behavior: 'smooth'
         });
     }
+}
+function scrollToItemInstant(id) {
+    var item = document.getElementById(id);
+    if (!item) return; // Exit if the element is not found
 
+    var itemPosition = item.getBoundingClientRect().top + window.pageYOffset;
+
+    // Scroll to the element's position minus the header height
+    if (window.innerHeight > window.innerWidth) {
+        document.getElementById(id).scrollIntoView({ behavior: "instant", block: "start", inline: "nearest" });
+    }
+    else {
+        window.scrollTo({
+            top: itemPosition - getHeaderHeight(),
+            behavior: 'instant'
+        });
+    }
 }
 
 function getHeaderHeight() {

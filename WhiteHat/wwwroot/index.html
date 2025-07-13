@@ -43,6 +43,12 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155151058-1"></script>
     <script>
+        var ahrefs_analytics_script = document.createElement('script');
+        ahrefs_analytics_script.async = true;
+        ahrefs_analytics_script.src = 'https://analytics.ahrefs.com/analytics.js';
+        ahrefs_analytics_script.setAttribute('data-key', 'rmGY72aN8hMJ7+tXExUTBw');
+        document.getElementsByTagName('head')[0].appendChild(ahrefs_analytics_script);
+
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
@@ -97,11 +103,6 @@
                     </a>
                 </p>
             </div>
-            <!--<div class="footer">
-        <p>
-            Version @(Constants.CurrentVersion)
-        </p>
-    </div>-->
         </div>
     </div>
 

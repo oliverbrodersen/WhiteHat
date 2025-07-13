@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Text.RegularExpressions;
 using WhiteHat.Enums;
 using WhiteHat.Models;
@@ -61,6 +62,10 @@ namespace WhiteHat.Components
             if (ItemChanged.HasDelegate)
             {
                 await ItemChanged.InvokeAsync(Item);
+            }
+            if (!Item.ShowComments)
+            {
+                await JSRuntime.InvokeVoidAsync("scrollToItemInstant", Item.Id);
             }
         }
 

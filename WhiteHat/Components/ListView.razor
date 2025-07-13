@@ -64,11 +64,14 @@
     }
     else
     {
-        for (var i = 0; i < List.Count(); i++)
-        {
-            int index = i;
-            <HnListItem @bind-Item="List[index]" OpenLink=@(x => OpenItem(x,index)) Selected=SelectedItem SelectedIndex=_selectedIndex Origin=Origin></HnListItem>
-        }
+        <Virtualize Items="List" Context="item">
+            <HnListItem Item="item"
+                        OpenLink=@(x => OpenItem(x))
+                        Selected=SelectedItem
+                        SelectedIndex=_selectedIndex
+                        Origin=Origin>
+            </HnListItem>
+        </Virtualize>
 
         @if (IsLoading)
         {
@@ -222,13 +225,9 @@
                             }
                             else
                             {
-                                @foreach (var kid in SelectedItem.Children)
-                                {
-                                    @if (kid is not null && !string.IsNullOrWhiteSpace(kid.Text) && !string.IsNullOrWhiteSpace(kid.Author))
-                                    {
-                                        <HnListItemComment Item="kid" Op="@SelectedItem.Author" />
-                                    }
-                                }
+                                <Virtualize Items="SelectedItem.Children.Where(c => c is not null && !string.IsNullOrWhiteSpace(c.Text) && !string.IsNullOrWhiteSpace(c.Author)).ToList()" Context="kid">
+                                    <HnListItemComment Item="kid" Op="@SelectedItem.Author" />
+                                </Virtualize>                                
                             }
                         </div>
                     }

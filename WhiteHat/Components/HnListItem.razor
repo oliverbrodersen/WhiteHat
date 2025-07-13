@@ -5,6 +5,7 @@
 @using WhiteHat.Services
 @using WhiteHat.Components
 @inject HNFetcher HNFetcher
+@inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
 @if(Loader) {
@@ -132,13 +133,9 @@ else {
                 }
                 else
                 {
-                    @foreach (var kid in Item.Children)
-                    {
-                        @if (kid is not null && !string.IsNullOrWhiteSpace(kid.Text) && !string.IsNullOrWhiteSpace(kid.Author))
-                        {
-                            <HnListItemComment Item="kid" Op="@Item.Author" />
-                        }
-                    }
+                    <Virtualize Items="Item.Children.Where(c => c is not null && !string.IsNullOrWhiteSpace(c.Text) && !string.IsNullOrWhiteSpace(c.Author)).ToList()" Context="kid">
+                        <HnListItemComment Item="kid" Op="@Item.Author" />
+                    </Virtualize>
                 }
             </div>
         }

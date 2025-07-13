@@ -1,194 +1,211 @@
-using Azure;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Net;
-using WhiteHat.Enums;
-using WhiteHat.Misc;
 
-namespace WhiteHatApi.Functions
+public class Proxy
 {
-    public class Proxy
+    private readonly ILogger<Proxy> _logger;
+    private readonly HttpClient _httpClient;
+    private readonly IDistributedCache _cache;
+
+    // Inject IHttpClientFactory (via HttpClient) and IDistributedCache
+    public Proxy(ILogger<Proxy> logger, IHttpClientFactory httpClientFactory, IDistributedCache cache)
     {
-        private readonly ILogger<Proxy> _logger;
+        _logger = logger;
+        _httpClient = httpClientFactory.CreateClient();
+        _cache = cache;
+    }
 
-        public Proxy(ILogger<Proxy> logger)
+    [Function("Proxy")]
+    public async Task<IActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req,
+        string restOfPath)
+    {
+        if (string.IsNullOrWhiteSpace(restOfPath))
         {
-            _logger = logger;
+            return new BadRequestObjectResult("Target URL is missing.");
         }
 
-        [Function("Proxy")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req,
-            string restOfPath)
+        string targetUrl = WebUtility.UrlDecode(restOfPath);
+        string cacheKey = $"proxy_v1_{targetUrl}"; // Added a version to the key
+
+        // 1. Try to get the content from cache
+        try
         {
-            HttpResponseMessage response;
-            string targetUrl = WebUtility.UrlDecode(restOfPath);
-            string htmlContent = "<h1>That didn't work...<h1/>";
-
-            // WhiteList requests
-            //if (!Constants.ProxyList.Any(domain => targetUrl.Contains(domain, StringComparison.InvariantCultureIgnoreCase)))
-            //{
-            //    return new ContentResult()
-            //    {
-            //        Content = htmlContent + $"<p><a href='{targetUrl}'>{targetUrl}</a> is not whitelisted</p>",
-            //        ContentType = "text/html",
-            //        StatusCode = 403
-            //    };
-            //}
-
-            try
+            byte[] cachedContent = await _cache.GetAsync(cacheKey);
+            if (cachedContent != null)
             {
-
-                using (var httpClient = new HttpClient())
-                {
-                    response = await httpClient.GetAsync(targetUrl);
-
-                    // Add CORS header
-                    response.Headers.Add("Access-Control-Allow-Origin", "*");
-                    htmlContent = await response.Content.ReadAsStringAsync();
-
-                    // HTML Modifications
-                    htmlContent = FixRelativePaths(htmlContent, targetUrl);
-                    htmlContent = AdjustLinksForNewTab(htmlContent);
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                // Error during the web request to the proxied site
-                _logger.LogError(ex.Message, ex);
+                _logger.LogInformation("Cache hit for URL: {TargetUrl}", targetUrl);
                 return new ContentResult()
                 {
-                    Content = htmlContent,
-                    ContentType = "text/html",
-                    StatusCode = (int)HttpStatusCode.BadGateway
+                    Content = Encoding.UTF8.GetString(cachedContent),
+                    ContentType = "text/html; charset=utf-8",
+                    StatusCode = (int)HttpStatusCode.OK
                 };
             }
-            catch (Exception ex)
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Redis cache read error for URL: {TargetUrl}", targetUrl);
+            // If cache fails, proceed to fetch from source instead of failing the request
+        }
+
+        _logger.LogInformation("Cache miss for URL: {TargetUrl}", targetUrl);
+
+        // 2. Fetch from the target URL if not in cache
+        HttpResponseMessage response;
+        string htmlContent;
+        try
+        {
+            // Use the injected HttpClient
+            response = await _httpClient.GetAsync(targetUrl);
+
+            if (!response.IsSuccessStatusCode)
             {
-                // Unexpected error (e.g., HTML parsing issues)
-                _logger.LogError(ex.Message, ex);
+                _logger.LogWarning("Proxy target returned unsuccessful status code: {StatusCode} for URL: {TargetUrl}", response.StatusCode, targetUrl);
                 return new ContentResult()
                 {
-                    Content = htmlContent,
-                    ContentType = "text/html",
-                    StatusCode = (int)HttpStatusCode.InternalServerError
+                    Content = $"<h1>Error: The requested site returned a {response.StatusCode} status.</h1>",
+                    ContentType = "text/html; charset=utf-8",
+                    StatusCode = (int)response.StatusCode
                 };
             }
 
-            return new ContentResult()
-            {
-                Content = htmlContent,
-                ContentType = "text/html",
-                StatusCode = (int)response.StatusCode
-            };
+            htmlContent = await response.Content.ReadAsStringAsync();
+
+            // 3. Modify HTML
+            htmlContent = FixRelativePaths(htmlContent, targetUrl);
+            htmlContent = AdjustLinksForNewTab(htmlContent);
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex, "Error during web request to proxied site: {TargetUrl}", targetUrl);
+            return CreateErrorResponse(HttpStatusCode.BadGateway, "<h1>That didn't work... The remote server is not responding.</h1>");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unexpected error processing URL: {TargetUrl}", targetUrl);
+            return CreateErrorResponse(HttpStatusCode.InternalServerError, "<h1>An unexpected error occurred.</h1>");
         }
 
-        // Helper function to create consistent error responses 
-        private IActionResult CreateErrorResponse(HttpStatusCode statusCode, string message)
+        // 4. Store the processed content in cache
+        try
         {
-            return new ContentResult()
-            {
-                Content = message,
-                ContentType = "text/plain",
-                StatusCode = (int)statusCode
-            };
+            var cacheEntryOptions = new DistributedCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(30)); // Cache for 30 minutes of inactivity
+
+            byte[] contentToCache = Encoding.UTF8.GetBytes(htmlContent);
+            await _cache.SetAsync(cacheKey, contentToCache, cacheEntryOptions);
+            _logger.LogInformation("Successfully cached content for URL: {TargetUrl}", targetUrl);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Redis cache write error for URL: {TargetUrl}", targetUrl);
         }
 
-        private string FixRelativePaths(string htmlContent, string targetUrl)
+        // 5. Return the result
+        return new ContentResult()
         {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(htmlContent);
-            bool hasHost = Uri.TryCreate(targetUrl,UriKind.Absolute, out Uri? baseUri);
-            string baseUrl = targetUrl;
-            if (baseUri != null)
-            {
-                baseUrl = baseUri.Host.ToString();
-            }
-            else
-            {
-                _logger.LogError(targetUrl);
-            }
+            Content = htmlContent,
+            ContentType = "text/html; charset=utf-8",
+            StatusCode = (int)HttpStatusCode.OK
+        };
+    }
 
-            // Handle 'href' attributes
-            var hrefNodes = doc.DocumentNode.SelectNodes("//*[@href]");
-            if (hrefNodes != null)
-            {
-                foreach (var link in hrefNodes)
-                {
-                    FixAttribute(link, "href", baseUrl);
-                }
-            }
+    private string FixRelativePaths(string htmlContent, string targetUrl)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(htmlContent);
 
-            // Handle 'src' attributes
-            var srcNodes = doc.DocumentNode.SelectNodes("//*[@src]");
-            if (srcNodes != null)
-            {
-                foreach (var elem in srcNodes)
-                {
-                    FixAttribute(elem, "src", baseUrl);
-                }
-            }
+        // A more reliable way to get the base for resolving relative URLs
+        var baseUri = new Uri(targetUrl);
 
-            // Handle 'src' attributes
-            var srcsetNodes = doc.DocumentNode.SelectNodes("//*[@srcset]");
-            if (srcsetNodes != null)
-            {
-                foreach (var elem in srcsetNodes)
-                {
-                    FixAttribute(elem, "srcset", baseUrl);
-                }
-            }
+        // Select all relevant nodes at once
+        var nodes = doc.DocumentNode.SelectNodes("//*[@href or @src]");
+        if (nodes == null) return doc.DocumentNode.OuterHtml;
 
-            return doc.DocumentNode.OuterHtml;
+        foreach (var node in nodes)
+        {
+            FixAttribute(node, "href", baseUri);
+            FixAttribute(node, "src", baseUri);
         }
 
-        private void FixAttribute(HtmlNode node, string attributeName, string baseUrl)
+        // Special handling for srcset which can contain multiple URLs
+        var srcsetNodes = doc.DocumentNode.SelectNodes("//*[@srcset]");
+        if (srcsetNodes != null)
         {
-            var currentAttributeValue = node.GetAttributeValue(attributeName, "");
-            node.SetAttributeValue(attributeName, ConvertToAbsoluteUrl(currentAttributeValue, baseUrl));
-        }
-
-        private string AdjustLinksForNewTab(string htmlContent)
-        {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(htmlContent);
-
-            if (doc != null && doc.DocumentNode != null && doc.DocumentNode.ChildNodes != null && doc.DocumentNode.ChildNodes.Any())
+            foreach (var node in srcsetNodes)
             {
-                var links = doc.DocumentNode.SelectNodes("//a");
-                if (links != null)
-                {
-                    foreach (var link in links)
+                var originalSrcset = node.GetAttributeValue("srcset", "");
+                if (string.IsNullOrWhiteSpace(originalSrcset)) continue;
+
+                var newSrcsetParts = originalSrcset.Split(',')
+                    .Select(part => part.Trim().Split(' '))
+                    .Select(parts =>
                     {
-                        link.SetAttributeValue("target", "_blank");
-                    }
-                }
-            }
+                        if (parts.Length > 0 && Uri.TryCreate(baseUri, parts[0], out var absoluteUri))
+                        {
+                            parts[0] = absoluteUri.ToString();
+                        }
+                        return string.Join(" ", parts);
+                    });
 
-            return doc.DocumentNode.OuterHtml;
+                node.SetAttributeValue("srcset", string.Join(", ", newSrcsetParts));
+            }
         }
 
-        private string ConvertToAbsoluteUrl(string relativeUrl, string baseUrl)
+        return doc.DocumentNode.OuterHtml;
+    }
+
+    private void FixAttribute(HtmlNode node, string attributeName, Uri baseUri)
+    {
+        var attr = node.Attributes[attributeName];
+        if (attr == null || string.IsNullOrWhiteSpace(attr.Value)) return;
+
+        // Skip data URIs and anchor links
+        if (attr.Value.StartsWith("data:") || attr.Value.StartsWith("#")) return;
+
+        // The Uri constructor reliably handles joining relative and absolute paths
+        if (Uri.TryCreate(baseUri, attr.Value, out Uri? absoluteUri))
         {
-            string result = relativeUrl;
-            try
-            {
-                if (!string.IsNullOrEmpty(relativeUrl) && !relativeUrl.StartsWith("http") && !relativeUrl.StartsWith("localhost") && !relativeUrl.StartsWith("data") && !relativeUrl.StartsWith("#"))
-                {
-                    result = "https://" + baseUrl + (relativeUrl.StartsWith("/") ? string.Empty : "/") + relativeUrl;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"RelativeUrl: {relativeUrl}, BaseUri: {baseUrl} failed with:");
-                _logger.LogError(ex.Message, ex);
-            }
-             
-            return result;
+            attr.Value = absoluteUri.ToString();
         }
+    }
+
+    private string AdjustLinksForNewTab(string htmlContent)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(htmlContent);
+
+        var links = doc.DocumentNode.SelectNodes("//a[@href]");
+        if (links != null)
+        {
+            foreach (var link in links)
+            {
+                link.SetAttributeValue("target", "_blank");
+                // Add rel="noopener noreferrer" for security when using target="_blank"
+                link.SetAttributeValue("rel", "noopener noreferrer");
+            }
+        }
+
+        return doc.DocumentNode.OuterHtml;
+    }
+
+    private IActionResult CreateErrorResponse(HttpStatusCode statusCode, string message)
+    {
+        return new ContentResult()
+        {
+            Content = message,
+            ContentType = "text/html; charset=utf-8",
+            StatusCode = (int)statusCode
+        };
     }
 }

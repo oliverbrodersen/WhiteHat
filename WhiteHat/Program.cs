@@ -13,5 +13,6 @@ builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<HNFetcher>();
 builder.Services.AddScoped<StorageService>();
 builder.Services.AddScoped<IframeCheckerService>();
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 await builder.Build().RunAsync();
